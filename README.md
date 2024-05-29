@@ -1,7 +1,7 @@
 # mango: A generative design framework intended for wireframe DNA origami
 This is a Python-based generative design framework intended for wireframe DNA origami. Here, grammars are employed which can allow for the exploration of wireframe objects corresponding with different design features. This framework is intended to give you a "sandbox" to generate designs which minimize an input function given specific design constraints. The accompanying readthedocs documentation walks through tutorials on the types of designs the can be generated.
 
-Also, this package can create standardized outputs that can be viewed via the [kodak toolkit](https://github.com/ajvetturini/kodak_toolkit) and [viewer](https://ajvetturini.github.io/kodak/) to visualize plots via a user-interface (UI) application.
+Also, this package can create standardized outputs that can be created via the [kodak toolkit](https://github.com/ajvetturini/kodak_toolkit) and viewed us the [visualization application](https://ajvetturini.github.io/kodak/).
 
 This package is in active development and it should be expected for code to change quite frequently. 
 
@@ -10,14 +10,14 @@ Documentation can be found [here]().
 Tutorials can be found [here]().
 
 # How to install
-Since this toolkit is in an early build, it is not currently available on PyPi / pip. Therefore, to install (or update) the package, please run the following commands.
+As this toolkit is still an early build, it is not currently available on PyPi / pip. Therefore, to install (or update) the package, please run the following commands.
 1) Create a new virtual environment in anaconda (_recommended_)  
-2) Open the terminal and run the following commands in order (you can just copy and paste the whole line. Please note the period on the 3rd bullet)
+2) Open a terminal (or command line) and run the following commands in order (you can just copy and paste the whole line. Please note the period on the 3rd bullet)
    - git clone https://github.com/CMU-Integrated-Design-Innovation-Group/Mango.git
    - cd Mango
    - pip install -e .
 
-This should install the mango to your environment which you can then import into a Python. Please see readthedocs (or files in the tests folder) for a tutorial on how this framework is intended to be used.
+This should install the mango package to your environment which you can then import into a Python. Please see readthedocs for a tutorial on how this framework is intended to be used.
 
 # Requirements
 Python Version >= 3.9
