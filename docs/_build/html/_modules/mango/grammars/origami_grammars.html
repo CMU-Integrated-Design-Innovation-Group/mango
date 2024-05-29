@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mango.grammars.origami_grammars &mdash; mango generative design framework b0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=7d16594f"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            mango generative design framework
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">mango</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">mango generative design framework</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mango.grammars.origami_grammars</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mango.grammars.origami_grammars</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A.J. Vetturini</span>
+<span class="sd">IDIG and MMBL</span>
+<span class="sd">Carnegie Mellon University</span>
+
+<span class="sd">This script contains the dataclasses used in the grammar sets for the initial mango design framework. Further grammars</span>
+<span class="sd">can be added here as long as the top level &quot;GrammarSet&quot; object is used in the dataclass.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">mango.design_spaces.polyhedral_design_space</span> <span class="kn">import</span> <span class="n">PolyhedralSpace</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">choice</span><span class="p">,</span> <span class="n">seed</span>
+<span class="kn">from</span> <span class="nn">mango.utils.mango_math</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">mango.mango_features.mesh_face</span> <span class="kn">import</span> <span class="n">MeshFace</span>
+<span class="kn">from</span> <span class="nn">mango.utils.DNA_property_constants</span> <span class="kn">import</span> <span class="n">BDNA</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial.transform</span> <span class="kn">import</span> <span class="n">Rotation</span>
+<span class="kn">from</span> <span class="nn">mango.mango_features.preserved_regions</span> <span class="kn">import</span> <span class="n">PreservedVertex</span><span class="p">,</span> <span class="n">PreservedEdge</span>
+
+<div class="viewcode-block" id="GrammarSet">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.GrammarSet">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">GrammarSet</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is a top level class that simply defines the number of decimals to use when rounding &amp; control the random</span>
+<span class="sd">    seed number of the selection</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ------------</span>
+<span class="sd">    numDecimals: Integer</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Precision that can be manually defined. I just use &quot;2&quot; for default since 0.34 is the presumed bp rise in BDNA</span>
+    <span class="n">numDecimals</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
+
+<div class="viewcode-block" id="GrammarSet.set_seed">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.GrammarSet.set_seed">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">set_seed</span><span class="p">(</span><span class="n">seed_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Simply seeds the random number for grammar selections</span>
+<span class="sd">        :param seed_number: User specified seed number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">seed</span><span class="p">(</span><span class="n">seed_number</span><span class="p">)</span></div>
+</div>
+
+
+<div class="viewcode-block" id="TriangulationGrammars">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">TriangulationGrammars</span><span class="p">(</span><span class="n">GrammarSet</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class controls the grammars used in the generative process. The methods of this class modify the design graph</span>
+<span class="sd">    of the current design iteration.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ------------</span>
+<span class="sd">    grammars_to_not_use: list of grammars to not use if desired. Must match names in grammar_names</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">grammars_to_not_use</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>  <span class="c1"># This is a potential list of grammars to not use.</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grammar_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Divide Face&#39;</span><span class="p">,</span> <span class="s1">&#39;Merge Face&#39;</span><span class="p">,</span> <span class="s1">&#39;Extend Vertex&#39;</span><span class="p">,</span> <span class="s1">&#39;Retriangulate Face&#39;</span><span class="p">,</span> <span class="s1">&#39;Edge Rotation&#39;</span><span class="p">]</span>
+        <span class="c1"># Remove any potential grammars:</span>
+        <span class="k">for</span> <span class="n">grammar</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grammars_to_not_use</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">grammar</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grammar_names</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The grammar </span><span class="si">{</span><span class="n">grammar</span><span class="si">}</span><span class="s1"> was not found in the grammar_names list. The only valid grammars &#39;</span>
+                                <span class="sa">f</span><span class="s1">&#39;you can remove from this set are: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">grammar_names</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Here we remove the grammar name from the list such that pick_random_grammar will therefore never</span>
+                <span class="c1"># pick a value.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">grammar_names</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">grammar</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TriangulationGrammars.set_seed">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.set_seed">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">set_seed</span><span class="p">(</span><span class="n">seed_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Seeds the random seed &quot;&quot;&quot;</span>
+        <span class="n">seed</span><span class="p">(</span><span class="n">seed_number</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="TriangulationGrammars.pick_random_grammar">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.pick_random_grammar">[docs]</a>
+    <span class="k">def</span> <span class="nf">pick_random_grammar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Randomly selects any grammar with equal probability &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grammar_names</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="TriangulationGrammars.call_grammar_function">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.call_grammar_function">[docs]</a>
+    <span class="k">def</span> <span class="nf">call_grammar_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grammar_selected</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">design_space</span><span class="p">:</span> <span class="n">PolyhedralSpace</span><span class="p">,</span> <span class="n">extension_value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                              <span class="n">override</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function calls the proper grammar to apply to the active design_space which is passed in</span>
+
+<span class="sd">        :param extension_value: If an edge extension is being used we pass in the extension_value</span>
+<span class="sd">        :param grammar_selected: Whichever grammar was selected to be applied</span>
+<span class="sd">        :param design_space: The PolyhedralDesign space that is being manipulated</span>
+<span class="sd">        :param override: Used for testing / image creation... manually apply rules to specific faces</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">grammar_selected</span> <span class="o">==</span> <span class="s1">&#39;Divide Face&#39;</span><span class="p">:</span>
+            <span class="n">check</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">divide_face</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="n">design_space</span><span class="p">,</span> <span class="n">override</span><span class="o">=</span><span class="n">override</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">grammar_selected</span> <span class="o">==</span> <span class="s1">&#39;Merge Face&#39;</span><span class="p">:</span>
+            <span class="n">check</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">merge_face</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="n">design_space</span><span class="p">,</span> <span class="n">override</span><span class="o">=</span><span class="n">override</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">grammar_selected</span> <span class="o">==</span> <span class="s1">&#39;Extend Vertex&#39;</span><span class="p">:</span>
+            <span class="n">check</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extend_vertex</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="n">design_space</span><span class="p">,</span> <span class="n">extension_value</span><span class="o">=</span><span class="n">extension_value</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">grammar_selected</span> <span class="o">==</span> <span class="s1">&#39;Retriangulate Face&#39;</span><span class="p">:</span>
+            <span class="n">check</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retriangulate_face</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="n">design_space</span><span class="p">,</span> <span class="n">override</span><span class="o">=</span><span class="n">override</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">grammar_selected</span> <span class="o">==</span> <span class="s1">&#39;Edge Rotation&#39;</span><span class="p">:</span>
+            <span class="n">check</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edge_rotation</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="n">design_space</span><span class="p">,</span> <span class="n">rotation_value</span><span class="o">=</span><span class="n">extension_value</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Invalid rule passed in: </span><span class="si">{</span><span class="n">grammar_selected</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Now, if check is returned as False, we had an invalid rule applied so we need ot set design_constraint_failure</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+        <span class="k">return</span> <span class="n">check</span><span class="p">,</span> <span class="n">end_time</span></div>
+
+
+    <span class="c1">## ACTUAL GRAMMAR LOGIC BELOW</span>
+<div class="viewcode-block" id="TriangulationGrammars.divide_face">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.divide_face">[docs]</a>
+    <span class="k">def</span> <span class="nf">divide_face</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">design_space</span><span class="p">:</span> <span class="n">PolyhedralSpace</span><span class="p">,</span> <span class="n">override</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This grammar selects a random face and divides it into two.</span>
+
+<span class="sd">        :param design_space: design space that is currently being generated / optimized</span>
+<span class="sd">        :param override: A tuple of indices to override the random selection</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">all_faces_list</span> <span class="o">=</span> <span class="n">design_space</span><span class="o">.</span><span class="n">plotting_faces</span><span class="p">[</span><span class="s1">&#39;other&#39;</span><span class="p">]</span>
+        <span class="n">face_verts_to_divide</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="n">all_faces_list</span><span class="p">)</span>
+        <span class="n">new_faces</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Tracking what new faces are created</span>
+        <span class="k">if</span> <span class="n">override</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">face_verts_to_divide</span> <span class="o">=</span> <span class="n">override</span>
+        <span class="n">face_to_divide</span> <span class="o">=</span> <span class="n">design_space</span><span class="o">.</span><span class="n">all_faces</span><span class="p">[</span><span class="n">face_verts_to_divide</span><span class="p">]</span>
+        <span class="c1"># We divide the face using the method from the mesh_face.py file in mango_features:</span>
+        <span class="n">new_vertex</span><span class="p">,</span> <span class="n">new_triangle1</span><span class="p">,</span> <span class="n">new_triangle2</span><span class="p">,</span> <span class="n">divided_edge</span><span class="p">,</span> <span class="n">og_vertex</span> <span class="o">=</span> <span class="n">face_to_divide</span><span class="o">.</span><span class="n">divide_triangular_face</span><span class="p">()</span>
+
+        <span class="c1"># Now, if the new vertex we created already exists in the graph, we will simply return False meaning that the</span>
+        <span class="c1"># rule has failed:</span>
+        <span class="n">faces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">design_space</span><span class="o">.</span><span class="n">all_faces</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+        <span class="n">vertex_mapping</span> <span class="o">=</span> <span class="n">design_space</span><span class="o">.</span><span class="n">renumber_vertices</span><span class="p">(</span><span class="n">faces</span><span class="o">=</span><span class="n">faces</span><span class="p">)</span>
+        <span class="n">all_verts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">get_all_verts_in_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">vertex_mapping</span><span class="o">=</span><span class="n">vertex_mapping</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">row</span> <span class="o">==</span> <span class="n">new_vertex</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">all_verts</span><span class="p">):</span>
+            <span class="c1"># If this new_vertex matches a whole row in all_verts (meaning this new point already exists),</span>
+            <span class="c1"># we simply return False meaning &quot;INVALID RULE APPLICATION&quot;</span>
+            <span class="c1">## Note to self: I have never seen this return False, I just thought it would make sense to error</span>
+            <span class="c1">##               catch for it in case this is a Fringe case.</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># Now, due to a requirement of the DAEDALUS and vHelix algorithms, we actually need to &quot;double divide&quot; to</span>
+        <span class="c1"># maintain a valid mesh. Therefore, we will select a random face that is along the divided edge and also</span>
+        <span class="c1"># divide it:</span>
+        <span class="n">potential_faces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">n1</span> <span class="o">=</span> <span class="n">node_from_xyz</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">divided_edge</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">n2</span> <span class="o">=</span> <span class="n">node_from_xyz</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">divided_edge</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">design_space</span><span class="o">.</span><span class="n">plotting_faces</span><span class="p">[</span><span class="s1">&#39;other&#39;</span><span class="p">]:</span>
+            <span class="n">face</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">n1</span> <span class="ow">in</span> <span class="n">face</span> <span class="ow">and</span> <span class="n">n2</span> <span class="ow">in</span> <span class="n">face</span><span class="p">)</span> <span class="ow">and</span> <span class="n">f</span> <span class="o">!=</span> <span class="n">face_verts_to_divide</span><span class="p">:</span>
+                <span class="n">connected_node</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">face</span><span class="p">)</span> <span class="o">-</span> <span class="p">{</span><span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">})</span>
+                <span class="n">potential_faces</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">face</span><span class="p">,</span> <span class="n">connected_node</span><span class="p">))</span>
+
+        <span class="c1"># If we make it here, we then add the new_vertex and begin creating the new faces and edges:</span>
+        <span class="n">design_space</span><span class="o">.</span><span class="n">add_new_node</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">new_vertex</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">new_vertex</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">z</span><span class="o">=</span><span class="n">new_vertex</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">terminal</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">new_node</span> <span class="o">=</span> <span class="n">node_from_xyz</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">new_vertex</span><span class="p">)</span>
+        <span class="n">reciprocal_face_to_divide</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">potential_faces</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># If this is FALSE there are no other faces sharing this edge, we may simply remove the old and add the</span>
+            <span class="c1"># new faces which we will do outside the if statement since this always happens.</span>
+            <span class="c1"># IF this is TRUE then we also need to divide out a secondary face:</span>
+            <span class="n">reciprocal_face_to_divide</span><span class="p">,</span> <span class="n">connect</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="n">potential_faces</span><span class="p">)</span>
+            <span class="c1"># Now we remove reciprocal_face_to_divide and add an edge between the new_vertex and the connect</span>
+            <span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">new_node</span><span class="p">,</span> <span class="n">connect</span><span class="p">)</span>
+            <span class="n">all_faces_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">reciprocal_face_to_divide</span><span class="p">))</span>
+            <span class="n">design_space</span><span class="o">.</span><span class="n">all_faces</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">reciprocal_face_to_divide</span><span class="p">),</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="c1"># Add the new face:</span>
+            <span class="n">newF1</span> <span class="o">=</span> <span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="n">new_node</span><span class="p">,</span> <span class="n">connect</span><span class="p">)</span>
+            <span class="n">newF2</span> <span class="o">=</span> <span class="p">(</span><span class="n">n2</span><span class="p">,</span> <span class="n">new_node</span><span class="p">,</span> <span class="n">connect</span><span class="p">)</span>
+            <span class="n">all_faces_list</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">newF1</span><span class="p">,</span> <span class="n">newF2</span><span class="p">])</span>
+            <span class="n">new_faces</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">newF1</span><span class="p">,</span> <span class="n">newF2</span><span class="p">])</span>
+            <span class="n">design_space</span><span class="o">.</span><span class="n">all_faces</span><span class="p">[</span><span class="n">newF1</span><span class="p">]</span> <span class="o">=</span> <span class="n">MeshFace</span><span class="p">(</span><span class="n">v1</span><span class="o">=</span><span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">n1</span><span class="p">),</span>
+                                                     <span class="n">v2</span><span class="o">=</span><span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">new_node</span><span class="p">),</span>
+                                                     <span class="n">v3</span><span class="o">=</span><span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">connect</span><span class="p">),</span>
+                                                     <span class="n">numDecimals</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">numDecimals</span><span class="p">)</span>
+            <span class="n">design_space</span><span class="o">.</span><span class="n">all_faces</span><span class="p">[</span><span class="n">newF2</span><span class="p">]</span> <span class="o">=</span> <span class="n">MeshFace</span><span class="p">(</span><span class="n">v1</span><span class="o">=</span><span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">n2</span><span class="p">),</span>
+                                                     <span class="n">v2</span><span class="o">=</span><span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">new_node</span><span class="p">),</span>
+                                                     <span class="n">v3</span><span class="o">=</span><span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">connect</span><span class="p">),</span>
+                                                     <span class="n">numDecimals</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">numDecimals</span><span class="p">)</span>
+
+        <span class="c1"># Now we repeat the above but with the original face (since this always happens):</span>
+        <span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">new_node</span><span class="p">,</span> <span class="n">node_from_xyz</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">og_vertex</span><span class="p">))</span>
+        <span class="c1"># Remove the old edges:</span>
+        <span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="n">new_node</span><span class="p">)</span>
+        <span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">n2</span><span class="p">,</span> <span class="n">new_node</span><span class="p">)</span>
+        <span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">remove_edge</span><span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">)</span>
+        <span class="n">design_space</span><span class="o">.</span><span class="n">edge_divide_nodes</span><span class="p">[</span><span class="n">new_node</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">]</span>  <span class="c1"># Label the edge we divided for other rule uses.</span>
+        <span class="n">all_faces_list</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">face_verts_to_divide</span><span class="p">)</span>
+        <span class="n">design_space</span><span class="o">.</span><span class="n">all_faces</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">face_verts_to_divide</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="c1"># Add the new face:</span>
+        <span class="n">newF1</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">node_from_xyz</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">new_triangle1</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+            <span class="n">node_from_xyz</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">new_triangle1</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+            <span class="n">node_from_xyz</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">new_triangle1</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="p">)</span>
+        <span class="n">newF2</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">node_from_xyz</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">new_triangle2</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+            <span class="n">node_from_xyz</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">new_triangle2</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+            <span class="n">node_from_xyz</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">new_triangle2</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="p">)</span>
+        <span class="n">all_faces_list</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">newF1</span><span class="p">,</span> <span class="n">newF2</span><span class="p">])</span>
+        <span class="n">design_space</span><span class="o">.</span><span class="n">all_faces</span><span class="p">[</span><span class="n">newF1</span><span class="p">]</span> <span class="o">=</span> <span class="n">MeshFace</span><span class="p">(</span><span class="n">v1</span><span class="o">=</span><span class="n">new_triangle1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">v2</span><span class="o">=</span><span class="n">new_triangle1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">v3</span><span class="o">=</span><span class="n">new_triangle1</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                                                 <span class="n">numDecimals</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">numDecimals</span><span class="p">)</span>
+        <span class="n">design_space</span><span class="o">.</span><span class="n">all_faces</span><span class="p">[</span><span class="n">newF2</span><span class="p">]</span> <span class="o">=</span> <span class="n">MeshFace</span><span class="p">(</span><span class="n">v1</span><span class="o">=</span><span class="n">new_triangle2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">v2</span><span class="o">=</span><span class="n">new_triangle2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">v3</span><span class="o">=</span><span class="n">new_triangle2</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                                                 <span class="n">numDecimals</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">numDecimals</span><span class="p">)</span>
+
+        <span class="c1"># Finally, we label these faces:</span>
+        <span class="n">new_faces</span> <span class="o">+=</span> <span class="p">[</span><span class="n">newF1</span><span class="p">,</span> <span class="n">newF2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">reciprocal_face_to_divide</span><span class="p">:</span>  <span class="c1"># If we added the reciprocal face we update the value of face_verts_to_divide</span>
+            <span class="n">face_verts_to_divide</span> <span class="o">=</span> <span class="p">(</span><span class="n">face_verts_to_divide</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">reciprocal_face_to_divide</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label_retri_or_divide_for_backout_rule</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="n">design_space</span><span class="p">,</span>
+                                                    <span class="n">new_faces</span><span class="o">=</span><span class="n">new_faces</span><span class="p">,</span> <span class="n">old_face</span><span class="o">=</span><span class="n">face_verts_to_divide</span><span class="p">)</span>
+
+        <span class="c1"># Finally we return True signalling the rule was applied successfully</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+
+<div class="viewcode-block" id="TriangulationGrammars.merge_face">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.merge_face">[docs]</a>
+    <span class="k">def</span> <span class="nf">merge_face</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">design_space</span><span class="p">:</span> <span class="n">PolyhedralSpace</span><span class="p">,</span> <span class="n">override</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This rule allows us to &quot;back out&quot; of edge divisions as well as face re-triangulations by checking the labelled</span>
+<span class="sd">        dictionary and randomly selecting a face to back out of.</span>
+<span class="sd">        NOTE: This rule currently can lead to very significant design changes as the merge face will merge ALL faces</span>
+<span class="sd">              to back out. It does NOT require vertices to be coplanar and it will remove a significant amount of</span>
+<span class="sd">              points and edges depending on which face is randomly selected to be merged back.</span>
+
+<span class="sd">        :param design_space: design space that is currently being generated / optimized</span>
+<span class="sd">        :param override: A tuple of indices to override the random selection</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># First check to see if there are even any potential faces to merge:</span>
+        <span class="k">if</span> <span class="n">design_space</span><span class="o">.</span><span class="n">merge_label_dict</span> <span class="o">==</span> <span class="p">{}:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># Otherwise, we select the LAST key in the dictionary, as we can only back out of the most recent edge division</span>
+        <span class="c1"># or triangulation. This is for 2 reasons: Computational complexity of checking to ensure a mesh stays water</span>
+        <span class="c1"># -tight is too high and because a random choice can lead to very drastic design changes which is not ideal imo</span>
+        <span class="c1">####recreate_this_face = choice(list(self.merge_label_dict.keys()))</span>
+        <span class="k">if</span> <span class="n">override</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">recreate_this_face</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">design_space</span><span class="o">.</span><span class="n">merge_label_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">recreate_this_face</span> <span class="o">=</span> <span class="n">override</span>
+        <span class="n">all_faces</span> <span class="o">=</span> <span class="n">design_space</span><span class="o">.</span><span class="n">plotting_faces</span><span class="p">[</span><span class="s1">&#39;other&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Depending on if the face we are merging was from a division or a re-triangulation:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">recreate_this_face</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="c1"># If this is length 2, then we are recreating 2 faces from an edge division rule</span>
+            <span class="n">delete_these1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_children_nodes_to_merge</span><span class="p">(</span><span class="n">design_space</span><span class="o">.</span><span class="n">merge_label_graph</span><span class="p">,</span>
+                                                             <span class="n">start_node</span><span class="o">=</span><span class="n">recreate_this_face</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">delete_these2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_children_nodes_to_merge</span><span class="p">(</span><span class="n">design_space</span><span class="o">.</span><span class="n">merge_label_graph</span><span class="p">,</span>
+                                                             <span class="n">start_node</span><span class="o">=</span><span class="n">recreate_this_face</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">delete_these</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">delete_these1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">delete_these2</span><span class="p">))</span>
+
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">recreate_this_face</span><span class="p">:</span>
+                <span class="n">v1</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">v2</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">v3</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                <span class="n">design_space</span><span class="o">.</span><span class="n">all_faces</span><span class="p">[</span><span class="n">f</span><span class="p">]</span> <span class="o">=</span> <span class="n">MeshFace</span><span class="p">(</span><span class="n">v1</span><span class="o">=</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="o">=</span><span class="n">v2</span><span class="p">,</span> <span class="n">v3</span><span class="o">=</span><span class="n">v3</span><span class="p">,</span> <span class="n">numDecimals</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">numDecimals</span><span class="p">)</span>
+                <span class="n">all_faces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                <span class="n">keys_to_delete</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_f_in_keys</span><span class="p">(</span><span class="n">merge_label_dict</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">merge_label_dict</span><span class="p">,</span> <span class="n">fa</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys_to_delete</span><span class="p">:</span>
+                    <span class="n">design_space</span><span class="o">.</span><span class="n">merge_label_dict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Otherwise, we are only re-creating one face</span>
+            <span class="n">delete_these</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_children_nodes_to_merge</span><span class="p">(</span><span class="n">design_space</span><span class="o">.</span><span class="n">merge_label_graph</span><span class="p">,</span> <span class="n">start_node</span><span class="o">=</span><span class="n">recreate_this_face</span><span class="p">)</span>
+            <span class="c1"># Also add back the recreate_this_face:</span>
+            <span class="n">v1</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">recreate_this_face</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">v2</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">recreate_this_face</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">v3</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">recreate_this_face</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+            <span class="n">design_space</span><span class="o">.</span><span class="n">all_faces</span><span class="p">[</span><span class="n">recreate_this_face</span><span class="p">]</span> <span class="o">=</span> <span class="n">MeshFace</span><span class="p">(</span><span class="n">v1</span><span class="o">=</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="o">=</span><span class="n">v2</span><span class="p">,</span> <span class="n">v3</span><span class="o">=</span><span class="n">v3</span><span class="p">,</span> <span class="n">numDecimals</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">numDecimals</span><span class="p">)</span>
+            <span class="n">all_faces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">recreate_this_face</span><span class="p">)</span>
+            <span class="n">design_space</span><span class="o">.</span><span class="n">merge_label_dict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">recreate_this_face</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># Next we need to remove the faces_to_delete</span>
+        <span class="c1">## First: Using the merge_label_graph we can find all of the downstream / &quot;children&quot; nodes and verify</span>
+        <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">delete_these</span><span class="p">:</span>
+            <span class="c1"># First delete the node from the merge_label_graph and remove the key (if it exists)from merge_label_dict</span>
+            <span class="n">design_space</span><span class="o">.</span><span class="n">merge_label_graph</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">face</span><span class="p">)</span>
+            <span class="n">keys_to_delete</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_f_in_keys</span><span class="p">(</span><span class="n">merge_label_dict</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">merge_label_dict</span><span class="p">,</span> <span class="n">fa</span><span class="o">=</span><span class="n">face</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys_to_delete</span><span class="p">:</span>
+                <span class="n">design_space</span><span class="o">.</span><span class="n">merge_label_dict</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="c1"># Next delete the face from all_faces</span>
+            <span class="n">design_space</span><span class="o">.</span><span class="n">all_faces</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">face</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">all_faces</span><span class="p">:</span>
+                <span class="n">all_faces</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">face</span><span class="p">)</span>
+
+        <span class="c1"># Next, we need to find any nodes that are no longer a part of the graph. We want to find the unique values of</span>
+        <span class="c1"># all_faces to find this:</span>
+        <span class="n">all_nodes_in_graph</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+        <span class="n">unique_values</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">value</span> <span class="k">for</span> <span class="n">tpl</span> <span class="ow">in</span> <span class="n">all_faces</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">tpl</span><span class="p">)</span>
+        <span class="n">nodes_to_remove</span> <span class="o">=</span> <span class="n">all_nodes_in_graph</span> <span class="o">-</span> <span class="n">unique_values</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">nodes_to_remove</span><span class="p">):</span>
+            <span class="c1"># Remove any references to these nodes that are currently stored elsewhere:</span>
+            <span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">remove_node</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">design_space</span><span class="o">.</span><span class="n">edge_divide_nodes</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span> <span class="o">=</span> <span class="n">design_space</span><span class="o">.</span><span class="n">edge_divide_nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+                <span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">)</span>
+            <span class="n">design_space</span><span class="o">.</span><span class="n">edge_divide_nodes</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="c1">#design_space.normal_dir_label_dict.pop(n, None)</span>
+
+        <span class="c1"># If we make it here, we signal True meaning rule applied successfully</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+
+<div class="viewcode-block" id="TriangulationGrammars.extend_vertex">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.extend_vertex">[docs]</a>
+    <span class="k">def</span> <span class="nf">extend_vertex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">design_space</span><span class="p">:</span> <span class="n">PolyhedralSpace</span><span class="p">,</span> <span class="n">extension_value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This grammar randomly selects a vertex that is non-terminal and moves it along an edge by the passed in</span>
+<span class="sd">        extension_value</span>
+
+<span class="sd">        :param design_space: design space that is currently being generated / optimized</span>
+<span class="sd">        :param extension_value: A value to move the selected node along the edge by (in nm)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># First we update the list of nonterminal nodes, and if there are not any we return False</span>
+        <span class="n">design_space</span><span class="o">.</span><span class="n">find_nonterminal_nodes</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">design_space</span><span class="o">.</span><span class="n">nonterminal_nodes</span><span class="p">:</span>
+            <span class="c1"># If there are no nonterminal nodes, we return False meaning no valid rule application</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="c1"># Otherwise, we start by getting all faces referencing this node:</span>
+        <span class="n">selected_node</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="n">design_space</span><span class="o">.</span><span class="n">nonterminal_nodes</span><span class="p">)</span>
+        <span class="n">dir_to_move_towards</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">selected_node</span><span class="p">)))</span>
+        <span class="c1"># Next we grab the X Y Z values we need and determine the directionality to move in. However, we make a slightly</span>
+        <span class="c1"># informed decision to move in:</span>
+        <span class="k">if</span> <span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">dir_to_move_towards</span><span class="p">][</span><span class="s1">&#39;terminal&#39;</span><span class="p">]:</span>
+            <span class="c1"># if the direction we are moving towards is a terminal node, then we can only move in the direction of the</span>
+            <span class="c1"># nonterminal (or selected) node:</span>
+            <span class="n">xyz_moving_towards</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">dir_to_move_towards</span><span class="p">)</span>
+            <span class="n">og_xyz_to_search_for</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">selected_node</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># If the direction we are moving towards is also a non-terminal node, then we can choose either direction</span>
+            <span class="k">if</span> <span class="n">choice</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># If we choose 0, we move towards the dir_to_move_towards</span>
+                <span class="n">og_xyz_to_search_for</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">selected_node</span><span class="p">)</span>
+                <span class="n">xyz_moving_towards</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">dir_to_move_towards</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># If we choose 1, we move towards the selected_node</span>
+                <span class="n">xyz_moving_towards</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">selected_node</span><span class="p">)</span>
+                <span class="n">og_xyz_to_search_for</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">dir_to_move_towards</span><span class="p">)</span>
+                <span class="c1"># We also over-write the selected_node value so the positions update properly:</span>
+                <span class="n">selected_node</span> <span class="o">=</span> <span class="n">dir_to_move_towards</span>
+
+        <span class="c1"># Find the encompassing unit vector to determine which &quot;direction&quot; to extend the edge in:</span>
+        <span class="n">u_v</span> <span class="o">=</span> <span class="n">unit_vector</span><span class="p">(</span><span class="n">P1</span><span class="o">=</span><span class="n">xyz_moving_towards</span><span class="p">,</span> <span class="n">P2</span><span class="o">=</span><span class="n">og_xyz_to_search_for</span><span class="p">)</span>
+        <span class="c1"># Update the edge extension by extend_rule_distance (which is passed in</span>
+        <span class="k">if</span> <span class="n">extension_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">extension_value</span> <span class="o">=</span> <span class="n">BDNA</span><span class="o">.</span><span class="n">pitch_per_rise</span>  <span class="c1"># Set default value to 0.34</span>
+        <span class="n">new_value</span> <span class="o">=</span> <span class="n">og_xyz_to_search_for</span> <span class="o">+</span> <span class="p">(</span><span class="n">extension_value</span> <span class="o">*</span> <span class="n">u_v</span><span class="p">)</span>
+        <span class="n">update_nodal_position</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">selected_node</span><span class="p">,</span> <span class="n">new_xyz</span><span class="o">=</span><span class="n">new_value</span><span class="p">,</span>
+                              <span class="n">numDecimals</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">numDecimals</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_face_values</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="n">design_space</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">selected_node</span><span class="p">,</span> <span class="n">old_xyz</span><span class="o">=</span><span class="n">og_xyz_to_search_for</span><span class="p">,</span>
+                                <span class="n">new_xyz</span><span class="o">=</span><span class="n">new_value</span><span class="p">)</span>
+
+        <span class="c1"># If we get here without issue, we return True meaning it applied successfully</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+
+<div class="viewcode-block" id="TriangulationGrammars.retriangulate_face">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.retriangulate_face">[docs]</a>
+    <span class="k">def</span> <span class="nf">retriangulate_face</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">design_space</span><span class="p">:</span> <span class="n">PolyhedralSpace</span><span class="p">,</span> <span class="n">override</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This grammar randomly selects a face and divides it into 3 triangles by placing a new node at the centroid</span>
+<span class="sd">        and connecting that new node to all 3 edges of the selected triangle.</span>
+
+<span class="sd">        :param design_space: design space that is currently being generated / optimized</span>
+<span class="sd">        :param override: A tuple of 3 face index values to override the random selection</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># First we need to select a face that is not part of the binding regions or NP faces:</span>
+        <span class="n">face_verts</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="n">design_space</span><span class="o">.</span><span class="n">plotting_faces</span><span class="p">[</span><span class="s1">&#39;other&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">override</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">face_verts</span> <span class="o">=</span> <span class="n">override</span>
+        <span class="n">face_to_triangulate</span> <span class="o">=</span> <span class="n">design_space</span><span class="o">.</span><span class="n">all_faces</span><span class="p">[</span><span class="n">face_verts</span><span class="p">]</span>
+
+        <span class="c1"># Finding the face centroid:</span>
+        <span class="n">centroid</span> <span class="o">=</span> <span class="n">face_to_triangulate</span><span class="o">.</span><span class="n">calculate_face_centroid</span><span class="p">()</span>
+
+        <span class="c1"># Next we remove the original faces:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remove_faces</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="n">design_space</span><span class="p">,</span> <span class="n">face_verts</span><span class="o">=</span><span class="n">face_verts</span><span class="p">)</span>
+
+        <span class="c1"># Then we simply add a new vertex here and create edges to the other face verts</span>
+        <span class="n">design_space</span><span class="o">.</span><span class="n">add_new_node</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">centroid</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">centroid</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">z</span><span class="o">=</span><span class="n">centroid</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">terminal</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># NOTE: we add edges to node_count-1 because the add_new_node above will add 1 to the node_count.</span>
+        <span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">face_verts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">design_space</span><span class="o">.</span><span class="n">node_count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">face_verts</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">design_space</span><span class="o">.</span><span class="n">node_count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">face_verts</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">design_space</span><span class="o">.</span><span class="n">node_count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Finally we add the 3 new faces to all_faces and plotting_faces[&#39;other&#39;]:</span>
+        <span class="n">all_faces</span> <span class="o">=</span> <span class="n">design_space</span><span class="o">.</span><span class="n">plotting_faces</span><span class="p">[</span><span class="s1">&#39;other&#39;</span><span class="p">]</span>
+        <span class="n">new_faces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">face_verts</span><span class="p">),</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">all_faces</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">design_space</span><span class="o">.</span><span class="n">node_count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">))</span>
+            <span class="n">new_faces</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">design_space</span><span class="o">.</span><span class="n">node_count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">))</span>
+            <span class="n">v11</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">node_count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">v22</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">v1</span><span class="p">)</span>
+            <span class="n">v33</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">v2</span><span class="p">)</span>
+            <span class="n">design_space</span><span class="o">.</span><span class="n">all_faces</span><span class="p">[(</span><span class="n">design_space</span><span class="o">.</span><span class="n">node_count</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)]</span> <span class="o">=</span> <span class="n">MeshFace</span><span class="p">(</span><span class="n">v1</span><span class="o">=</span><span class="n">v11</span><span class="p">,</span> <span class="n">v2</span><span class="o">=</span><span class="n">v22</span><span class="p">,</span> <span class="n">v3</span><span class="o">=</span><span class="n">v33</span><span class="p">,</span>
+                                                                                     <span class="n">numDecimals</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">numDecimals</span><span class="p">)</span>
+        <span class="c1"># Next we label the new face:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label_retri_or_divide_for_backout_rule</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="n">design_space</span><span class="p">,</span> <span class="n">new_faces</span><span class="o">=</span><span class="n">new_faces</span><span class="p">,</span> <span class="n">old_face</span><span class="o">=</span><span class="n">face_verts</span><span class="p">)</span>
+
+        <span class="c1"># If we get here without issue, we return True meaning it applied successfully</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="TriangulationGrammars.edge_rotation">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.edge_rotation">[docs]</a>
+    <span class="k">def</span> <span class="nf">edge_rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">design_space</span><span class="p">:</span> <span class="n">PolyhedralSpace</span><span class="p">,</span> <span class="n">rotation_value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This grammar randomly selects an edge containing a nonterminal node and rotates it along any face by which</span>
+<span class="sd">        the edge exists. The face is randomly selected.</span>
+
+<span class="sd">        :param design_space: design space that is currently being generated / optimized</span>
+<span class="sd">        :param rotation_value: A value to rotate the edge along the face by (degrees)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># First we update the list of nonterminal nodes, and if there are not any we return False</span>
+        <span class="n">design_space</span><span class="o">.</span><span class="n">find_nonterminal_nodes</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">design_space</span><span class="o">.</span><span class="n">nonterminal_nodes</span><span class="p">:</span>
+            <span class="c1"># If there are no nonterminal nodes, we return False meaning no valid rule application</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="c1"># Now, we can&#39;t move into the normal direction of a labelled edge division, so we remove those:</span>
+        <span class="n">selected_node</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="n">design_space</span><span class="o">.</span><span class="n">nonterminal_nodes</span><span class="p">)</span>
+        <span class="n">selected_node_connection</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># Now we check if the selected_node has already had a labelled normal-direction move applied:</span>
+        <span class="k">if</span> <span class="n">selected_node</span> <span class="ow">in</span> <span class="n">design_space</span><span class="o">.</span><span class="n">edge_divide_nodes</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="c1"># If we select a node that was a part of an edge division, we need to select its non-collinear</span>
+            <span class="c1"># points to create the plane label.</span>
+            <span class="n">connected_nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">selected_node</span><span class="p">))</span>
+            <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">n3</span> <span class="o">=</span> <span class="n">find_non_collinear_nodes</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">selected_node</span><span class="p">,</span>
+                                                  <span class="n">potential_nodes</span><span class="o">=</span><span class="n">connected_nodes</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">n1</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># In this case, we could not find 3 non-collinear nodes forming the plane</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="p">[</span><span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">selected_node</span><span class="p">)]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="n">n2</span><span class="p">,</span> <span class="n">n3</span><span class="p">]:</span>  <span class="c1"># We don&#39;t use n1 because that is the same as selected_node</span>
+                <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">i</span><span class="p">))</span>
+                <span class="n">selected_node_connection</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">i</span><span class="p">))</span>
+            <span class="n">local_plane</span> <span class="o">=</span> <span class="n">LocalPlane</span><span class="p">(</span><span class="n">verts</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">og_point</span><span class="o">=</span><span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span>
+                                                                                <span class="n">node</span><span class="o">=</span><span class="n">selected_node</span><span class="p">),</span>
+                                     <span class="n">divide_edge_rule_used</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Otherwise we must create a local plane label for the re-triangulation such:</span>
+            <span class="n">connected_nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">neighbors</span><span class="p">(</span><span class="n">selected_node</span><span class="p">))</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="p">[</span><span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">selected_node</span><span class="p">)]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">connected_nodes</span><span class="p">:</span>
+                <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">i</span><span class="p">))</span>
+                <span class="n">selected_node_connection</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">i</span><span class="p">))</span>
+            <span class="c1"># Now with all faces that are connected to this node, we create a local plane and store in the dict:</span>
+            <span class="n">local_plane</span> <span class="o">=</span> <span class="n">LocalPlane</span><span class="p">(</span><span class="n">verts</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">og_point</span><span class="o">=</span><span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span>
+                                                                                <span class="n">node</span><span class="o">=</span><span class="n">selected_node</span><span class="p">))</span>
+
+        <span class="c1"># With the local_plane defined, we are going to move by extend_rule_distance into one of the normal dirs:</span>
+        <span class="n">normal_dir1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">local_plane</span><span class="o">.</span><span class="n">A</span><span class="p">,</span> <span class="n">local_plane</span><span class="o">.</span><span class="n">B</span><span class="p">,</span> <span class="n">local_plane</span><span class="o">.</span><span class="n">C</span><span class="p">])</span>
+
+        <span class="c1"># Check both rotations about the face:</span>
+        <span class="n">rotation_matrix1</span> <span class="o">=</span> <span class="n">Rotation</span><span class="o">.</span><span class="n">from_rotvec</span><span class="p">(</span><span class="n">normal_dir1</span> <span class="o">*</span> <span class="n">rotation_value</span><span class="p">)</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
+        <span class="n">rotation_matrix2</span> <span class="o">=</span> <span class="n">Rotation</span><span class="o">.</span><span class="n">from_rotvec</span><span class="p">(</span><span class="n">normal_dir1</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">-</span> <span class="n">rotation_value</span><span class="p">))</span><span class="o">.</span><span class="n">as_matrix</span><span class="p">()</span>
+        <span class="n">selected_rotation</span> <span class="o">=</span> <span class="n">choice</span><span class="p">([</span><span class="n">rotation_matrix1</span><span class="p">,</span> <span class="n">rotation_matrix2</span><span class="p">])</span>
+
+        <span class="n">cur_xyz</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">selected_node</span><span class="p">)</span>
+        <span class="n">connected_node_xyz</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="n">selected_node_connection</span><span class="p">)</span>  <span class="c1"># Doesn&#39;t matter which we pick, just need the edge:</span>
+        <span class="n">edge_vector</span> <span class="o">=</span> <span class="n">connected_node_xyz</span> <span class="o">-</span> <span class="n">cur_xyz</span>
+        <span class="n">unit_v</span> <span class="o">=</span> <span class="n">edge_vector</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">edge_vector</span><span class="p">)</span>
+
+        <span class="c1"># Based on local_plan, we check if the unit vector is not none and overwrite otherwise:</span>
+        <span class="k">if</span> <span class="n">local_plane</span><span class="o">.</span><span class="n">unit_bisector_vector</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">unit_v1</span> <span class="o">=</span> <span class="n">local_plane</span><span class="o">.</span><span class="n">unit_bisector_vector</span>
+            <span class="n">unit_v2</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">local_plane</span><span class="o">.</span><span class="n">unit_bisector_vector</span>
+            <span class="n">unit_v</span> <span class="o">=</span> <span class="n">choice</span><span class="p">([</span><span class="n">unit_v1</span><span class="p">,</span> <span class="n">unit_v2</span><span class="p">])</span>
+
+        <span class="n">new_value</span> <span class="o">=</span> <span class="n">cur_xyz</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">selected_rotation</span><span class="p">,</span> <span class="n">unit_v</span><span class="p">)</span>
+        <span class="c1"># Then we update the positions for this node to all lists:</span>
+        <span class="n">update_nodal_position</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">selected_node</span><span class="p">,</span> <span class="n">new_xyz</span><span class="o">=</span><span class="n">new_value</span><span class="p">,</span>
+                              <span class="n">numDecimals</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">numDecimals</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_face_values</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="n">design_space</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">selected_node</span><span class="p">,</span> <span class="n">old_xyz</span><span class="o">=</span><span class="n">cur_xyz</span><span class="p">,</span> <span class="n">new_xyz</span><span class="o">=</span><span class="n">new_value</span><span class="p">)</span>
+
+        <span class="c1"># Signal that the rule has applied successfully:</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+    <span class="c1"># HELPER FUNCTIONS FOR ABOVE GRAMMARS</span>
+<div class="viewcode-block" id="TriangulationGrammars.label_retri_or_divide_for_backout_rule">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.label_retri_or_divide_for_backout_rule">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">label_retri_or_divide_for_backout_rule</span><span class="p">(</span><span class="n">design_space</span><span class="p">:</span> <span class="n">PolyhedralSpace</span><span class="p">,</span> <span class="n">new_faces</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">old_face</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is called whenever the retriangulation or division rule is applied such that we can</span>
+<span class="sd">        back out of these geometries</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># First we must check if the face we divided / merged</span>
+        <span class="n">design_space</span><span class="o">.</span><span class="n">merge_label_dict</span><span class="p">[</span><span class="n">old_face</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_faces</span>
+        <span class="n">design_space</span><span class="o">.</span><span class="n">merge_label_graph</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">(</span><span class="n">new_faces</span><span class="p">)</span>  <span class="c1"># Add new faces as nodes</span>
+        <span class="c1"># Next we add to the directed graph:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">old_face</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="c1"># If old_face is length 2 that means two nodes are connected to &quot;children&quot; that we need to track:</span>
+            <span class="n">edges_to_add</span> <span class="o">=</span> <span class="p">[(</span><span class="n">old_face</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">target_node</span><span class="p">)</span> <span class="k">for</span> <span class="n">target_node</span> <span class="ow">in</span> <span class="n">new_faces</span><span class="p">]</span>
+            <span class="n">edges_to_add2</span> <span class="o">=</span> <span class="p">[(</span><span class="n">old_face</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">target_node</span><span class="p">)</span> <span class="k">for</span> <span class="n">target_node</span> <span class="ow">in</span> <span class="n">new_faces</span><span class="p">]</span>
+            <span class="n">design_space</span><span class="o">.</span><span class="n">merge_label_graph</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="n">edges_to_add</span><span class="p">)</span>
+            <span class="n">design_space</span><span class="o">.</span><span class="n">merge_label_graph</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="n">edges_to_add2</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">edges_to_add</span> <span class="o">=</span> <span class="p">[(</span><span class="n">old_face</span><span class="p">,</span> <span class="n">target_node</span><span class="p">)</span> <span class="k">for</span> <span class="n">target_node</span> <span class="ow">in</span> <span class="n">new_faces</span><span class="p">]</span>
+            <span class="n">design_space</span><span class="o">.</span><span class="n">merge_label_graph</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="n">edges_to_add</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="TriangulationGrammars.get_children_nodes_to_merge">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.get_children_nodes_to_merge">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_children_nodes_to_merge</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">start_node</span><span class="p">):</span>
+        <span class="n">downstream_nodes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">stack</span> <span class="o">=</span> <span class="p">[</span><span class="n">start_node</span><span class="p">]</span>
+
+        <span class="k">while</span> <span class="n">stack</span><span class="p">:</span>
+            <span class="n">current_node</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="n">downstream_nodes</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">current_node</span><span class="p">)</span>
+
+            <span class="c1"># Get successors and add them to the stack</span>
+            <span class="n">successors</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">successors</span><span class="p">(</span><span class="n">current_node</span><span class="p">)</span>
+            <span class="n">stack</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">successors</span><span class="p">)</span>
+        <span class="n">downstream_nodes</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">start_node</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">downstream_nodes</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="TriangulationGrammars.is_f_in_keys">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.is_f_in_keys">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">is_f_in_keys</span><span class="p">(</span><span class="n">merge_label_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">fa</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function isn&#39;t really math but it searches a dictionary to find if a face is found within the dictionary</span>
+
+<span class="sd">        :param merge_label_dict: Dictionary containing merge labels</span>
+<span class="sd">        :param fa: Face we are looking for</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ke</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">merge_label_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">fa</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+                    <span class="n">ke</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">ke</span></div>
+
+
+
+<div class="viewcode-block" id="TriangulationGrammars.update_face_values">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.update_face_values">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">update_face_values</span><span class="p">(</span><span class="n">design_space</span><span class="p">:</span> <span class="n">PolyhedralSpace</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">old_xyz</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">new_xyz</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function will update all of the face values in the current mesh with the new nodal values</span>
+<span class="sd">        :param design_space: Design space we are updating</span>
+<span class="sd">        :param node: Node number to update</span>
+<span class="sd">        :param old_xyz: Old XYZ Position</span>
+<span class="sd">        :param new_xyz: New XYZ Position</span>
+<span class="sd">        :return: Nothing, just updates values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># We loop over all the faces which contain vertex information and update these values:</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">design_space</span><span class="o">.</span><span class="n">all_faces</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="c1"># If the node is in the list of vertices for the face, we need to update it&#39;s mesh face:</span>
+            <span class="k">if</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+                <span class="n">v</span><span class="o">.</span><span class="n">update_vertex_values</span><span class="p">(</span><span class="n">old_xyz</span><span class="o">=</span><span class="n">old_xyz</span><span class="p">,</span> <span class="n">new_xyz</span><span class="o">=</span><span class="n">new_xyz</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="TriangulationGrammars.remove_faces">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.remove_faces">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">remove_faces</span><span class="p">(</span><span class="n">design_space</span><span class="p">:</span> <span class="n">PolyhedralSpace</span><span class="p">,</span> <span class="n">face_verts</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function removes a face from the self.all_faces and self.plotting_faces[&#39;other&#39;]</span>
+<span class="sd">        :param design_space: Design space being modified</span>
+<span class="sd">        :param face_verts: Tuple of vertices to search for</span>
+<span class="sd">        :return: Nothing, just updates values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">design_space</span><span class="o">.</span><span class="n">all_faces</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">face_verts</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">all_faces</span> <span class="o">=</span> <span class="n">design_space</span><span class="o">.</span><span class="n">plotting_faces</span><span class="p">[</span><span class="s1">&#39;other&#39;</span><span class="p">]</span>
+        <span class="n">all_faces</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">face_verts</span><span class="p">)</span>
+        <span class="n">design_space</span><span class="o">.</span><span class="n">plotting_faces</span><span class="p">[</span><span class="s1">&#39;other&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">all_faces</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ParallelepipedGrammars">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.ParallelepipedGrammars">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ParallelepipedGrammars</span><span class="p">(</span><span class="n">GrammarSet</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class controls the grammars used in the generative process that modify the bounding box conditions.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ------------</span>
+<span class="sd">    cell_type: string name of a desired cell_type if input (e.g., triclinic, monoclinic, etc.).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cell_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span>   <span class="c1"># This determines which rules can be applied to which directions DesignConstraints used to</span>
+                              <span class="c1"># hold cell walls constant.</span>
+
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Which grammars we can call depends on the cell_type:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_type</span> <span class="o">==</span> <span class="s1">&#39;triclinic&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grammar_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Vary_a&#39;</span><span class="p">,</span> <span class="s1">&#39;Vary_b&#39;</span><span class="p">,</span> <span class="s1">&#39;Vary_c&#39;</span><span class="p">,</span>
+                                  <span class="s1">&#39;Rotate_alpha&#39;</span><span class="p">,</span> <span class="s1">&#39;Rotate_beta&#39;</span><span class="p">,</span> <span class="s1">&#39;Rotate_gamma&#39;</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_type</span> <span class="o">==</span> <span class="s1">&#39;monoclinic&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grammar_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Vary_a&#39;</span><span class="p">,</span> <span class="s1">&#39;Vary_b&#39;</span><span class="p">,</span> <span class="s1">&#39;Vary_c&#39;</span><span class="p">,</span>
+                                  <span class="s1">&#39;Rotate_beta&#39;</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_type</span> <span class="o">==</span> <span class="s1">&#39;orthorhombic&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grammar_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Vary_a&#39;</span><span class="p">,</span> <span class="s1">&#39;Vary_b&#39;</span><span class="p">,</span> <span class="s1">&#39;Vary_c&#39;</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_type</span> <span class="o">==</span> <span class="s1">&#39;tetragonal&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grammar_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Vary_a&#39;</span><span class="p">,</span> <span class="s1">&#39;Vary_c&#39;</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_type</span> <span class="o">==</span> <span class="s1">&#39;rhombohedral&#39;</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_type</span> <span class="o">==</span> <span class="s1">&#39;trigonal&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grammar_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Vary_a&#39;</span><span class="p">,</span>
+                                  <span class="s1">&#39;Rotate_alpha&#39;</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_type</span> <span class="o">==</span> <span class="s1">&#39;hexagonal&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grammar_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Vary_a&#39;</span><span class="p">,</span> <span class="s1">&#39;Vary_c&#39;</span><span class="p">]</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_type</span> <span class="o">==</span> <span class="s1">&#39;isometric&#39;</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell_type</span> <span class="o">==</span> <span class="s1">&#39;cubic&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grammar_names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Vary_a&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid parallelepiped volume calculation&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ParallelepipedGrammars.set_seed">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.ParallelepipedGrammars.set_seed">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">set_seed</span><span class="p">(</span><span class="n">seed_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Sets the random seed &quot;&quot;&quot;</span>
+        <span class="n">seed</span><span class="p">(</span><span class="n">seed_number</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ParallelepipedGrammars.pick_random_grammar">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.ParallelepipedGrammars.pick_random_grammar">[docs]</a>
+    <span class="k">def</span> <span class="nf">pick_random_grammar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Randomly selects a grammar with equal probabilty &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grammar_names</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ParallelepipedGrammars.call_grammar_function">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.ParallelepipedGrammars.call_grammar_function">[docs]</a>
+    <span class="k">def</span> <span class="nf">call_grammar_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grammar_selected</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">design_space</span><span class="p">:</span> <span class="n">PolyhedralSpace</span><span class="p">,</span> <span class="n">extension_value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                              <span class="n">rotation_value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function calls the proper grammar to apply to the active design_space which is passed in</span>
+
+<span class="sd">        :param extension_value: How far to extend the grammar selected by</span>
+<span class="sd">        :param grammar_selected: String of whatever grammar was selected to be applied</span>
+<span class="sd">        :param design_space: The PolyhedralDesign space that is being manipulated</span>
+<span class="sd">        :param rotation_value: How much to rotate an angle of the bounding box by</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">grammar_rule</span><span class="p">,</span> <span class="n">geometry</span> <span class="o">=</span> <span class="n">grammar_selected</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">grammar_rule</span> <span class="o">==</span> <span class="s1">&#39;Vary&#39;</span><span class="p">:</span>
+            <span class="n">check</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extend_or_shorten_edge</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="n">design_space</span><span class="p">,</span> <span class="n">extension_value</span><span class="o">=</span><span class="n">extension_value</span><span class="p">,</span>
+                                                <span class="n">param</span><span class="o">=</span><span class="n">geometry</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">grammar_rule</span> <span class="o">==</span> <span class="s1">&#39;Rotate&#39;</span><span class="p">:</span>
+            <span class="n">check</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotate_edge</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="n">design_space</span><span class="p">,</span> <span class="n">rotation_value</span><span class="o">=</span><span class="n">rotation_value</span><span class="p">,</span> <span class="n">param</span><span class="o">=</span><span class="n">geometry</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Invalid rule passed in: </span><span class="si">{</span><span class="n">grammar_selected</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Now, if check is returned as False, we had an invalid rule applied so we need ot set design_constraint_failure</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+        <span class="k">return</span> <span class="n">check</span><span class="p">,</span> <span class="n">end_time</span></div>
+
+
+    <span class="c1"># ACTUAL GRAMMAR LOGIC BELOW</span>
+<div class="viewcode-block" id="ParallelepipedGrammars.extend_or_shorten_edge">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.ParallelepipedGrammars.extend_or_shorten_edge">[docs]</a>
+    <span class="k">def</span> <span class="nf">extend_or_shorten_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">design_space</span><span class="p">:</span> <span class="n">PolyhedralSpace</span><span class="p">,</span> <span class="n">extension_value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">param</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function calls to extend (or shorten using a negative extension_value) one of the bounding box parameters</span>
+
+<span class="sd">        :param extension_value: How far to extend the grammar selected by</span>
+<span class="sd">        :param param: Which bounding box value to change (a, b, c)</span>
+<span class="sd">        :param design_space: The PolyhedralDesign space that is being manipulated</span>
+<span class="sd">        :return: Bool dictating if function ran properly</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># This grammar will effectively change the value of &#39;a&#39; which will modify the PreservedRegion vertex values</span>
+        <span class="c1"># and therefore changes the size of the structure compliant to the constraints of the problem. The constraints</span>
+        <span class="c1"># are very important for this type of optimization to narrow the design search to a reasonable search</span>
+
+        <span class="c1">## Step 1: Find the current value of the param:</span>
+        <span class="n">new_bounding_box</span> <span class="o">=</span> <span class="n">design_space</span><span class="o">.</span><span class="n">bounding_box</span>
+        <span class="n">curVal</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">new_bounding_box</span><span class="p">,</span> <span class="n">param</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">numDecimals</span><span class="p">)</span>
+
+        <span class="c1"># Randomly choose to either shorten or lengthen the selected param:</span>
+        <span class="n">random_choice</span> <span class="o">=</span> <span class="n">choice</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>  <span class="c1"># -1 will shorten, 1 will lengthen the value</span>
+        <span class="n">curVal</span> <span class="o">+=</span> <span class="nb">round</span><span class="p">((</span><span class="n">random_choice</span> <span class="o">*</span> <span class="n">extension_value</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">numDecimals</span><span class="p">)</span>
+
+        <span class="c1"># Set the new value to design_space.bounding_box.param</span>
+        <span class="k">for</span> <span class="n">param_to_update</span> <span class="ow">in</span> <span class="n">design_space</span><span class="o">.</span><span class="n">bounding_box</span><span class="o">.</span><span class="n">param_map</span><span class="p">[</span><span class="n">param</span><span class="p">]:</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">new_bounding_box</span><span class="p">,</span> <span class="n">param_to_update</span><span class="p">,</span> <span class="n">curVal</span><span class="p">)</span>
+
+        <span class="c1"># Now update:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_design_space</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="n">design_space</span><span class="p">,</span> <span class="n">new_bounding_box</span><span class="o">=</span><span class="n">new_bounding_box</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># If the design updated properly we send &quot;True&quot; back signalling rule aplied</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># Otherwise signal the rule could not be applied</span></div>
+
+
+
+<div class="viewcode-block" id="ParallelepipedGrammars.rotate_edge">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.ParallelepipedGrammars.rotate_edge">[docs]</a>
+    <span class="k">def</span> <span class="nf">rotate_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">design_space</span><span class="p">:</span> <span class="n">PolyhedralSpace</span><span class="p">,</span> <span class="n">rotation_value</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">param</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function calls to rotate one of the bounding box parameters</span>
+
+<span class="sd">        :param rotation_value: How far to rotate the selected bounding box parameter</span>
+<span class="sd">        :param param: Which bounding box value to change (alpha, beta, gamma)</span>
+<span class="sd">        :param design_space: The PolyhedralDesign space that is being manipulated</span>
+<span class="sd">        :return: Bool dictating if function ran properly</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># This follows a very similar logic to extend_or_shorten where here we &quot;open&quot; or &quot;close&quot; an angle correspondin</span>
+        <span class="c1"># to a specific alpha beta or gamma of a unit cell</span>
+
+        <span class="c1">## Step 1: Find the current value of the param:</span>
+        <span class="n">new_bounding_box</span> <span class="o">=</span> <span class="n">design_space</span><span class="o">.</span><span class="n">bounding_box</span>
+        <span class="n">curVal</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">new_bounding_box</span><span class="p">,</span> <span class="n">param</span><span class="p">)</span>
+
+        <span class="c1"># Randomly choose to either shorten or lengthen the selected param:</span>
+        <span class="n">random_choice</span> <span class="o">=</span> <span class="n">choice</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>  <span class="c1"># -1 will shorten, 1 will lengthen the value</span>
+        <span class="n">curVal</span> <span class="o">+=</span> <span class="p">(</span><span class="n">random_choice</span> <span class="o">*</span> <span class="n">rotation_value</span><span class="p">)</span>  <span class="c1"># Should be in RADIANS (adding or subtracting degrees)</span>
+
+        <span class="c1"># Set the new value to design_space.bounding_box.param</span>
+        <span class="k">for</span> <span class="n">param_to_update</span> <span class="ow">in</span> <span class="n">design_space</span><span class="o">.</span><span class="n">bounding_box</span><span class="o">.</span><span class="n">param_map</span><span class="p">[</span><span class="n">param</span><span class="p">]:</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">new_bounding_box</span><span class="p">,</span> <span class="n">param_to_update</span><span class="p">,</span> <span class="n">curVal</span><span class="p">)</span>
+
+        <span class="c1"># Now update:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_design_space</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="n">design_space</span><span class="p">,</span> <span class="n">new_bounding_box</span><span class="o">=</span><span class="n">new_bounding_box</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># If the design updated properly we send &quot;True&quot; back signalling rule aplied</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># Otherwise signal the rule could not be aplpied</span></div>
+
+
+    <span class="c1"># HELPER FUNCTIONS FOR ABOVE GRAMMARS</span>
+<div class="viewcode-block" id="ParallelepipedGrammars.update_design_space">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.ParallelepipedGrammars.update_design_space">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_design_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">design_space</span><span class="p">:</span> <span class="n">PolyhedralSpace</span><span class="p">,</span> <span class="n">new_bounding_box</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function actually updated the bounding box hyperparmeters so that the volume / other values can be</span>
+<span class="sd">        properly updated</span>
+<span class="sd">        :param new_bounding_box: New boudning box to be used in the design iteration</span>
+<span class="sd">        :param design_space: The PolyhedralDesign space that is being manipulated</span>
+<span class="sd">        :return: Bool dictating if function ran properly</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Update midpoint values to compare</span>
+        <span class="c1"># NOTE (WIP): In the future I need to change this logic to allow for more &quot;arbitrary&quot; searches. Right now</span>
+        <span class="c1">#             I am just updating the face midpoint</span>
+        <span class="c1"># First we get the current midpoints:</span>
+        <span class="n">previous_vertices</span> <span class="o">=</span> <span class="n">new_bounding_box</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">calculate_vertices_and_edges</span><span class="p">()</span>
+        <span class="n">current_midpoints</span> <span class="o">=</span> <span class="n">new_bounding_box</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">get_midpoint_of_each_face</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">previous_vertices</span><span class="p">)</span>
+
+        <span class="n">new_bounding_box</span><span class="o">.</span><span class="n">update_shape</span><span class="p">()</span>
+        <span class="n">new_vertices</span> <span class="o">=</span> <span class="n">new_bounding_box</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">calculate_vertices_and_edges</span><span class="p">()</span>
+        <span class="n">new_bounding_box</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">update_face_equations</span><span class="p">()</span>
+        <span class="n">new_bounding_box</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">update_volume</span><span class="p">()</span>
+        <span class="n">new_midpoints</span> <span class="o">=</span> <span class="n">new_bounding_box</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">get_midpoint_of_each_face</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">new_vertices</span><span class="p">)</span>
+        <span class="n">midpoint_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">current_midpoints</span><span class="p">,</span> <span class="n">new_midpoints</span><span class="p">):</span>
+            <span class="n">midpoint_map</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span>
+
+        <span class="c1"># Update to new bounding box:</span>
+        <span class="n">design_space</span><span class="o">.</span><span class="n">bounding_box</span> <span class="o">=</span> <span class="n">new_bounding_box</span>
+
+
+        <span class="c1">## Also need to update the design graph preserved region values potentially (if they are on the bounding box):</span>
+        <span class="c1">## NOTE (WIP): Need to scale things up properly? Like I think everything need to &quot;proportionally&quot; scale</span>
+        <span class="k">for</span> <span class="n">preserved_region</span> <span class="ow">in</span> <span class="n">design_space</span><span class="o">.</span><span class="n">preserved</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">preserved_region</span><span class="p">,</span> <span class="n">PreservedVertex</span><span class="p">):</span>
+                <span class="n">curPoint</span> <span class="o">=</span> <span class="n">preserved_region</span><span class="o">.</span><span class="n">v1</span>
+                <span class="k">if</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">curPoint</span><span class="p">)</span> <span class="ow">in</span> <span class="n">midpoint_map</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">newPoint</span> <span class="o">=</span> <span class="n">midpoint_map</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">curPoint</span><span class="p">)]</span>
+                    <span class="n">preserved_region</span><span class="o">.</span><span class="n">v1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">newPoint</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">newPoint</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">newPoint</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
+
+                    <span class="c1"># Now we need to update this nodal position in design graph:</span>
+                    <span class="n">curNode</span> <span class="o">=</span> <span class="n">node_from_xyz</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">curPoint</span><span class="p">)</span>
+                    <span class="n">update_nodal_position</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">curNode</span><span class="p">,</span>
+                                          <span class="n">new_xyz</span><span class="o">=</span><span class="n">preserved_region</span><span class="o">.</span><span class="n">v1</span><span class="p">,</span> <span class="n">numDecimals</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">numDecimals</span><span class="p">)</span>
+                    <span class="n">update_vertex_in_all_faces</span><span class="p">(</span><span class="n">all_faces</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">all_faces</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">curNode</span><span class="p">,</span>
+                                               <span class="n">new_xyz</span><span class="o">=</span><span class="n">preserved_region</span><span class="o">.</span><span class="n">v1</span><span class="p">)</span>
+
+
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">preserved_region</span><span class="p">,</span> <span class="n">PreservedEdge</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;WIP: Need to implement this&#39;</span><span class="p">)</span>
+        <span class="c1"># After this all occurs, we send True signalling &#39;grammar applied successfully&#39;</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+</div>
+
+
+<div class="viewcode-block" id="LocalPlane">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.LocalPlane">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">LocalPlane</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is not used directly by the user, it is used to check geometry of a generated design</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">verts</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span>
+    <span class="n">og_point</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span>  <span class="c1"># Original vertex / significant point we need to tract</span>
+    <span class="n">divide_edge_rule_used</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1">### The plane we create for 3 coplanar points from a retriangulation rule is different:</span>
+        <span class="c1"># Select the first 3 points and verify that they are NOT co-linear</span>
+        <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">verts</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:]</span>
+
+        <span class="c1"># Find two vectors lying on the plane</span>
+        <span class="n">v1</span> <span class="o">=</span> <span class="n">p3</span> <span class="o">-</span> <span class="n">p1</span>
+        <span class="n">v2</span> <span class="o">=</span> <span class="n">p2</span> <span class="o">-</span> <span class="n">p1</span>
+
+        <span class="c1"># Calculate the normal vector using the cross product</span>
+        <span class="n">normal_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">A</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">normal_vector</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">normal_vector</span><span class="p">,</span> <span class="n">p3</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+
+        <span class="c1"># If we create a plan using the divide_edge rule, we also set the angle:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">divide_edge_rule_used</span><span class="p">:</span>
+            <span class="n">bisector_vector</span> <span class="o">=</span> <span class="p">(</span><span class="n">v1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v1</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span><span class="n">v2</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v2</span><span class="p">))</span>
+            <span class="c1"># Normalize the bisector vector to obtain the unit vector</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unit_bisector_vector</span> <span class="o">=</span> <span class="n">bisector_vector</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">bisector_vector</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unit_bisector_vector</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="CustomGrammarSet">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.CustomGrammarSet">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">CustomGrammarSet</span><span class="p">(</span><span class="n">GrammarSet</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is not used directly by the user, but rather it is created if the user specifies more than 1 GrammarSets</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">grammar_sets</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># First need to create a list of grammar_names:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grammar_names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grammar_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grammar_sets</span><span class="p">:</span>
+            <span class="c1"># We add all grammar names from all grammar sets as potential rules to pick</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">grammar_names</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">grammar_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                <span class="c1"># We also add this name to the grammar_map so we know which grammar functions to call:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">grammar_map</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span>
+
+<div class="viewcode-block" id="CustomGrammarSet.set_seed">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.CustomGrammarSet.set_seed">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">set_seed</span><span class="p">(</span><span class="n">seed_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">seed</span><span class="p">(</span><span class="n">seed_number</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="CustomGrammarSet.pick_random_grammar">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.CustomGrammarSet.pick_random_grammar">[docs]</a>
+    <span class="k">def</span> <span class="nf">pick_random_grammar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># Simply select a random rule</span>
+        <span class="k">return</span> <span class="n">choice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grammar_names</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="CustomGrammarSet.call_grammar_function">
+<a class="viewcode-back" href="../../../mango.grammars.html#mango.grammars.origami_grammars.CustomGrammarSet.call_grammar_function">[docs]</a>
+    <span class="k">def</span> <span class="nf">call_grammar_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grammar_selected</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">design_space</span><span class="p">:</span> <span class="n">PolyhedralSpace</span><span class="p">,</span>
+                              <span class="n">extension_value</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="c1"># First get the GrammarSet for the grammar_selected:</span>
+        <span class="n">grammar_set</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grammar_map</span><span class="p">[</span><span class="n">grammar_selected</span><span class="p">]</span>
+
+        <span class="c1"># Now call the call_grammar_function:</span>
+        <span class="n">grammar_applied_successfully</span><span class="p">,</span> <span class="n">grammar_time</span> <span class="o">=</span> <span class="n">grammar_set</span><span class="o">.</span><span class="n">call_grammar_function</span><span class="p">(</span>
+            <span class="n">grammar_selected</span><span class="o">=</span><span class="n">grammar_selected</span><span class="p">,</span>
+            <span class="n">design_space</span><span class="o">=</span><span class="n">design_space</span><span class="p">,</span>
+            <span class="n">extension_value</span><span class="o">=</span><span class="n">extension_value</span><span class="p">)</span>
+
+        <span class="c1"># Finally just &quot;pass along&quot; the grammar_applied_successfully and grammar_time functions:</span>
+        <span class="k">return</span> <span class="n">grammar_applied_successfully</span><span class="p">,</span> <span class="n">grammar_time</span></div>
+</div>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, A.J. Vetturini.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

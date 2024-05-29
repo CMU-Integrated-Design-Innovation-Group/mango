@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mango.mango_features.grammar_ramp &mdash; mango generative design framework b0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=7d16594f"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            mango generative design framework
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">mango</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">mango generative design framework</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mango.mango_features.grammar_ramp</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mango.mango_features.grammar_ramp</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A.J. Vetturini \n</span>
+<span class="sd">IDIG and MMBL \n</span>
+<span class="sd">Carnegie Mellon University \n</span>
+
+<span class="sd">This script contains the ability to create ramp elements for both the edge rotation and the length extension rules.</span>
+<span class="sd">These ramps are specifically used for the length extension or edge rotation rules, future research may seek to optimize</span>
+<span class="sd">these ramps automatically based on the scale of the input.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<div class="viewcode-block" id="Ramp">
+<a class="viewcode-back" href="../../../mango.mango_features.html#mango.mango_features.grammar_ramp.Ramp">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Ramp</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This Ramp class is capable of manipulating the extension / rotation value of the grammars during the generative</span>
+<span class="sd">    process. Generally, earlier in the search we make larger design modifications and over time we switch over to a</span>
+<span class="sd">    more refined search by making smaller design modifications down to a minmal value. </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ------------</span>
+<span class="sd">    unique_id : Center of sphere defined by a numpy array in [X Y Z] (nm). \n</span>
+<span class="sd">    max_value : floating point of the sphere (nm) \n</span>
+<span class="sd">    min_value : Number of decimals to round positional values to \n</span>
+<span class="sd">    max_number_epochs : Integer number defining how many epochs a study might run for to allocate step sizes \n</span>
+<span class="sd">    min_steps_at_min : Integer number of a minimal # of steps to use the min_value for the ramp element \n</span>
+<span class="sd">    precision : integer that is automatically specified to 2. You can lower the precision if desired but consider DNA! \n</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">unique_id</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># A simple identifier / name for the ramp object</span>
+    <span class="n">max_value</span><span class="p">:</span> <span class="nb">float</span>  <span class="c1"># User should be careful with too large, we currently employ an error to prevent this behavior</span>
+    <span class="n">min_value</span><span class="p">:</span> <span class="nb">float</span>  <span class="c1"># E.g. 0.34nm since we only need precision down to the level</span>
+    <span class="n">max_number_epochs</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># So we know how to ramp based on Epoch</span>
+    <span class="n">min_steps_at_min</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># Number of steps where the extend value is the lowest possible (0.34 nm)</span>
+    <span class="n">precision</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1"># Level of precision for the ramp, 2 is good for DNA since BDNA bprise is 0.34nm and</span>
+                        <span class="c1"># we don&#39;t need more precision than that.</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_value</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">20</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_value</span><span class="p">):</span> <span class="c1"># If desired, just raise the value of &quot;20&quot; but please note</span>
+                                                   <span class="c1"># this in any publication supplmentary-type materials.</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Too large of a discrepancy between the max and min value for a ramp.&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ramp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_ramp</span><span class="p">()</span>  <span class="c1"># Make this function and things later.</span>
+
+<div class="viewcode-block" id="Ramp.distribute">
+<a class="viewcode-back" href="../../../mango.mango_features.html#mango.mango_features.grammar_ramp.Ramp.distribute">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">distribute</span><span class="p">(</span><span class="n">ct</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; This static method simply distributes the ramp elements given the parameters defined at class level &quot;&quot;&quot;</span>
+        <span class="n">num_bins</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+        <span class="n">ideal_value_per_bin</span> <span class="o">=</span> <span class="n">ct</span> <span class="o">//</span> <span class="n">num_bins</span>
+        <span class="n">remainder</span> <span class="o">=</span> <span class="n">ct</span> <span class="o">%</span> <span class="n">num_bins</span>
+
+        <span class="c1"># Sort the values in ascending order</span>
+        <span class="n">sorted_values</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+
+        <span class="n">distributed_values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">sorted_values</span><span class="p">:</span>
+            <span class="n">bin_value</span> <span class="o">=</span> <span class="n">ideal_value_per_bin</span>
+            <span class="k">if</span> <span class="n">remainder</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">bin_value</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">remainder</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="n">distributed_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bin_value</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">distributed_values</span></div>
+
+
+
+<div class="viewcode-block" id="Ramp.create_ramp">
+<a class="viewcode-back" href="../../../mango.mango_features.html#mango.mango_features.grammar_ramp.Ramp.create_ramp">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_ramp</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Note: This is an area of interest for the future, here I use a simple ramp that worked via design iteration.</span>
+<span class="sd">              Future studies can observe the effects of different ramps (and maybe influence repeatability and depth</span>
+<span class="sd">              of search given the stochastic nature of the optimizers).</span>
+
+<span class="sd">        This class creates the actual ramp array which can be referenced by the optimizer to determine the extension</span>
+<span class="sd">        or rotation value during that design iteration.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">max_mult</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_value</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_value</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_value</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">precision</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">max_mult</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_value</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The maximal value for the </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">unique_id</span><span class="si">}</span><span class="s1"> ramp of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_value</span><span class="si">}</span><span class="s1"> was not an even step &#39;</span>
+                          <span class="sa">f</span><span class="s1">&#39;size away from the min value of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">min_value</span><span class="si">}</span><span class="s1">, therefore using a value of </span><span class="si">{</span><span class="n">max_mult</span><span class="si">}</span><span class="s1"> &#39;</span>
+                          <span class="sa">f</span><span class="s1">&#39;instead.&#39;</span><span class="p">)</span>
+        <span class="n">extension_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_value</span><span class="p">,</span> <span class="n">max_mult</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_value</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">min_value</span><span class="p">)))</span>
+        <span class="n">ramp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_number_epochs</span><span class="p">)</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">extension_values</span><span class="p">)</span>
+        <span class="n">ct</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_number_epochs</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_steps_at_min</span>  <span class="c1"># Number of &quot;steps&quot; we have to assign to non-min vals</span>
+        <span class="k">if</span> <span class="n">ct</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># If ct is larger than the number of value in ramp, then we try and assign as many &quot;even&quot; time at each of</span>
+            <span class="c1"># values. However, we prefer to spend more time at the smaller values depending on the length discrepancy</span>
+            <span class="c1"># between ct and extension values</span>
+            <span class="c1"># This distribute logic bakes in if ct &lt; len(extension_values) and we will only use the smallest values</span>
+            <span class="n">distributions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">distribute</span><span class="p">(</span><span class="n">ct</span><span class="o">=</span><span class="n">ct</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="n">extension_values</span><span class="p">)</span>
+            <span class="n">flipped_distributions</span> <span class="o">=</span> <span class="n">distributions</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="n">ct</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">flipped_distributions</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+                    <span class="n">ramp</span><span class="p">[</span><span class="n">ct</span><span class="p">]</span> <span class="o">=</span> <span class="n">extension_values</span><span class="p">[</span><span class="n">idx</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">ct</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">idx</span> <span class="o">-=</span> <span class="mi">1</span>  <span class="c1"># We lower idx to lessen the input value into flipped distributions</span>
+
+        <span class="c1"># If ct is not bigger than zero we do the logic below. This logic still &quot;works&quot; to finish off the ramp as</span>
+        <span class="c1"># edited above as in this case, all we need to do is replace all remaining &quot;zeros&quot; in ramp with the value</span>
+        <span class="c1"># of min_value:</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">ramp</span> <span class="o">==</span> <span class="mf">0.0</span>
+        <span class="n">ramp</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_value</span>
+
+        <span class="k">return</span> <span class="n">ramp</span></div>
+
+
+
+<div class="viewcode-block" id="Ramp.current_ramp_value">
+<a class="viewcode-back" href="../../../mango.mango_features.html#mango.mango_features.grammar_ramp.Ramp.current_ramp_value">[docs]</a>
+    <span class="k">def</span> <span class="nf">current_ramp_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function returns the ramp value to use based on the current epoch #</span>
+
+<span class="sd">        :param epoch: Whatever epoch # we are at</span>
+<span class="sd">        :return: The ramp value to use in the optimizer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ramp</span><span class="p">[</span><span class="n">epoch</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="c1"># In case an issue, just use the last value (ie smallest value)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">ramp</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, A.J. Vetturini.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

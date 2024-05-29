@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Optimization problem definition &mdash; mango generative design framework b0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=7d16594f"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Optimizers" href="mango.optimizers.html" />
+    <link rel="prev" title="Input design features" href="mango.mango_features.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            mango generative design framework
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">mango</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="mango.html">mango package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="mango.html#package-components">Package Components</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html">Establishing design space</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html">Grammars</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html">Input design features</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Optimization problem definition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html">Optimizers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.utils.html">Utilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html">Visualization Options</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mango generative design framework</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">mango</a></li>
+          <li class="breadcrumb-item"><a href="mango.html">mango package</a></li>
+      <li class="breadcrumb-item active">Optimization problem definition</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/mango.optimization_features.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="optimization-problem-definition">
+<h1>Optimization problem definition<a class="headerlink" href="#optimization-problem-definition" title="Link to this heading"></a></h1>
+<section id="module-mango.optimization_features.design_constraints">
+<span id="design-constraints"></span><h2>Design Constraints<a class="headerlink" href="#module-mango.optimization_features.design_constraints" title="Link to this heading"></a></h2>
+<p>A.J. Vetturini</p>
+<p>IDIG and MMBL</p>
+<p>Carnegie Mellon University</p>
+<p>This script contains the default (standard) design constraints used with the PolyhedralDesignSpace as well as the class
+affording a designer the ability to create a custom defined constraint.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.CustomDesignConstraint">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.optimization_features.design_constraints.</span></span><span class="sig-name descname"><span class="pre">CustomDesignConstraint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_constraint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/optimization_features/design_constraints.html#CustomDesignConstraint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.optimization_features.design_constraints.CustomDesignConstraint" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class lets the user define a custom function which can be assigned as an extra design constraint. This is
+a slight WIP as I may want to convert this to a Python wrapper, but I am not sure about the logistics (or if this
+is even a good idea).</p>
+<p>The function can really be defined as anything, however it should be noted that there are no checks here to see how
+“good” a constraint is or is not, and that is at the discretion of the user.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
+<p>name : String unique identifies of the constraint name</p>
+<p>design_constraint : A Python function defining the constraint. For example, if you have a constraint as:</p>
+<blockquote>
+<div><p>def foo(input_vars, extra_params):</p>
+<blockquote>
+<div><p>constraint_code</p>
+</div></blockquote>
+<p>Then you would pass in CustomDesignConstraint(name=’foo’, design_constraint=foo, extra_params=extra_params)</p>
+</div></blockquote>
+<p>extra_params : A dictionary of constants / values that a user may want to use in the custom constraint</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.CustomDesignConstraint.design_constraint">
+<span class="sig-name descname"><span class="pre">design_constraint</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#mango.optimization_features.design_constraints.CustomDesignConstraint.design_constraint" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.CustomDesignConstraint.evaluate_constraint">
+<span class="sig-name descname"><span class="pre">evaluate_constraint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/optimization_features/design_constraints.html#CustomDesignConstraint.evaluate_constraint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.optimization_features.design_constraints.CustomDesignConstraint.evaluate_constraint" title="Link to this definition"></a></dt>
+<dd><p>This function simply calls the Callable function</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.CustomDesignConstraint.extra_params">
+<span class="sig-name descname"><span class="pre">extra_params</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#mango.optimization_features.design_constraints.CustomDesignConstraint.extra_params" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.CustomDesignConstraint.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#mango.optimization_features.design_constraints.CustomDesignConstraint.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.PolyhedralDefaultConstraints">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.optimization_features.design_constraints.</span></span><span class="sig-name descname"><span class="pre">PolyhedralDefaultConstraints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">extra_constraints</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaffold_routing_algorithm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'DAEDALUS'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_face_angle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_edge_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">39</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_edge_length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">250</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_number_basepairs_in_scaffold</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">7249</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/optimization_features/design_constraints.html#PolyhedralDefaultConstraints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This default constraints class contains methods which can examine a design space and determine if the design is
+compliant w.r.t.: edge lengths, scaffold required to create the design, etc. If looking to constrain certain
+aspects of the design, please see the CustomDesignConstraint class.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>extra_constraints : List of CustomDesignConstraint objects</p>
+<p>scaffold_routing_algorithm : Which automated algorithm is to be used on the exported PLY file, defualt DAEDALUS</p>
+<p>min_face_angle : Floating point minimal allowable face angle (in degrees). Too low of a value can cause issues in the exported design.</p>
+<p>min_edge_length : Integer min number of nucleotides any one edge can have; default is 39 due to ATHENA restrictions.</p>
+<p>max_edge_length : Integer max number of nucleotides any one edge can have</p>
+<p>max_number_basepairs_in_scaffold : Integer value for max # of nucleotides to allow in a design. Note that here we estimate the # of nts in the scaffold, and there may be some error in exported designs.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.broken_preserved_edge">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">broken_preserved_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/mango/optimization_features/design_constraints.html#PolyhedralDefaultConstraints.broken_preserved_edge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.broken_preserved_edge" title="Link to this definition"></a></dt>
+<dd><p>This method verifies that any PreservedEdge maintains as an edge during the generative process and is not
+manipulated via grammar application.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>design_space</strong> – The current design represented by its design_space to be validated for constraint
+compliance</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the design is invalid, False if the design is valid. Also returns time of function execution
+for internal logging / development purposes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.call_function_with_params">
+<span class="sig-name descname"><span class="pre">call_function_with_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/mango/optimization_features/design_constraints.html#PolyhedralDefaultConstraints.call_function_with_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.call_function_with_params" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.check_constraints">
+<span class="sig-name descname"><span class="pre">check_constraints</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraint_set</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compare_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/mango/optimization_features/design_constraints.html#PolyhedralDefaultConstraints.check_constraints"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.check_constraints" title="Link to this definition"></a></dt>
+<dd><p>This is the top-level method which calls all constraints in the constraint_set (as well as any custom defined
+constraints).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>design_space</strong> – The current design represented by its design_space to be validated for constraint
+compliance</p></li>
+<li><p><strong>constraint_set</strong> – List of strings dictating which constraints are being used in the study</p></li>
+<li><p><strong>compare_space</strong> – Design space of the prior design_space which is used to validate against the active design</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.check_face_intersections">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_face_intersections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Trimesh</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/mango/optimization_features/design_constraints.html#PolyhedralDefaultConstraints.check_face_intersections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.check_face_intersections" title="Link to this definition"></a></dt>
+<dd><p>This function validates whether the faces of the mesh overlap or not signalling an “invalid” mesh.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mesh</strong> – Trimesh mesh of the active design_space which auto-calculates all face angles</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the design is invalid, False if the design is valid. Also returns time of function execution
+for internal logging / development purposes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.create_constraint_dictionary">
+<span class="sig-name descname"><span class="pre">create_constraint_dictionary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/optimization_features/design_constraints.html#PolyhedralDefaultConstraints.create_constraint_dictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.create_constraint_dictionary" title="Link to this definition"></a></dt>
+<dd><p>This function creates the necessary dictionary which stores parameters (such as the trimesh) who are used
+in validating the design constraints of the problem</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>design_space</strong> – The current design represented by its design_space to be validated for constraint
+compliance</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.edge_in_excluded_region">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">edge_in_excluded_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/mango/optimization_features/design_constraints.html#PolyhedralDefaultConstraints.edge_in_excluded_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.edge_in_excluded_region" title="Link to this definition"></a></dt>
+<dd><p>This method determines if an edge crossed through a face in the excluded regions list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>design_space</strong> – The current design represented by its design_space to be validated for constraint
+compliance</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the design is invalid, False if the design is valid. Also returns time of function execution
+for internal logging / development purposes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.extra_constraints">
+<span class="sig-name descname"><span class="pre">extra_constraints</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.extra_constraints" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.find_intersecting_edges">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">find_intersecting_edges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">compare_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/mango/optimization_features/design_constraints.html#PolyhedralDefaultConstraints.find_intersecting_edges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.find_intersecting_edges" title="Link to this definition"></a></dt>
+<dd><p>This function instead considers the design as an invalid polyhedra where faces may intersect one another. This
+specific function will consider edges has cylindrical bounding boxes that may not collide with one another
+through a collision detection algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>design_space</strong> – The current design represented by its design_space to be validated for constraint
+compliance</p></li>
+<li><p><strong>compare_space</strong> – Design space of the prior design_space which is used to validate against the active design</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the design is invalid, False if the design is valid. Also returns time of function execution
+for internal logging / development purposes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.invalid_edge_lengths">
+<span class="sig-name descname"><span class="pre">invalid_edge_lengths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_lengths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/mango/optimization_features/design_constraints.html#PolyhedralDefaultConstraints.invalid_edge_lengths"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.invalid_edge_lengths" title="Link to this definition"></a></dt>
+<dd><p>This method simply verifies that all edge lengths in a design are between the min and max allowable value set
+by the user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>all_lengths</strong> – List of edge length values [15, 20, 25] (nm)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the design is invalid, False if the design is valid. Also returns time of function execution
+for internal logging / development purposes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.invalid_face_angles">
+<span class="sig-name descname"><span class="pre">invalid_face_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Trimesh</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/mango/optimization_features/design_constraints.html#PolyhedralDefaultConstraints.invalid_face_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.invalid_face_angles" title="Link to this definition"></a></dt>
+<dd><p>This method analyzes a mesh and assesses the faces of the mesh to assure none of the face angles are below the
+set minimal value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mesh</strong> – Trimesh mesh of the active design_space which auto-calculates all face angles</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the design is invalid, False if the design is valid. Also returns time of function execution
+for internal logging / development purposes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.max_edge_length">
+<span class="sig-name descname"><span class="pre">max_edge_length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">250</span></em><a class="headerlink" href="#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.max_edge_length" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.max_number_basepairs_in_scaffold">
+<span class="sig-name descname"><span class="pre">max_number_basepairs_in_scaffold</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7249</span></em><a class="headerlink" href="#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.max_number_basepairs_in_scaffold" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.min_edge_length">
+<span class="sig-name descname"><span class="pre">min_edge_length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">39</span></em><a class="headerlink" href="#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.min_edge_length" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.min_face_angle">
+<span class="sig-name descname"><span class="pre">min_face_angle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></em><a class="headerlink" href="#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.min_face_angle" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.outside_design_space">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">outside_design_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_edges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/mango/optimization_features/design_constraints.html#PolyhedralDefaultConstraints.outside_design_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.outside_design_space" title="Link to this definition"></a></dt>
+<dd><p>This method determines if a design is outside the bounding_box</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>design_space</strong> – The current design represented by its design_space to be validated for constraint
+compliance</p></li>
+<li><p><strong>all_edges</strong> – List of all edge node pairs</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the design is invalid, False if the design is valid. Also returns time of function execution
+for internal logging / development purposes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.scaffold_routing_algorithm">
+<span class="sig-name descname"><span class="pre">scaffold_routing_algorithm</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'DAEDALUS'</span></em><a class="headerlink" href="#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.scaffold_routing_algorithm" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.update_params">
+<span class="sig-name descname"><span class="pre">update_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/optimization_features/design_constraints.html#PolyhedralDefaultConstraints.update_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.update_params" title="Link to this definition"></a></dt>
+<dd><p>This function will update the proper value inside of self.params such that future design_constraints can be
+computationally efficiently checked</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>design_space</strong> – The current design represented by its design_space to be validated for constraint
+compliance</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.used_too_much_scaffold">
+<span class="sig-name descname"><span class="pre">used_too_much_scaffold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_lengths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/mango/optimization_features/design_constraints.html#PolyhedralDefaultConstraints.used_too_much_scaffold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.used_too_much_scaffold" title="Link to this definition"></a></dt>
+<dd><p>This method estimates the total number of nucleotides a scaffold would require to convert the design_space
+to a DNA origami design file using the specified automated routing algorithm (eg DAEDALUS). This method is
+simply an approximation and may over or under-shoot a design. Due to the stochastic nature of this algorithm,
+it would be prohibitively expensive to constantly compute the total number of nucleotides each design would
+require, whereas this is much more efficient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>all_lengths</strong> – List of edge length values [15, 20, 25] (nm)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the design is invalid, False if the design is valid. Also returns time of function execution
+for internal logging / development purposes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.vert_in_excluded_region">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">vert_in_excluded_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">all_verts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/mango/optimization_features/design_constraints.html#PolyhedralDefaultConstraints.vert_in_excluded_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.vert_in_excluded_region" title="Link to this definition"></a></dt>
+<dd><p>This method determines if a vertex is inside of an excluded region which is not permissible.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>design_space</strong> – The current design represented by its design_space to be validated for constraint
+compliance</p></li>
+<li><p><strong>all_verts</strong> – List of all vertices in [X Y Z] as in [[X1 Y1 Z1], [X2 Y2 Z2], … [XN YN ZN]]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the design is invalid, False if the design is valid. Also returns time of function execution
+for internal logging / development purposes</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-mango.optimization_features.objective_function">
+<span id="objective-function"></span><h2>Objective Function<a class="headerlink" href="#module-mango.optimization_features.objective_function" title="Link to this heading"></a></h2>
+<p>A.J. Vetturini</p>
+<p>IDIG and MMBL</p>
+<p>Carnegie Mellon University</p>
+<p>This script simply contains the dataclass for creating an ObjectiveFunction to use to guide the search process for
+a generative study.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.optimization_features.objective_function.ObjectiveFunction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.optimization_features.objective_function.</span></span><span class="sig-name descname"><span class="pre">ObjectiveFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objective_equation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numDecimals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/optimization_features/objective_function.html#ObjectiveFunction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.optimization_features.objective_function.ObjectiveFunction" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class lets the user define a custom function which can be assigned as the objective of the generative process.
+This is a slight WIP as I may want to convert this to a Python wrapper, but I am not sure about the logistics (or if
+this is even a good idea). This class is very similar to the CustomDesignConstraint class.</p>
+<p>The function can really be defined as anything, however it should be noted that there are no checks here to see how
+“good” a constraint is or is not, and that is at the discretion of the user.</p>
+<section id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>name : String unique identifies of the constraint name</p>
+<p>objective_equation : A Python function defining the objective. For example, if you have a constraint as:</p>
+<blockquote>
+<div><p>def bar(input_vars, extra_params):</p>
+<blockquote>
+<div><p>objective_function_code</p>
+</div></blockquote>
+<p>Then you would pass in ObjectiveFunction(name=’bar’, design_constraint=bar, extra_params=extra_params)</p>
+</div></blockquote>
+<p>extra_params : A dictionary of constants / values that a user may want to use in the custom constraint</p>
+<dl class="simple">
+<dt>numDecimals<span class="classifier">Floating point value to control precision. Allowing too high of precision, depending on the sampling</span></dt><dd><p>sampling, can lead to the optimizers getting stuck in local minima around a certain point.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.optimization_features.objective_function.ObjectiveFunction.evaluate_function">
+<span class="sig-name descname"><span class="pre">evaluate_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/optimization_features/objective_function.html#ObjectiveFunction.evaluate_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.optimization_features.objective_function.ObjectiveFunction.evaluate_function" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.optimization_features.objective_function.ObjectiveFunction.extra_params">
+<span class="sig-name descname"><span class="pre">extra_params</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#mango.optimization_features.objective_function.ObjectiveFunction.extra_params" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.optimization_features.objective_function.ObjectiveFunction.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#mango.optimization_features.objective_function.ObjectiveFunction.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.optimization_features.objective_function.ObjectiveFunction.numDecimals">
+<span class="sig-name descname"><span class="pre">numDecimals</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#mango.optimization_features.objective_function.ObjectiveFunction.numDecimals" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.optimization_features.objective_function.ObjectiveFunction.objective_equation">
+<span class="sig-name descname"><span class="pre">objective_equation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#mango.optimization_features.objective_function.ObjectiveFunction.objective_equation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mango.mango_features.html" class="btn btn-neutral float-left" title="Input design features" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mango.optimizers.html" class="btn btn-neutral float-right" title="Optimizers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, A.J. Vetturini.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

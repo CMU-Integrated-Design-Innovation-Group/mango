@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mango.visualizations.mango_output_visualization &mdash; mango generative design framework b0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=7d16594f"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            mango generative design framework
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">mango</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">mango generative design framework</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mango.visualizations.mango_output_visualization</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mango.visualizations.mango_output_visualization</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A.J. Vetturini \n</span>
+<span class="sd">IDIG and MMBL \n</span>
+<span class="sd">Carnegie Mellon University \n</span>
+
+<span class="sd">This script will support creating an output file that can be used within the kodak visualization tool. This scripts</span>
+<span class="sd">purpose is to create a simple binary file that can then be read-in by the visualization tool to create the validated</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># Import modules</span>
+<span class="kn">import</span> <span class="nn">dill</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">mango.optimizers.single_objective_shape_annealing</span> <span class="kn">import</span> <span class="n">ShapeAnneal</span>
+<span class="kn">from</span> <span class="nn">mango.visualizations.display_mesh_design</span> <span class="kn">import</span> <span class="n">CylindricalRepresentation</span><span class="p">,</span> <span class="n">MeshRepresentation</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">mango.visualizations.optimizer_analysis</span> <span class="kn">import</span> <span class="n">MOSA_Analysis</span>
+
+<span class="c1"># Import kodak module which is a package I built to visualize my results figures. You can also manually create your</span>
+<span class="c1"># own results by reading in the results file via dill.load(filepath)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">kodak.kodak_creator</span> <span class="kn">import</span> <span class="n">KodakPlots</span>
+<span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Missing kodak toolkit package. Please see https://github.com/ajvetturini/kodak_toolkit/tree/master&quot;</span>
+                    <span class="s2">&quot; for how to install this visualization Python package&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># This returns a list of 33 evenly spaced point (for a total of 35) to use in a design animation for the multiobjective</span>
+<span class="c1"># output.</span>
+<div class="viewcode-block" id="select_evenly_spaced_tuples">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.mango_output_visualization.select_evenly_spaced_tuples">[docs]</a>
+<span class="k">def</span> <span class="nf">select_evenly_spaced_tuples</span><span class="p">(</span><span class="n">tuples_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">num_points</span><span class="o">=</span><span class="mi">33</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function finds 33 evenly space points amongst a list of 2D tuples [(1, 2), (3, 4), ...] and uses these points</span>
+<span class="sd">    as the default exported designs which a user can interact with in the UI window. \n \n</span>
+
+<span class="sd">    Why 33 as the default? The plots files I create with this value were a reasonable enough size.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Always select the first and last tuples</span>
+    <span class="n">selected_indices</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tuples_list</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Calculate the spacing between the tuples to select approximately &#39;num_points&#39; tuples</span>
+    <span class="n">spacing</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tuples_list</span><span class="p">)</span> <span class="o">//</span> <span class="p">(</span><span class="n">num_points</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># Select tuples at evenly spaced intervals</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">spacing</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tuples_list</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">spacing</span><span class="p">):</span>
+        <span class="n">selected_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+    <span class="c1"># Extract the selected tuples</span>
+    <span class="n">selected_tuples</span> <span class="o">=</span> <span class="p">[</span><span class="n">tuples_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">selected_indices</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">selected_tuples</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="VisualizationObject">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.mango_output_visualization.VisualizationObject">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">VisualizationObject</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class quickly creates visualization files which can be visualized using the custom kodak viewer found at</span>
+<span class="sd">    https://ajvetturini.github.io/kodak/. A user can create much more powerful custom scripts, but these defaults</span>
+<span class="sd">    create a simple, minimal example output that one might be most interested in.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ------------</span>
+<span class="sd">    aj1_filepath : String filepath location to the .aj1 results file output from the optimizer \n</span>
+<span class="sd">    output_filepath : Where to store the plots file (as only a folderpath) \n</span>
+<span class="sd">    output_filename_no_extension : String name of the file to output \n</span>
+<span class="sd">    max_number_of_windows : Integer number of windows that the kodak viewer will let you have open. Just here to prevent</span>
+<span class="sd">                            someone from accidentally opening too many windows, likely don&#39;t change the value. \n</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">aj1_filepath</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># Path to the new AJ1 file to read in</span>
+    <span class="n">output_filepath</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">output_filename_no_extension</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">max_number_of_windows</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># The user can change this value, but this is the max # of windows that can be</span>
+                                     <span class="c1"># created inside of the kodak tool. This may cause memory issues if set too high.</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_in_file</span><span class="p">()</span>  <span class="c1"># Dictionary of data</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_filepath</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_filepath</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="VisualizationObject.read_in_file">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.mango_output_visualization.VisualizationObject.read_in_file">[docs]</a>
+    <span class="k">def</span> <span class="nf">read_in_file</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ShapeAnneal</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Simple function reading in the passed in file and loading the data in via dill &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aj1_filepath</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">dill</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+
+<div class="viewcode-block" id="VisualizationObject.create_standard_output_single_objective">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.mango_output_visualization.VisualizationObject.create_standard_output_single_objective">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_standard_output_single_objective</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mesh_or_cylinder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;cylinder&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function will create the standard output windows for a single objective optimization process consisting of:</span>
+<span class="sd">            - The objective function valuation over the number of epochs which is interactive and a user can select</span>
+<span class="sd">              from this list</span>
+<span class="sd">            - A window describing all constraints of the problem</span>
+
+<span class="sd">        :param mesh_or_cylinder: Values are either &quot;mesh&quot; or &quot;cylinder&quot; and change the visual appearance of the</span>
+<span class="sd">                                 generated design</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">mesh_or_cylinder</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;mesh&#39;</span><span class="p">,</span> <span class="s1">&#39;cylinder&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;mesh_or_cylinder can only be &quot;mesh&quot; or &quot;cylinder&quot;&#39;</span><span class="p">)</span>
+        <span class="n">kodak_plots</span> <span class="o">=</span> <span class="n">KodakPlots</span><span class="p">()</span>
+        <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objectives_during_annealing</span><span class="p">),</span> <span class="mi">1</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objectives_during_annealing</span>
+        <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">random_walk_objective_values</span><span class="p">),</span> <span class="mi">1</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">random_walk_objective_values</span>
+        <span class="n">obj1</span> <span class="o">=</span> <span class="n">kodak_plots</span><span class="o">.</span><span class="n">scatter_plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y1</span><span class="p">,</span> <span class="n">lines_markers_both</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Optimization&#39;</span><span class="p">)</span>
+        <span class="n">obj2</span> <span class="o">=</span> <span class="n">kodak_plots</span><span class="o">.</span><span class="n">scatter_plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x2</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y2</span><span class="p">,</span> <span class="n">lines_markers_both</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Random Walk&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Add design evolution:</span>
+        <span class="n">scatterX</span><span class="p">,</span> <span class="n">scatterY</span><span class="p">,</span> <span class="n">scatterXY</span><span class="p">,</span> <span class="n">stored_designs</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">design_evolution</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">design_evolution</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">design_evolution</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">y1</span><span class="p">:</span>
+                <span class="n">epoch</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">epoch</span> <span class="o">=</span> <span class="n">y1</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">design_evolution</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">scatterX</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">epoch</span><span class="p">)</span>
+            <span class="n">scatterY</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">design_evolution</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">scatterXY</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">epoch</span><span class="p">,</span> <span class="n">design_evolution</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">stored_designs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">design_evolution</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="c1"># First add X Y as scatter points:</span>
+        <span class="n">obj3</span> <span class="o">=</span> <span class="n">kodak_plots</span><span class="o">.</span><span class="n">scatter_plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">scatterX</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">scatterY</span><span class="p">,</span> <span class="n">lines_markers_both</span><span class="o">=</span><span class="s1">&#39;markers&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Design evolution&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Next save out the design_evolutions for an interactive plot:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stored_designs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Too many designs were found in the interactive chart, please reduce this number for&#39;</span>
+                            <span class="s1">&#39;file size reasons. Create multiple plots files if needed.&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stored_designs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">35</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s1">&#39;This many exported designs will create a large plots file, be aware!&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Exporting designs, depending on length of design this may take a while due to 3D operations&#39;</span><span class="p">)</span>
+        <span class="n">design_map</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">xy</span><span class="p">,</span> <span class="n">des</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">scatterXY</span><span class="p">,</span> <span class="n">stored_designs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">mesh_or_cylinder</span> <span class="o">==</span> <span class="s1">&#39;cylinder&#39;</span><span class="p">:</span>
+                <span class="n">newDes</span> <span class="o">=</span> <span class="n">CylindricalRepresentation</span><span class="p">(</span><span class="n">design</span><span class="o">=</span><span class="n">des</span><span class="p">,</span> <span class="n">bounding_box</span><span class="o">=</span><span class="n">des</span><span class="o">.</span><span class="n">bounding_box</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">newDes</span> <span class="o">=</span> <span class="n">MeshRepresentation</span><span class="p">(</span><span class="n">design</span><span class="o">=</span><span class="n">des</span><span class="p">,</span> <span class="n">bounding_box</span><span class="o">=</span><span class="n">des</span><span class="o">.</span><span class="n">bounding_box</span><span class="p">)</span>
+
+            <span class="c1">#newDes.create_plot()</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">newDes</span><span class="o">.</span><span class="n">return_figure</span><span class="p">()</span>
+            <span class="n">design_map</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">xy</span><span class="p">)]</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">to_json</span><span class="p">()</span>
+            <span class="k">del</span> <span class="n">newDes</span>
+
+        <span class="c1"># Store interactive data:</span>
+        <span class="n">kodak_plots</span><span class="o">.</span><span class="n">store_interactive_points</span><span class="p">(</span><span class="n">design_map</span><span class="o">=</span><span class="n">design_map</span><span class="p">)</span>
+
+
+        <span class="c1"># Store plot data:</span>
+        <span class="n">plot_description</span> <span class="o">=</span> <span class="s1">&#39;This plot shows a random walk through space (i.e., by randomly applying grammars) compared &#39;</span> \
+                           <span class="s1">&#39;to the optimization process. This helps visualize that the optimization is actually &#39;</span> \
+                           <span class="s1">&#39;working. Each of the points is selectable and will &quot;open&quot; a window showing the design at &#39;</span> \
+                           <span class="s1">&#39;that stage of the optimization process.&#39;</span>
+
+        <span class="n">kodak_plots</span><span class="o">.</span><span class="n">standard_2D_layout</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;Iteration #&#39;</span>
+        <span class="n">kodak_plots</span><span class="o">.</span><span class="n">standard_2D_layout</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objective_function</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">kodak_plots</span><span class="o">.</span><span class="n">add_new_plot</span><span class="p">(</span><span class="n">traces</span><span class="o">=</span><span class="p">[</span><span class="n">obj1</span><span class="p">,</span> <span class="n">obj2</span><span class="p">,</span> <span class="n">obj3</span><span class="p">],</span> <span class="n">window_title</span><span class="o">=</span><span class="s1">&#39;Generative process results&#39;</span><span class="p">,</span>
+                                 <span class="n">description</span><span class="o">=</span><span class="n">plot_description</span><span class="p">)</span>
+
+
+        <span class="c1">### Add problem definition:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objective_function</span><span class="o">.</span><span class="n">extra_params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objective_function</span><span class="o">.</span><span class="n">extra_params</span> <span class="o">=</span> <span class="s1">&#39;None&#39;</span>
+        <span class="n">kodak_plots</span><span class="o">.</span><span class="n">add_problem_definition</span><span class="p">(</span><span class="n">objective_function</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objective_function</span><span class="p">,</span>
+                                           <span class="n">design_constraints</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">design_constraints</span><span class="p">)</span>
+
+        <span class="c1">## Write out data:</span>
+        <span class="n">kodak_plots</span><span class="o">.</span><span class="n">write_json_output</span><span class="p">(</span><span class="n">write_directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">output_filepath</span><span class="p">,</span>
+                                      <span class="n">savename_no_extension</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">output_filename_no_extension</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="VisualizationObject.create_standard_output_multi_objective">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.mango_output_visualization.VisualizationObject.create_standard_output_multi_objective">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_standard_output_multi_objective</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mesh_or_cylinder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;cylinder&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function will create a standard output for a multiobjective optimization process</span>
+<span class="sd">            - The found Pareto front which is interactable and allows a user to explore design variation</span>
+<span class="sd">            - An animation of the pareto growth</span>
+<span class="sd">            - A window describing all constraints of the problem</span>
+
+<span class="sd">        :param mesh_or_cylinder: Values are either &quot;mesh&quot; or &quot;cylinder&quot; and change the visual appearance of the</span>
+<span class="sd">                                 generated design</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">mesh_or_cylinder</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;mesh&#39;</span><span class="p">,</span> <span class="s1">&#39;cylinder&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;mesh_or_cylinder can only be &quot;mesh&quot; or &quot;cylinder&quot;&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;objective_functions&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objective_functions</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Currently this standard output only supports 2-objective output windows. &#39;</span>
+                                <span class="s1">&#39;You will have to read the documentation about the .aj1 output to create a proper kodak plots output.&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid aj1 data file.&#39;</span><span class="p">)</span>
+        <span class="n">kodak_plots</span> <span class="o">=</span> <span class="n">KodakPlots</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;MOSA_archive&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;archive_post_temperature_initialization&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;objective_functions&#39;</span><span class="p">):</span>
+            <span class="n">final_pareto</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">MOSA_archive</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+            <span class="n">random_walk_pareto</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">archive_post_temperature_initialization</span><span class="p">)</span>
+            <span class="c1"># Now we will store a random selection of designs evenly spaced along the Pareto. We do this because there</span>
+            <span class="c1"># are way too many designs in the final pareto that too large a file could be created.</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">final_pareto</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">35</span><span class="p">:</span>
+                <span class="n">selected_designs</span> <span class="o">=</span> <span class="n">select_evenly_spaced_tuples</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">final_pareto</span><span class="p">))</span>
+                <span class="c1"># In this case, we then want to remove the values of selected_design from final-pareto:</span>
+                <span class="n">dtype</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;col1&#39;</span><span class="p">,</span> <span class="n">final_pareto</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;col2&#39;</span><span class="p">,</span> <span class="n">selected_designs</span><span class="o">.</span><span class="n">dtype</span><span class="p">)]</span>
+                <span class="n">struct_array1</span> <span class="o">=</span> <span class="n">final_pareto</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">struct_array2</span> <span class="o">=</span> <span class="n">selected_designs</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">not_in_array2</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">struct_array1</span><span class="p">,</span> <span class="n">struct_array2</span><span class="p">)</span>
+                <span class="n">final_pareto</span> <span class="o">=</span> <span class="n">final_pareto</span><span class="p">[</span><span class="n">not_in_array2</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="nb">bool</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">final_pareto</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># If this final pareto was less than the final size we just use whatever the final pareto is</span>
+                <span class="n">selected_designs</span> <span class="o">=</span> <span class="n">final_pareto</span>
+
+            <span class="n">selectedX</span><span class="p">,</span> <span class="n">selectedY</span> <span class="o">=</span> <span class="n">selected_designs</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">selected_designs</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="c1"># Next create traces:</span>
+            <span class="n">xp</span><span class="p">,</span> <span class="n">yp</span> <span class="o">=</span> <span class="n">final_pareto</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">final_pareto</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">xr</span><span class="p">,</span> <span class="n">yr</span> <span class="o">=</span> <span class="n">random_walk_pareto</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">random_walk_pareto</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">obj1</span> <span class="o">=</span> <span class="n">kodak_plots</span><span class="o">.</span><span class="n">scatter_plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xp</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">yp</span><span class="p">,</span> <span class="n">lines_markers_both</span><span class="o">=</span><span class="s1">&#39;markers&#39;</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Found Pareto&#39;</span><span class="p">,</span>
+                                            <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;rgb(68, 170, 153)&#39;</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;circle&#39;</span><span class="p">,</span>
+                                                        <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;Black&#39;</span><span class="p">)))</span>
+            <span class="n">obj2</span> <span class="o">=</span> <span class="n">kodak_plots</span><span class="o">.</span><span class="n">scatter_plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xr</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">yr</span><span class="p">,</span> <span class="n">lines_markers_both</span><span class="o">=</span><span class="s1">&#39;markers&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Random Walk&#39;</span><span class="p">,</span>
+                                            <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;rgb(204, 102, 119)&#39;</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;circle&#39;</span><span class="p">,</span>
+                                                        <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;Black&#39;</span><span class="p">))</span>
+                                            <span class="p">)</span>
+            <span class="n">obj3</span> <span class="o">=</span> <span class="n">kodak_plots</span><span class="o">.</span><span class="n">scatter_plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">selectedX</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">selectedY</span><span class="p">,</span> <span class="n">lines_markers_both</span><span class="o">=</span><span class="s1">&#39;markers&#39;</span><span class="p">,</span>
+                                            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Select Pareto design&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;rgb(17, 119, 51)&#39;</span><span class="p">,</span>
+                                                                                     <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;diamond&#39;</span><span class="p">,</span>
+                                                        <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;Black&#39;</span><span class="p">)))</span>
+
+            <span class="n">o1</span><span class="p">,</span> <span class="n">o2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objective_functions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objective_functions</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">kodak_plots</span><span class="o">.</span><span class="n">standard_2D_layout</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">o1</span>
+            <span class="n">kodak_plots</span><span class="o">.</span><span class="n">standard_2D_layout</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">o2</span>
+
+
+            <span class="c1"># Now adding in design evolution as selectable features:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Exporting designs, this may take a few minutes.&#39;</span><span class="p">)</span>
+            <span class="n">design_map</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="c1"># Loop over the stored designs:</span>
+            <span class="k">for</span> <span class="n">des</span> <span class="ow">in</span> <span class="n">selected_designs</span><span class="p">:</span>
+                <span class="n">poly_design</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">MOSA_archive</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">des</span><span class="p">)]</span>
+                <span class="k">if</span> <span class="n">mesh_or_cylinder</span> <span class="o">==</span> <span class="s1">&#39;cylinder&#39;</span><span class="p">:</span>
+                    <span class="n">newDes</span> <span class="o">=</span> <span class="n">CylindricalRepresentation</span><span class="p">(</span><span class="n">design</span><span class="o">=</span><span class="n">poly_design</span><span class="p">,</span> <span class="n">bounding_box</span><span class="o">=</span><span class="n">poly_design</span><span class="o">.</span><span class="n">bounding_box</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">newDes</span> <span class="o">=</span> <span class="n">MeshRepresentation</span><span class="p">(</span><span class="n">design</span><span class="o">=</span><span class="n">poly_design</span><span class="p">,</span> <span class="n">bounding_box</span><span class="o">=</span><span class="n">poly_design</span><span class="o">.</span><span class="n">bounding_box</span><span class="p">)</span>
+                <span class="c1"># newDes.create_plot()</span>
+                <span class="n">fig</span> <span class="o">=</span> <span class="n">newDes</span><span class="o">.</span><span class="n">return_figure</span><span class="p">()</span>
+                <span class="n">design_map</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">des</span><span class="p">))]</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">to_json</span><span class="p">()</span>
+                <span class="k">del</span> <span class="n">newDes</span>
+
+            <span class="c1"># Store interactive data:</span>
+            <span class="n">kodak_plots</span><span class="o">.</span><span class="n">store_interactive_points</span><span class="p">(</span><span class="n">design_map</span><span class="o">=</span><span class="n">design_map</span><span class="p">)</span>
+
+            <span class="c1"># Store plot data:</span>
+            <span class="n">plot_description</span> <span class="o">=</span> <span class="s1">&#39;This plot shows a sample Pareto found using the mango generative design package. Here&#39;</span> \
+                               <span class="s1">&#39; the objective functions are a convexity measure (volume of mesh divided by the volume&#39;</span> \
+                               <span class="s1">&#39; of the convex hull of the points in the mesh) and the surface area to volume ratio of&#39;</span> \
+                               <span class="s1">&#39; the mesh. The tradeoff is essentially the volume of the mesh which can be explored via&#39;</span> \
+                               <span class="s1">&#39; the interactive Pareto points.&#39;</span>
+            <span class="n">kodak_plots</span><span class="o">.</span><span class="n">add_new_plot</span><span class="p">(</span><span class="n">traces</span><span class="o">=</span><span class="p">[</span><span class="n">obj1</span><span class="p">,</span> <span class="n">obj2</span><span class="p">,</span> <span class="n">obj3</span><span class="p">],</span> <span class="n">window_title</span><span class="o">=</span><span class="s1">&#39;Found Pareto front&#39;</span><span class="p">,</span>
+                                     <span class="n">description</span><span class="o">=</span><span class="n">plot_description</span><span class="p">)</span>
+
+            <span class="n">animated_figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_pareto_animation_figure</span><span class="p">()</span>
+            <span class="c1"># Add to kodak_plots:</span>
+            <span class="n">animation</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;_title&#39;</span><span class="p">:</span> <span class="s1">&#39;Found Pareto animation during generative process&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;_closeable&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;_description&#39;</span><span class="p">:</span> <span class="s1">&#39;Animation showing the stored Pareto points during the generative process&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;_showGraphSettingsBar&#39;</span><span class="p">:</span> <span class="s1">&#39;scatter3d&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;_data&#39;</span><span class="p">:</span> <span class="n">animated_figure</span>
+            <span class="p">}</span>
+            <span class="n">kodak_plots</span><span class="o">.</span><span class="n">all_plots</span><span class="p">[</span><span class="s1">&#39;Found Pareto animation during generative process&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">animation</span>
+
+
+            <span class="c1">### Add problem definition:</span>
+            <span class="n">condensed_format</span> <span class="o">=</span> <span class="n">Obj</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objective_functions</span><span class="p">)</span>
+            <span class="n">kodak_plots</span><span class="o">.</span><span class="n">add_problem_definition</span><span class="p">(</span><span class="n">objective_function</span><span class="o">=</span><span class="n">condensed_format</span><span class="p">,</span>
+                                               <span class="n">design_constraints</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">design_constraints</span><span class="p">)</span>
+
+            <span class="c1">## Write out data:</span>
+            <span class="n">kodak_plots</span><span class="o">.</span><span class="n">write_json_output</span><span class="p">(</span><span class="n">write_directory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">output_filepath</span><span class="p">,</span>
+                                          <span class="n">savename_no_extension</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">output_filename_no_extension</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid aj1 data file.&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="VisualizationObject.create_pareto_animation_figure">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.mango_output_visualization.VisualizationObject.create_pareto_animation_figure">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_pareto_animation_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Simple function used to create the relevant animation figure for the output file &quot;&quot;&quot;</span>
+        <span class="n">mosa_analysis</span> <span class="o">=</span> <span class="n">MOSA_Analysis</span><span class="p">(</span><span class="n">results_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">aj1_filepath</span><span class="p">)</span>
+        <span class="n">animation_fig</span> <span class="o">=</span> <span class="n">mosa_analysis</span><span class="o">.</span><span class="n">create_pareto_animation_figure</span><span class="p">(</span><span class="n">return_or_show</span><span class="o">=</span><span class="s1">&#39;return&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">animation_fig</span><span class="o">.</span><span class="n">to_json</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Obj">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.mango_output_visualization.Obj">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Obj</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is not end-user facing, it is used to format an object for input</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">objs</span><span class="p">:</span> <span class="nb">list</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extra_params</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">objs</span><span class="p">:</span>
+            <span class="n">curName</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">curParams</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">extra_params</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">curName</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39; and &#39;</span> <span class="o">+</span> <span class="n">curName</span>
+
+            <span class="k">if</span> <span class="n">curParams</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">curParams</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">extra_params</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="c1"># Now after this if extra_params is still empty we set it to &quot;none&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra_params</span> <span class="o">==</span> <span class="p">{}:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">extra_params</span> <span class="o">=</span> <span class="s1">&#39;None&#39;</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, A.J. Vetturini.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

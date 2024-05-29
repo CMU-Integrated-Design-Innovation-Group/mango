@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mango.visualizations.display_mesh_design &mdash; mango generative design framework b0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=7d16594f"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            mango generative design framework
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">mango</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">mango generative design framework</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mango.visualizations.display_mesh_design</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mango.visualizations.display_mesh_design</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A.J. Vetturini \n</span>
+<span class="sd">IDIG and MMBL \n</span>
+<span class="sd">Carnegie Mellon University \n</span>
+
+<span class="sd">This is a visualization function that will utilize plotly to show a design as a mesh file both as a cylindrical</span>
+<span class="sd">representation and as a standard mesh file</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># Import Modules</span>
+<span class="kn">from</span> <span class="nn">mango.design_spaces.bounding_box</span> <span class="kn">import</span> <span class="n">TriclinicBox</span><span class="p">,</span> <span class="n">MonoclinicBox</span><span class="p">,</span> <span class="n">OrthorhombicBox</span><span class="p">,</span> <span class="n">TetragonalBox</span><span class="p">,</span> <span class="n">RhombohedralBox</span><span class="p">,</span> <span class="n">HexagonalBox</span><span class="p">,</span> <span class="n">CubicBox</span>
+<span class="kn">from</span> <span class="nn">mango.design_spaces.polyhedral_design_space</span> <span class="kn">import</span> <span class="n">PolyhedralSpace</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">mango.utils.mango_math</span> <span class="kn">import</span> <span class="n">length_and_direction_between_nodes</span><span class="p">,</span> <span class="n">rotation_matrix_from_vectors</span><span class="p">,</span> <span class="n">find_smaller_z_value</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+
+<div class="viewcode-block" id="MeshRepresentation">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">MeshRepresentation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class lets a user visualize the resultant structure using plotly traces. This function is also called by the</span>
+<span class="sd">    plots / output file creator, but it has many options that can be adjusted as discussed in the below parameters. This</span>
+<span class="sd">    visualization is built using plotly and the figures will all show in a web browser.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ------------</span>
+<span class="sd">    design : Design we are visualizing of the PolyhedralSpace data object (see design_spaces.polyhedral_design_space). \n</span>
+<span class="sd">    bounding_box : The bounding box defined, can be accessed by the design.bounding_box \n</span>
+
+<span class="sd">    BOOLEAN options that turn on / off various visualizations: \n</span>
+<span class="sd">    display_node_names : Determines if node names are shown, used for debugging (default: FALSE) \n</span>
+<span class="sd">    show_bounding_box : Determines if bounding box is shown, used for debugging (default: TRUE) \n</span>
+<span class="sd">    show_mesh_nodes : Determines if nodes are shown as scatter points or not (default: TRUE) \n</span>
+<span class="sd">    show_excluded_regions : Determines if the excluded regions are shown or not (default: TRUE) \n</span>
+<span class="sd">    opaque_excluded_region : Determines if excluded regions are opaque or not (default: FALSE / not opaque) \n</span>
+<span class="sd">    display_background : Determines if a background color is to be used (default: False / blank background) \n</span>
+<span class="sd">    display_axes : Determines if the axes and ticker labels are shown (default: True) \n</span>
+
+
+<span class="sd">    DISPLAY options that control colors / font sizes: \n</span>
+<span class="sd">    face_color : String color of mesh faces defined by either plotly color or &#39;rgb(R, G, B)&#39; (default: darkgray) \n</span>
+<span class="sd">    constant_edge_color : String color of edges shown by either plotly color or &#39;rgb(R, G, B)&#39; (default: None / black) \n</span>
+<span class="sd">    symbol_size : Integer size of mesh nodes (default: 6) \n</span>
+<span class="sd">    line_width : Integer width of edges shown (default: 4) \n</span>
+<span class="sd">    tick_font : Integer point-size of ticker font (default: 14) \n</span>
+<span class="sd">    axis_title_font : Integer point-size of axis titles \n</span>
+<span class="sd">    camera_position : Camera dictionary (see plotly) for holding the camera angle constant \n</span>
+<span class="sd">    node_color :  String color of nodes defined by either plotly color or &#39;rgb(R, G, B)&#39; (default: green) \n</span>
+<span class="sd">    symbol : String symbol of nodes defined by plotly (default: square) \n </span>
+<span class="sd">    excluded_color : String color of excluded regions by either plotly color or &#39;rgb(R, G, B)&#39; (default: red) \n</span>
+<span class="sd">    plot_background_color : String color of background defined by either plotly color or &#39;rgb(R, G, B)&#39; (default: None) \n</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">design</span><span class="p">:</span> <span class="n">PolyhedralSpace</span>
+    <span class="n">bounding_box</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">TriclinicBox</span><span class="p">,</span> <span class="n">MonoclinicBox</span><span class="p">,</span> <span class="n">OrthorhombicBox</span><span class="p">,</span> <span class="n">TetragonalBox</span><span class="p">,</span>
+                        <span class="n">RhombohedralBox</span><span class="p">,</span> <span class="n">HexagonalBox</span><span class="p">,</span> <span class="n">CubicBox</span><span class="p">]</span>
+    <span class="n">display_node_names</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">show_bounding_box</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">show_mesh_nodes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">show_excluded_regions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">display_background</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Determine if axis titles and ticker labels are shown</span>
+    <span class="n">display_axes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Determine if axis titles and ticker labels are shown</span>
+    <span class="n">face_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Override potential face color of mesh if desired</span>
+    <span class="n">constant_edge_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># If set then all edges will appear as the specified color, otherwise green + black</span>
+    <span class="n">symbol_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span>
+    <span class="n">line_width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">tick_font</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">14</span>
+    <span class="n">axis_title_font</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="n">plot_background_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Used to color the background of the 3D plot if desired</span>
+    <span class="n">camera_position</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Determine if a specific camera value is used (See Plotly for Camera values)</span>
+    <span class="n">node_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;green&#39;</span>
+    <span class="n">symbol</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;square&#39;</span>
+    <span class="n">excluded_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span>
+    <span class="n">opaque_excluded_region</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">()</span>  <span class="c1"># Initialize a figure to use in various functions</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">display_node_names</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;markers+text&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">=</span> <span class="s2">&quot;markers&quot;</span>
+
+        <span class="c1"># Create the plotly layout figure:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">display_background</span><span class="p">:</span>
+            <span class="n">background_color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_background_color</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">background_color</span> <span class="o">=</span> <span class="s1">&#39;rgba(0, 0, 0, 0)&#39;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera_position</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">camera_position</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">camera_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera_position</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
+            <span class="n">scene</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">xaxis_visible</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">display_axes</span><span class="p">,</span>
+                <span class="n">yaxis_visible</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">display_axes</span><span class="p">,</span>
+                <span class="n">zaxis_visible</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">display_axes</span><span class="p">,</span>
+                <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;X Axis (nm)&quot;</span><span class="p">,</span>
+                    <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                    <span class="n">titlefont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                    <span class="n">showbackground</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">display_background</span><span class="p">,</span>
+                    <span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">backgroundcolor</span><span class="o">=</span><span class="n">background_color</span><span class="p">,</span>
+                    <span class="n">zerolinewidth</span><span class="o">=</span><span class="mf">0.</span>
+                <span class="p">),</span>
+                <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Y Axis (nm)&quot;</span><span class="p">,</span>
+                    <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                    <span class="n">titlefont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                    <span class="n">showbackground</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">display_background</span><span class="p">,</span>
+                    <span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">backgroundcolor</span><span class="o">=</span><span class="n">background_color</span><span class="p">,</span>
+                    <span class="n">zerolinewidth</span><span class="o">=</span><span class="mf">0.</span>
+                <span class="p">),</span>
+                <span class="n">zaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Z Axis (nm)&quot;</span><span class="p">,</span>
+                    <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                    <span class="n">titlefont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                    <span class="n">showbackground</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">display_background</span><span class="p">,</span>
+                    <span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">backgroundcolor</span><span class="o">=</span><span class="n">background_color</span><span class="p">,</span>
+                    <span class="n">zerolinewidth</span><span class="o">=</span><span class="mf">0.</span>
+                <span class="p">),</span>
+                <span class="n">camera</span><span class="o">=</span><span class="n">camera_position</span>
+            <span class="p">),</span>
+            <span class="n">plot_bgcolor</span><span class="o">=</span><span class="s2">&quot;rgba(0, 0, 0, 0)&quot;</span><span class="p">,</span>  <span class="c1"># Set plot background color to white</span>
+            <span class="n">paper_bgcolor</span><span class="o">=</span><span class="s2">&quot;rgba(0, 0, 0, 0)&quot;</span><span class="p">,</span>  <span class="c1"># Set paper background color to white</span>
+            <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_plot</span><span class="p">()</span>  <span class="c1"># Call the plot creation so the user can simply return or show the plot</span>
+
+
+<div class="viewcode-block" id="MeshRepresentation.plot_bounding_box">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.plot_bounding_box">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_bounding_box</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; This method plots all bounding box edges &quot;&quot;&quot;</span>
+        <span class="n">bounding_box_traces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># Plotting Nodes:</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box</span><span class="o">.</span><span class="n">bounding_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box</span><span class="o">.</span><span class="n">bounding_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">]</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">n</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">n</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">n</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span>
+            <span class="n">node_trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter3d</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="n">y</span><span class="p">],</span> <span class="n">z</span><span class="o">=</span><span class="p">[</span><span class="n">z</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">node</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+                                      <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">symbol_size</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;square&#39;</span><span class="p">),</span>
+                                      <span class="n">textposition</span><span class="o">=</span><span class="s1">&#39;top center&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Bounding Region&#39;</span><span class="p">,</span>
+                                      <span class="n">legendgroup</span><span class="o">=</span><span class="s1">&#39;Bounding Region&#39;</span><span class="p">,</span> <span class="n">textfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">12</span><span class="p">),</span> <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">bounding_box_traces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_trace</span><span class="p">)</span>
+
+        <span class="c1"># Plotting Edges:</span>
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box</span><span class="o">.</span><span class="n">bounding_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+            <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box</span><span class="o">.</span><span class="n">bounding_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box</span><span class="o">.</span><span class="n">bounding_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span> <span class="o">=</span> <span class="n">n1</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">n1</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">n1</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span>
+            <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">n2</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">n2</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">n2</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span>
+            <span class="n">node_trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter3d</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">],</span> <span class="n">z</span><span class="o">=</span><span class="p">[</span><span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span>
+                                      <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">dash</span><span class="o">=</span><span class="s1">&#39;dash&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">line_width</span><span class="p">),</span>
+                                      <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Bounding Region&#39;</span><span class="p">,</span> <span class="n">legendgroup</span><span class="o">=</span><span class="s1">&#39;Bounding Region&#39;</span><span class="p">,</span> <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">bounding_box_traces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_trace</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">bounding_box_traces</span></div>
+
+
+
+<div class="viewcode-block" id="MeshRepresentation.plot_mesh_faces">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.plot_mesh_faces">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_mesh_faces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; This method creates all plotly traces for the mesh &quot;&quot;&quot;</span>
+        <span class="n">all_face_traces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">design</span><span class="o">.</span><span class="n">all_faces</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">face_color</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">trace</span> <span class="o">=</span> <span class="n">face</span><span class="o">.</span><span class="n">get_face_plot</span><span class="p">(</span><span class="n">color_type</span><span class="o">=</span><span class="s1">&#39;manual&#39;</span><span class="p">,</span> <span class="n">override_color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">face_color</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">trace</span> <span class="o">=</span> <span class="n">face</span><span class="o">.</span><span class="n">get_face_plot</span><span class="p">(</span><span class="n">color_type</span><span class="o">=</span><span class="s1">&#39;other&#39;</span><span class="p">)</span>
+            <span class="n">trace</span><span class="o">.</span><span class="n">legendgroup</span> <span class="o">=</span> <span class="s1">&#39;dna&#39;</span>
+            <span class="n">all_face_traces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trace</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">all_face_traces</span></div>
+
+
+
+<div class="viewcode-block" id="MeshRepresentation.plot_edges_and_nodes">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.plot_edges_and_nodes">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_edges_and_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; This method creates all traces containing the edges and nodes of the design &quot;&quot;&quot;</span>
+        <span class="n">surface_mesh_traces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_mesh_nodes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">design</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">design</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">]</span>
+                <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span> <span class="o">=</span> <span class="n">n</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">n</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">n</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="s1">&#39;preserved_region&#39;</span> <span class="ow">in</span> <span class="n">n</span><span class="p">:</span>
+                    <span class="n">node_trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter3d</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="n">x1</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="n">y1</span><span class="p">],</span> <span class="n">z</span><span class="o">=</span><span class="p">[</span><span class="n">z1</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">node</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+                                              <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_color</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">symbol_size</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">symbol</span><span class="p">),</span>
+                                              <span class="n">textposition</span><span class="o">=</span><span class="s1">&#39;top center&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Mesh Node&#39;</span><span class="p">,</span>
+                                              <span class="n">legendgroup</span><span class="o">=</span><span class="s1">&#39;Graph Node&#39;</span><span class="p">,</span> <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">node_trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter3d</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="n">x1</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="n">y1</span><span class="p">],</span> <span class="n">z</span><span class="o">=</span><span class="p">[</span><span class="n">z1</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">node</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+                                              <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">symbol_size</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">symbol</span><span class="p">),</span>
+                                              <span class="n">textposition</span><span class="o">=</span><span class="s1">&#39;top center&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Mesh Node&#39;</span><span class="p">,</span>
+                                              <span class="n">legendgroup</span><span class="o">=</span><span class="s1">&#39;Graph Node&#39;</span><span class="p">,</span> <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">surface_mesh_traces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_trace</span><span class="p">)</span>
+
+        <span class="c1"># Plot edges:</span>
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">design</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+            <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">design</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="bp">self</span><span class="o">.</span><span class="n">design</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span> <span class="o">=</span> <span class="n">n1</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">n1</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">n1</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span>
+            <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">n2</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">n2</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">n2</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">constant_edge_color</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">edge_trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter3d</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">],</span> <span class="n">z</span><span class="o">=</span><span class="p">[</span><span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span>
+                                          <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">constant_edge_color</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">line_width</span><span class="p">),</span>
+                                          <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Mesh Edge&#39;</span><span class="p">,</span> <span class="n">legendgroup</span><span class="o">=</span><span class="s1">&#39;Graph Edge&#39;</span><span class="p">,</span> <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+            <span class="c1"># If both nodes are preserved_regions then we make the line green by default:</span>
+            <span class="k">elif</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">design</span><span class="o">.</span><span class="n">terminal_edges</span> <span class="ow">or</span> <span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">design</span><span class="o">.</span><span class="n">terminal_edges</span><span class="p">:</span>
+                <span class="n">edge_trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter3d</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">],</span> <span class="n">z</span><span class="o">=</span><span class="p">[</span><span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span>
+                                          <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">line_width</span><span class="p">),</span> <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                          <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Mesh Edge&#39;</span><span class="p">,</span> <span class="n">legendgroup</span><span class="o">=</span><span class="s1">&#39;Graph Edge&#39;</span><span class="p">)</span>
+
+            <span class="c1"># Otherwise we use black for the line color:</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">edge_trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter3d</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">],</span> <span class="n">z</span><span class="o">=</span><span class="p">[</span><span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span>
+                                          <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">line_width</span><span class="p">),</span> <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                          <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Mesh Edge&#39;</span><span class="p">,</span> <span class="n">legendgroup</span><span class="o">=</span><span class="s1">&#39;Graph Edge&#39;</span><span class="p">)</span>
+
+            <span class="n">surface_mesh_traces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">edge_trace</span><span class="p">)</span>
+
+
+        <span class="k">return</span> <span class="n">surface_mesh_traces</span></div>
+
+
+
+<div class="viewcode-block" id="MeshRepresentation.plot_excluded_regions">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.plot_excluded_regions">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_excluded_regions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; This method plots the excluded regions &quot;&quot;&quot;</span>
+        <span class="n">excluded_face_traces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">excluded_region</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">design</span><span class="o">.</span><span class="n">excluded</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">excluded_region</span><span class="o">.</span><span class="n">faces</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="n">new_face_trace</span> <span class="o">=</span> <span class="n">face</span><span class="o">.</span><span class="n">get_face_plot</span><span class="p">(</span><span class="n">color_type</span><span class="o">=</span><span class="s1">&#39;manual&#39;</span><span class="p">,</span> <span class="n">override_opacity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">opaque_excluded_region</span><span class="p">,</span> <span class="n">override_color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">excluded_color</span><span class="p">)</span>
+                <span class="n">new_face_trace</span><span class="o">.</span><span class="n">legendgroup</span> <span class="o">=</span> <span class="s1">&#39;excluded&#39;</span>
+                <span class="n">excluded_face_traces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_face_trace</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">excluded_face_traces</span></div>
+
+
+
+<div class="viewcode-block" id="MeshRepresentation.create_plot">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.create_plot">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; This method is initialized by post_init and calls the above methods. Creates the plot. &quot;&quot;&quot;</span>
+        <span class="n">all_traces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_bounding_box</span><span class="p">:</span>
+            <span class="n">bounding_box_traces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_bounding_box</span><span class="p">()</span>
+            <span class="n">all_traces</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">bounding_box_traces</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_excluded_regions</span><span class="p">:</span>
+            <span class="n">excluded_traces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_excluded_regions</span><span class="p">()</span>
+            <span class="n">all_traces</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">excluded_traces</span><span class="p">)</span>
+
+        <span class="c1"># Grab the other traces:</span>
+        <span class="n">face_traces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_mesh_faces</span><span class="p">()</span>
+        <span class="n">all_traces</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">face_traces</span><span class="p">)</span>
+        <span class="n">edge_n_node_traces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_edges_and_nodes</span><span class="p">()</span>
+        <span class="n">all_traces</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">edge_n_node_traces</span><span class="p">)</span>
+
+        <span class="c1"># Now we add to the figure:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">add_traces</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">all_traces</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout</span>  <span class="c1"># Set the layout to the figure layout</span></div>
+
+
+
+<div class="viewcode-block" id="MeshRepresentation.return_figure">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.return_figure">[docs]</a>
+    <span class="k">def</span> <span class="nf">return_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Method allowing user to use / manipulate the plotly figure of a design &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fig</span></div>
+
+
+<div class="viewcode-block" id="MeshRepresentation.show_figure">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.show_figure">[docs]</a>
+    <span class="k">def</span> <span class="nf">show_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Function that shows the figure in the web browser &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="CylindricalRepresentation">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">CylindricalRepresentation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Other than a mesh representation, this cylindrical representation is a bit more meaningful for DNA origami</span>
+<span class="sd">    representations, since realistically the edge in the mesh dictates where material is at in the generated design.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ------------</span>
+<span class="sd">    design : Design we are visualizing of the PolyhedralSpace data object (see design_spaces.polyhedral_design_space). \n</span>
+<span class="sd">    bounding_box : The bounding box defined, can be accessed by the design.bounding_box \n</span>
+
+<span class="sd">    BOOLEAN options that turn on / off various visualizations: \n</span>
+<span class="sd">    show_bounding_box : Determines if bounding box is shown, used for debugging (default: TRUE) \n</span>
+<span class="sd">    show_excluded_regions : Determines if the excluded regions are shown or not (default: TRUE) \n</span>
+<span class="sd">    opaque_excluded_region : Determines if excluded regions are opaque or not (default: FALSE / not opaque) \n</span>
+<span class="sd">    display_background : Determines if a background color is to be used (default: False / blank background) \n</span>
+<span class="sd">    display_axes : Determines if the axes and ticker labels are shown (default: True) \n</span>
+<span class="sd">    show_box_bounds : Determines if custom annotations are displayed showing bounding box dimensions (default: FALSE) \n \n</span>
+
+<span class="sd">    DISPLAY options that control colors / font sizes: \n</span>
+<span class="sd">    cylinder_color : String color of the cylinders mapped by either plotly color or &#39;rgb(R, G, B)&#39; (default: darkgray) \n</span>
+<span class="sd">    cylinder_diameter : Floating point value of the cylinder diameter to use (default : 2.25) (BDNA diameter) \n</span>
+<span class="sd">    tick_font : Integer point-size of ticker font (default: 14) \n</span>
+<span class="sd">    axis_title_font : Integer point-size of axis titles \n</span>
+<span class="sd">    camera_position : Camera dictionary (see plotly) for holding the camera angle constant \n</span>
+<span class="sd">    excluded_color : String color of excluded regions by either plotly color or &#39;rgb(R, G, B)&#39; (default: red) \n</span>
+<span class="sd">    plot_background_color : String color of background defined by either plotly color or &#39;rgb(R, G, B)&#39; (default: None) \n</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">design</span><span class="p">:</span> <span class="n">PolyhedralSpace</span>
+    <span class="n">bounding_box</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">TriclinicBox</span><span class="p">,</span> <span class="n">MonoclinicBox</span><span class="p">,</span> <span class="n">OrthorhombicBox</span><span class="p">,</span> <span class="n">TetragonalBox</span><span class="p">,</span>
+                        <span class="n">RhombohedralBox</span><span class="p">,</span> <span class="n">HexagonalBox</span><span class="p">,</span> <span class="n">CubicBox</span><span class="p">]</span>
+    <span class="n">show_bounding_box</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">show_box_bounds</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">show_excluded_regions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">display_background</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">display_axes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Determine if axis titles and ticker labels are shown</span>
+    <span class="n">cylinder_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;darkgray&#39;</span>  <span class="c1"># Override potential face color of mesh if desired</span>
+    <span class="n">excluded_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span>
+    <span class="n">tick_font</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">18</span>
+    <span class="n">axis_title_font</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">22</span>
+    <span class="n">plot_background_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Used to color the background of the 3D plot if desired</span>
+    <span class="n">camera_position</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Determine if a specific camera value is used (See Plotly for Camera values)</span>
+    <span class="n">cylinder_diameter</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.25</span>  <span class="c1"># Diameter of DNA to use to represent as cylinder</span>
+    <span class="n">opaque_excluded_region</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">()</span>  <span class="c1"># Initialize a figure to use in various functions</span>
+
+        <span class="c1"># Create the plotly layout figure:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">display_background</span><span class="p">:</span>
+            <span class="n">background_color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_background_color</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">background_color</span> <span class="o">=</span> <span class="s1">&#39;rgba(0, 0, 0, 0)&#39;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera_position</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">camera_position</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">camera_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera_position</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
+            <span class="n">scene</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">xaxis_visible</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">display_axes</span><span class="p">,</span>
+                <span class="n">yaxis_visible</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">display_axes</span><span class="p">,</span>
+                <span class="n">zaxis_visible</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">display_axes</span><span class="p">,</span>
+                <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;X Axis (nm)&quot;</span><span class="p">,</span>
+                    <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                    <span class="n">titlefont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                    <span class="n">showbackground</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">display_background</span><span class="p">,</span>
+                    <span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">backgroundcolor</span><span class="o">=</span><span class="n">background_color</span><span class="p">,</span>
+                    <span class="n">zerolinewidth</span><span class="o">=</span><span class="mf">0.</span>
+                <span class="p">),</span>
+                <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Y Axis (nm)&quot;</span><span class="p">,</span>
+                    <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                    <span class="n">titlefont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                    <span class="n">showbackground</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">display_background</span><span class="p">,</span>
+                    <span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">backgroundcolor</span><span class="o">=</span><span class="n">background_color</span><span class="p">,</span>
+                    <span class="n">zerolinewidth</span><span class="o">=</span><span class="mf">0.</span>
+                <span class="p">),</span>
+                <span class="n">zaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Z Axis (nm)&quot;</span><span class="p">,</span>
+                    <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                    <span class="n">titlefont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                    <span class="n">showbackground</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">display_background</span><span class="p">,</span>
+                    <span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">backgroundcolor</span><span class="o">=</span><span class="n">background_color</span><span class="p">,</span>
+                    <span class="n">zerolinewidth</span><span class="o">=</span><span class="mf">0.</span>
+                <span class="p">),</span>
+                <span class="n">camera</span><span class="o">=</span><span class="n">camera_position</span>
+            <span class="p">),</span>
+            <span class="n">plot_bgcolor</span><span class="o">=</span><span class="s2">&quot;rgba(0, 0, 0, 0)&quot;</span><span class="p">,</span>  <span class="c1"># Set plot background color to white</span>
+            <span class="n">paper_bgcolor</span><span class="o">=</span><span class="s2">&quot;rgba(0, 0, 0, 0)&quot;</span><span class="p">,</span>  <span class="c1"># Set paper background color to white</span>
+            <span class="n">margin</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">l</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_plot</span><span class="p">()</span>  <span class="c1"># Call the plot creation so the user can simply return or show the plot</span>
+
+
+<div class="viewcode-block" id="CylindricalRepresentation.plot_bounding_box">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.plot_bounding_box">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_bounding_box</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; This method plots all bounding box edges &quot;&quot;&quot;</span>
+        <span class="n">bounding_box_traces</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Plotting Edges:</span>
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box</span><span class="o">.</span><span class="n">bounding_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+            <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box</span><span class="o">.</span><span class="n">bounding_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box</span><span class="o">.</span><span class="n">bounding_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span> <span class="o">=</span> <span class="n">n1</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">n1</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">n1</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span>
+            <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="n">n2</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">n2</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">n2</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span>
+            <span class="n">node_trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter3d</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">],</span> <span class="n">z</span><span class="o">=</span><span class="p">[</span><span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span>
+                                      <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">dash</span><span class="o">=</span><span class="s1">&#39;dash&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">6</span><span class="p">),</span>
+                                      <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Bounding Region&#39;</span><span class="p">,</span> <span class="n">legendgroup</span><span class="o">=</span><span class="s1">&#39;Bounding Region&#39;</span><span class="p">,</span> <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">bounding_box_traces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">node_trace</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">bounding_box_traces</span></div>
+
+
+
+<div class="viewcode-block" id="CylindricalRepresentation.plot_edges_as_surfaces">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.plot_edges_as_surfaces">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_edges_as_surfaces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; This method plots all edges using a cylindrical approximation &quot;&quot;&quot;</span>
+        <span class="n">surface_mesh_traces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">CYLINDER_RESOLUTION</span> <span class="o">=</span> <span class="mi">25</span>  <span class="c1"># Testing with the value and 25 seems to be fine computationally speaking</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cylinder_diameter</span> <span class="o">/</span> <span class="mi">2</span>
+
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">design</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+            <span class="n">length</span><span class="p">,</span> <span class="n">direction</span> <span class="o">=</span> <span class="n">length_and_direction_between_nodes</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">design</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span>
+                                                                   <span class="n">node1</span><span class="o">=</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">node2</span><span class="o">=</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="n">rotation_matrix</span> <span class="o">=</span> <span class="n">rotation_matrix_from_vectors</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span> <span class="n">direction</span><span class="p">)</span>
+            <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">CYLINDER_RESOLUTION</span><span class="p">)</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">CYLINDER_RESOLUTION</span><span class="p">)</span>
+            <span class="n">theta_grid</span><span class="p">,</span> <span class="n">z_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+            <span class="n">cylinder_surface_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_grid</span><span class="p">),</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_grid</span><span class="p">),</span> <span class="n">z_grid</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">rotation_matrix</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)):</span>
+                <span class="c1"># Handle the case when vectors are almost parallel</span>
+                <span class="n">P1</span> <span class="o">=</span> <span class="n">find_smaller_z_value</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">design</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node1</span><span class="o">=</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">node2</span><span class="o">=</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Apply the rotation matrix to cylinder surface points</span>
+                <span class="n">cylinder_surface_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_grid</span><span class="p">),</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_grid</span><span class="p">),</span> <span class="n">z_grid</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">CYLINDER_RESOLUTION</span><span class="p">):</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">CYLINDER_RESOLUTION</span><span class="p">):</span>
+                        <span class="n">cylinder_surface_points</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">rotation_matrix</span><span class="p">,</span> <span class="n">cylinder_surface_points</span><span class="p">[:,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+                <span class="c1"># Translate the points to the desired position in 3D space</span>
+                <span class="n">n1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">design</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                <span class="n">P1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">n1</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">n1</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">n1</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]])</span>
+
+            <span class="n">cylinder_surface_points</span> <span class="o">=</span> <span class="n">cylinder_surface_points</span> <span class="o">+</span> <span class="n">P1</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">x_grid</span><span class="p">,</span> <span class="n">y_grid</span><span class="p">,</span> <span class="n">z_grid</span> <span class="o">=</span> <span class="n">cylinder_surface_points</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cylinder_surface_points</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">cylinder_surface_points</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">x_points</span> <span class="o">=</span> <span class="n">x_grid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">y_points</span> <span class="o">=</span> <span class="n">y_grid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">z_points</span> <span class="o">=</span> <span class="n">z_grid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># Create vertices for the cylinder&#39;s surface</span>
+            <span class="n">faces</span><span class="p">,</span> <span class="n">vertices</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">CYLINDER_RESOLUTION</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">CYLINDER_RESOLUTION</span><span class="p">):</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="n">x_points</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">CYLINDER_RESOLUTION</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span>
+                    <span class="n">y</span> <span class="o">=</span> <span class="n">y_points</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">CYLINDER_RESOLUTION</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span>
+                    <span class="n">z</span> <span class="o">=</span> <span class="n">z_points</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">CYLINDER_RESOLUTION</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span>
+                    <span class="n">vertices</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span>
+
+            <span class="c1"># Create faces by defining the vertex indices</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">CYLINDER_RESOLUTION</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">CYLINDER_RESOLUTION</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">v1</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="n">CYLINDER_RESOLUTION</span> <span class="o">+</span> <span class="n">j</span>
+                    <span class="n">v2</span> <span class="o">=</span> <span class="n">v1</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="n">v3</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">CYLINDER_RESOLUTION</span> <span class="o">+</span> <span class="n">j</span>
+                    <span class="n">v4</span> <span class="o">=</span> <span class="n">v3</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="n">faces</span><span class="o">.</span><span class="n">extend</span><span class="p">([(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">v3</span><span class="p">),</span> <span class="p">(</span><span class="n">v2</span><span class="p">,</span> <span class="n">v4</span><span class="p">,</span> <span class="n">v3</span><span class="p">)])</span>
+
+            <span class="n">new_trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Mesh3d</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x_points</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y_points</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">z_points</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="p">[</span><span class="n">face</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">faces</span><span class="p">],</span>
+                                  <span class="n">j</span><span class="o">=</span><span class="p">[</span><span class="n">face</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">faces</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="p">[</span><span class="n">face</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">faces</span><span class="p">],</span>
+                                  <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cylinder_color</span><span class="p">,</span> <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">legendgroup</span><span class="o">=</span><span class="s1">&#39;dna&#39;</span><span class="p">)</span>
+            <span class="n">surface_mesh_traces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_trace</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">surface_mesh_traces</span></div>
+
+
+
+<div class="viewcode-block" id="CylindricalRepresentation.plot_excluded_regions">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.plot_excluded_regions">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_excluded_regions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; This method plots the excluded regions &quot;&quot;&quot;</span>
+        <span class="n">excluded_face_traces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">excluded_region</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">design</span><span class="o">.</span><span class="n">excluded</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">excluded_region</span><span class="o">.</span><span class="n">faces</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="n">new_face_trace</span> <span class="o">=</span> <span class="n">face</span><span class="o">.</span><span class="n">get_face_plot</span><span class="p">(</span><span class="n">color_type</span><span class="o">=</span><span class="s1">&#39;manual&#39;</span><span class="p">,</span> <span class="n">override_opacity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">opaque_excluded_region</span><span class="p">,</span>
+                                                    <span class="n">override_color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">excluded_color</span><span class="p">)</span>
+                <span class="n">new_face_trace</span><span class="o">.</span><span class="n">legendgroup</span> <span class="o">=</span> <span class="s1">&#39;excluded&#39;</span>
+                <span class="n">excluded_face_traces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_face_trace</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">excluded_face_traces</span></div>
+
+
+
+<div class="viewcode-block" id="CylindricalRepresentation.create_plot">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.create_plot">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; This method is initialized by post_init and calls the above methods. Creates the plot. &quot;&quot;&quot;</span>
+        <span class="n">all_traces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_bounding_box</span><span class="p">:</span>
+            <span class="n">bounding_box_traces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_bounding_box</span><span class="p">()</span>
+            <span class="n">all_traces</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">bounding_box_traces</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_box_bounds</span><span class="p">:</span>
+            <span class="c1"># This add the &quot;Unit Cell&quot; Parameters to the plot</span>
+            <span class="n">cone_traces</span><span class="p">,</span> <span class="n">trace_annotations</span><span class="p">,</span> <span class="n">text_annotation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box</span><span class="o">.</span><span class="n">return_box_traces</span><span class="p">(</span><span class="n">text_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font</span><span class="o">+</span><span class="mi">4</span><span class="p">)</span>
+            <span class="c1"># Add text annotations</span>
+            <span class="n">all_traces</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">cone_traces</span><span class="p">)</span>
+            <span class="n">all_traces</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">trace_annotations</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">text_annotation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">annotations</span> <span class="o">=</span> <span class="p">[</span><span class="n">text_annotation</span><span class="p">]</span>
+
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_excluded_regions</span><span class="p">:</span>
+            <span class="n">excluded_traces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_excluded_regions</span><span class="p">()</span>
+            <span class="n">all_traces</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">excluded_traces</span><span class="p">)</span>
+
+        <span class="c1"># Grab the other traces:</span>
+        <span class="n">edge_n_node_traces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">plot_edges_as_surfaces</span><span class="p">()</span>
+        <span class="n">all_traces</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">edge_n_node_traces</span><span class="p">)</span>
+
+        <span class="c1"># Now we add to the figure:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">add_traces</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">all_traces</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">layout</span>  <span class="c1"># Set the layout to the figure layout</span></div>
+
+
+
+<div class="viewcode-block" id="CylindricalRepresentation.return_figure">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.return_figure">[docs]</a>
+    <span class="k">def</span> <span class="nf">return_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Method allowing user to use / manipulate the plotly figure of a design &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fig</span></div>
+
+
+<div class="viewcode-block" id="CylindricalRepresentation.show_figure">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.show_figure">[docs]</a>
+    <span class="k">def</span> <span class="nf">show_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Function that shows the figure in the web browser &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, A.J. Vetturini.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

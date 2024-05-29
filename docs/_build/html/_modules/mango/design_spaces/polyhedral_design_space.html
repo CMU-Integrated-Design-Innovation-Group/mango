@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mango.design_spaces.polyhedral_design_space &mdash; mango generative design framework b0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=7d16594f"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            mango generative design framework
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">mango</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">mango generative design framework</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mango.design_spaces.polyhedral_design_space</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mango.design_spaces.polyhedral_design_space</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A.J. Vetturini \n</span>
+<span class="sd">IDIG and MMBL \n</span>
+<span class="sd">Carnegie Mellon University \n</span>
+
+<span class="sd">This is the top level class responsible for maintaining the design features / qualities of a given design. This is</span>
+<span class="sd">effectively an environment from which we are applying grammars (actions) to.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># Import Modules</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">.bounding_box</span> <span class="kn">import</span> <span class="n">TriclinicBox</span><span class="p">,</span> <span class="n">MonoclinicBox</span><span class="p">,</span> <span class="n">OrthorhombicBox</span><span class="p">,</span> <span class="n">TetragonalBox</span><span class="p">,</span> <span class="n">RhombohedralBox</span><span class="p">,</span> <span class="n">HexagonalBox</span><span class="p">,</span> <span class="n">CubicBox</span>
+<span class="kn">from</span> <span class="nn">mango.mango_features.preserved_regions</span> <span class="kn">import</span> <span class="n">PreservedEdge</span>
+<span class="kn">from</span> <span class="nn">mango.mango_features.mesh_face</span> <span class="kn">import</span> <span class="n">MeshFace</span>
+<span class="kn">from</span> <span class="nn">mango.utils.mango_math</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">trimesh</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">combinations</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="kn">import</span> <span class="n">ConvexHull</span>
+<span class="kn">from</span> <span class="nn">mango.utils.DNA_property_constants</span> <span class="kn">import</span> <span class="n">BDNA</span>
+<span class="kn">import</span> <span class="nn">pyvista</span> <span class="k">as</span> <span class="nn">pv</span>
+
+<div class="viewcode-block" id="PolyhedralSpace">
+<a class="viewcode-back" href="../../../mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">PolyhedralSpace</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is a design space tasked with monitoring a polyhedral mesh for the export to automated design algorithms such</span>
+<span class="sd">    as vHelix, DAEDALUS, and TALOS. This design space manages a 3D space via its design_graph</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ------------</span>
+<span class="sd">    bounding_box : BoundingBox data type, created \n</span>
+<span class="sd">    preserved : List of PreservedVertex or PreservedEdge objects \n</span>
+<span class="sd">    excluded: An optional list of Sphere or RectangularPrism objects \n</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">bounding_box</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">TriclinicBox</span><span class="p">,</span> <span class="n">MonoclinicBox</span><span class="p">,</span> <span class="n">OrthorhombicBox</span><span class="p">,</span> <span class="n">TetragonalBox</span><span class="p">,</span>
+                        <span class="n">RhombohedralBox</span><span class="p">,</span> <span class="n">HexagonalBox</span><span class="p">,</span> <span class="n">CubicBox</span><span class="p">]</span>
+    <span class="n">preserved</span><span class="p">:</span> <span class="nb">list</span>
+    <span class="n">excluded</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">empty_graph</span><span class="p">()</span>  <span class="c1"># Initialize this to an empty graph</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plotting_faces</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;preserved_region&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;other&#39;</span><span class="p">:</span> <span class="p">[]}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nonterminal_nodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edge_divide_nodes</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Tracking where all edge_divisions occur</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">merge_label_dict</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Used to track edge_divisions so we know when we can back out</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_faces</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Dictionary to tract MeshFaces thru stored tuples</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># This graph is used for the merge face grammar to guarantee that we can back out of certain topologies</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">merge_label_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">empty_graph</span><span class="p">(</span><span class="n">create_using</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">)</span>
+
+        <span class="c1"># Create the preserved regions by adding them to the design_graph:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_preserved_regions</span><span class="p">()</span>
+
+        <span class="c1"># Tract any preserved edges such that we guarantee they are never removed:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">terminal_edges</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">preserved</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">PreservedEdge</span><span class="p">):</span>
+                <span class="n">p1</span> <span class="o">=</span> <span class="n">node_from_xyz</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">i</span><span class="o">.</span><span class="n">v1</span><span class="p">)</span>
+                <span class="n">p2</span> <span class="o">=</span> <span class="n">node_from_xyz</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">i</span><span class="o">.</span><span class="n">v2</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">terminal_edges</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">))</span>
+
+        <span class="c1"># Create a list of all initial vertices and edges used to validate the start shape:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initial_nodes_pre_start</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">initial_nodes_pre_start</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mesh_file</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Initialize an object file for the mesh</span>
+
+
+<div class="viewcode-block" id="PolyhedralSpace.increment_node_count">
+<a class="viewcode-back" href="../../../mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.increment_node_count">[docs]</a>
+    <span class="k">def</span> <span class="nf">increment_node_count</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Increments the node_count value by 1 so we can track the node values</span>
+<span class="sd">        :return: Nothing, internally stored</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_count</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+
+
+<div class="viewcode-block" id="PolyhedralSpace.create_preserved_regions">
+<a class="viewcode-back" href="../../../mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.create_preserved_regions">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_preserved_regions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function will use the passed in preserved region spaces and specify these regions in the design_graph</span>
+
+<span class="sd">        :return: Nothing just updated the design_graph element</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">all_pts</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">preserved</span><span class="p">:</span>
+            <span class="n">numNodes</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">preserved_region_as_graph</span><span class="o">.</span><span class="n">number_of_nodes</span><span class="p">()</span>
+            <span class="c1"># We loop over the number of nodes in the region and change the relabel dict values as needed:</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">numNodes</span><span class="p">):</span>
+                <span class="n">pt</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">i</span><span class="o">.</span><span class="n">preserved_region_as_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">j</span><span class="p">)</span>
+                <span class="n">pt</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">pt</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">all_pts</span><span class="p">:</span>
+                    <span class="n">all_pts</span><span class="p">[</span><span class="n">pt</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_count</span>
+                    <span class="n">i</span><span class="o">.</span><span class="n">relabel_dict</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_count</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">increment_node_count</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># If the point already exists, we simply change the relabel dict to this value:</span>
+                    <span class="n">i</span><span class="o">.</span><span class="n">relabel_dict</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">all_pts</span><span class="p">[</span><span class="n">pt</span><span class="p">]</span>
+            <span class="c1"># Merging graphs</span>
+            <span class="n">new_preserved</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">relabel_nodes</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">preserved_region_as_graph</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">relabel_dict</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">add_nodes_from</span><span class="p">([(</span><span class="n">n</span><span class="p">,</span> <span class="n">new_preserved</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">new_preserved</span><span class="o">.</span><span class="n">nodes</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">add_edges_from</span><span class="p">(</span><span class="n">new_preserved</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="PolyhedralSpace.add_new_node">
+<a class="viewcode-back" href="../../../mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.add_new_node">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_new_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">z</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">terminal</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function will create a new node in our design graph</span>
+
+<span class="sd">        :param x: X position (nm)</span>
+<span class="sd">        :param y: Y Position (nm)</span>
+<span class="sd">        :param z: Z position (nm)</span>
+<span class="sd">        :param terminal: Is node terminal (i.e., a node that can NOT be removed) or not</span>
+<span class="sd">        :return: Nothing, modifies design_graph</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_count</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">terminal</span><span class="o">=</span><span class="n">terminal</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">increment_node_count</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="PolyhedralSpace.validate_start_shape">
+<a class="viewcode-back" href="../../../mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.validate_start_shape">[docs]</a>
+    <span class="k">def</span> <span class="nf">validate_start_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shape</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">trimesh</span><span class="o">.</span><span class="n">Trimesh</span><span class="p">,</span> <span class="n">pv</span><span class="o">.</span><span class="n">PolyData</span><span class="p">],</span> <span class="n">preserved_edges</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span>
+                             <span class="n">og_verts</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function simply validates that the triangulated alphashape is able to be modified as expected by</span>
+<span class="sd">        the application of various grammars</span>
+
+<span class="sd">        :param shape: Mesh element generated by alphashape algorithm</span>
+<span class="sd">        :param preserved_edges: A list of tuples that contain the nodes of any preserved edges.</span>
+<span class="sd">        :param og_verts: Original list of vertices from the preserved_regions</span>
+<span class="sd">        :return: (bool, list) : the bool returns if the shape is valid (true) or not (false) and the list contains</span>
+<span class="sd">                                the list returns a list of tuples defining the graph nodes of the preserved regions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">trimesh</span><span class="o">.</span><span class="n">Trimesh</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">pv</span><span class="o">.</span><span class="n">PolyData</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;An alphashape could not be generated for the provided input criterion and the optimization&quot;</span>
+                            <span class="s2">&quot; process could not begin.&quot;</span><span class="p">)</span>
+        <span class="n">verts</span> <span class="o">=</span> <span class="n">shape</span><span class="o">.</span><span class="n">points</span>
+        <span class="n">tris</span> <span class="o">=</span> <span class="n">shape</span><span class="o">.</span><span class="n">faces</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">:]</span>
+        <span class="c1"># First we do a simple check to validate a mesh was triangulated:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tris</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># If there are less than 4 triangles there is no way a 3D surface mesh is formed properly</span>
+
+        <span class="c1"># First check if number of verices in mesh matches number of vertices passed in:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">verts</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">og_verts</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># If we do not have the same number of points, then this mesh does not contain the input info</span>
+
+        <span class="c1"># Now we must create a &quot;map&quot; of shape vertices. We do this because the delaunay triangulation might &quot;move&quot; the</span>
+        <span class="c1"># indexed vertices around and so we want to validate we are checking the correct vertices:</span>
+        <span class="n">update_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">vert</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">verts</span><span class="p">):</span>
+            <span class="n">curNode</span> <span class="o">=</span> <span class="n">node_from_xyz</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">vert</span><span class="p">)</span>
+            <span class="c1"># If the current node in design_graph is not the same as the vert, we need to then update</span>
+            <span class="c1"># start_shape_faces to conform to the proper value</span>
+            <span class="n">update_map</span><span class="p">[</span><span class="n">curNode</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span>
+
+        <span class="c1"># Now we create a loop that functionally does two things: 1) It validates that any preserved edges defined</span>
+        <span class="c1"># by the user are in the starting mesh and 2) finds the new preserved_edge indices due to the &quot;changed&quot;</span>
+        <span class="c1"># index positions from the map</span>
+        <span class="n">new_preserved_edges</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">preserved_edges</span><span class="p">:</span>
+            <span class="c1">#n1, n2 = i[0], i[1]</span>
+            <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span> <span class="o">=</span> <span class="n">update_map</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">update_map</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="n">new_preserved_edges</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">))</span>
+            <span class="n">edge_found</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">tris</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">n1</span> <span class="ow">in</span> <span class="n">f</span> <span class="ow">and</span> <span class="n">n2</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">edge_found</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">edge_found</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span>  <span class="c1"># If we could not find a preserved edge we return True to re-arrange the mesh w new alpha</span>
+
+        <span class="c1"># Otherwise, if we make it here, return False signalling &quot;mesh passed checks, stop searching&quot;</span>
+        <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="n">new_preserved_edges</span></div>
+
+
+
+<div class="viewcode-block" id="PolyhedralSpace.triangulate_input_conditions">
+<a class="viewcode-back" href="../../../mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.triangulate_input_conditions">[docs]</a>
+    <span class="k">def</span> <span class="nf">triangulate_input_conditions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function uses the alphashape to create a start shape for the generative process based on the input</span>
+<span class="sd">        conditions defined by the designer. Future work may want to consider different types of triangulations, but the</span>
+<span class="sd">        alphashape generalizes well to a concave or convex set of input conditions and therefore I use it here.</span>
+
+<span class="sd">        :return: A tuple of the faces of the triangulation and the related vertices of the mesh</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># First gab the current design graph features:</span>
+        <span class="n">preserved</span><span class="p">,</span> <span class="n">excluded</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+            <span class="c1"># The current nodes will only contain preserved and excluded regions so just collect this info:</span>
+            <span class="n">pt</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;preserved_region&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">]:</span>
+                <span class="n">preserved</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">excluded</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span>  <span class="c1"># Not currently used</span>
+
+        <span class="n">vert_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">preserved</span><span class="p">)</span>
+
+        <span class="c1"># To generate a start shape we use the alpha-shape which requires an optimal alpha value which can be found:</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="n">pv</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="n">vert_list</span><span class="p">)</span>
+
+        <span class="c1"># Here we use an alpha shape to find a valid start shape within a while loop. Once a valid start shape is found</span>
+        <span class="c1"># we break out. This is often just the convex hull of the entered points, but can expand. Future research</span>
+        <span class="c1"># should look at this start shape condition as there are some assumptions made:</span>
+
+        <span class="n">keep_searching</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">initial_alpha</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="n">surface_mesh</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Init to get rid of annoying warning!</span>
+        <span class="k">while</span> <span class="n">keep_searching</span><span class="p">:</span>
+            <span class="n">curSurf</span> <span class="o">=</span> <span class="n">points</span><span class="o">.</span><span class="n">delaunay_3d</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">initial_alpha</span><span class="p">)</span>  <span class="c1"># Note: reconstruct_surface() did not seem to work very well!</span>
+            <span class="n">surface_mesh</span> <span class="o">=</span> <span class="n">curSurf</span><span class="o">.</span><span class="n">extract_surface</span><span class="p">()</span>
+            <span class="c1"># Validate the shape:</span>
+            <span class="n">keep_searching</span><span class="p">,</span> <span class="n">new_edges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_start_shape</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">surface_mesh</span><span class="p">,</span> <span class="n">preserved_edges</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">terminal_edges</span><span class="p">,</span>
+                                                                  <span class="n">og_verts</span><span class="o">=</span><span class="n">vert_list</span><span class="p">)</span>
+            <span class="c1"># If keep_searching is returned False then we update the terminal_edges:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">keep_searching</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">terminal_edges</span> <span class="o">=</span> <span class="n">new_edges</span>
+            <span class="n">initial_alpha</span> <span class="o">+=</span> <span class="mf">0.1</span>
+
+            <span class="c1"># Now we have a condition to check based on intiial_alpha:</span>
+            <span class="k">if</span> <span class="n">initial_alpha</span> <span class="o">&gt;=</span> <span class="mi">5</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Unable to find a valid start condition for your input conditions, please reach out&#39;</span>
+                                <span class="s1">&#39;to the developers to find a solution to your input case.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># After finding the correct surface_mesh:</span>
+        <span class="n">verts</span> <span class="o">=</span> <span class="n">surface_mesh</span><span class="o">.</span><span class="n">points</span>
+        <span class="n">tris</span> <span class="o">=</span> <span class="n">surface_mesh</span><span class="o">.</span><span class="n">faces</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">:]</span>
+
+        <span class="k">return</span> <span class="n">tris</span><span class="p">,</span> <span class="n">verts</span></div>
+
+
+
+<div class="viewcode-block" id="PolyhedralSpace.generate_start_shape">
+<a class="viewcode-back" href="../../../mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.generate_start_shape">[docs]</a>
+    <span class="k">def</span> <span class="nf">generate_start_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function adds all relevant edges on the initialized start_shape to the design_graph:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># The _ used to be a temp variable. I am currently leaving this as is just in case i need to debug later</span>
+        <span class="c1"># since this isn&#39;t really computationally expensive. If i forget, OOPS!</span>
+        <span class="n">start_shape_faces</span><span class="p">,</span> <span class="n">start_shape_vertices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">triangulate_input_conditions</span><span class="p">()</span>
+
+        <span class="c1"># Need to remap between start_shape vertices and the design_graph vertices so we create the correct</span>
+        <span class="c1"># faces:</span>
+        <span class="n">update_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">vert</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">start_shape_vertices</span><span class="p">):</span>
+            <span class="n">curNode</span> <span class="o">=</span> <span class="n">node_from_xyz</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">xyz</span><span class="o">=</span><span class="n">vert</span><span class="p">)</span>
+            <span class="c1"># If the current node in design_graph is not the same as the vert, we need to then update</span>
+            <span class="c1"># start_shape_faces to conform to the proper value</span>
+            <span class="n">update_map</span><span class="p">[</span><span class="n">curNode</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">relabel_nodes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">update_map</span><span class="p">)</span>  <span class="c1"># Update positions properly per above map</span>
+
+
+        <span class="c1"># First we extract all edges from the alpha shape and add them to the design_graph:</span>
+        <span class="k">for</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">start_shape_faces</span><span class="p">:</span>
+            <span class="n">combs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">combinations</span><span class="p">(</span><span class="n">face</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="c1"># First we add the edges to the design graph:</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">combs</span><span class="p">:</span>
+                <span class="n">edge</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">c</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">edge</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>  <span class="c1"># IF THERE IS AN ISSUE CHECK HERE AJ, YOU GOT RID OF IF</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="c1"># Now we add the faces to our plotting_faces list as well as the all_faces dictionary using the vertices:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plotting_faces</span><span class="p">[</span><span class="s1">&#39;other&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">face</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_faces</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">face</span><span class="p">)]</span> <span class="o">=</span> <span class="n">MeshFace</span><span class="p">(</span>
+                <span class="n">v1</span><span class="o">=</span><span class="n">start_shape_vertices</span><span class="p">[</span><span class="n">face</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+                <span class="n">v2</span><span class="o">=</span><span class="n">start_shape_vertices</span><span class="p">[</span><span class="n">face</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+                <span class="n">v3</span><span class="o">=</span><span class="n">start_shape_vertices</span><span class="p">[</span><span class="n">face</span><span class="p">[</span><span class="mi">2</span><span class="p">]],</span> <span class="n">face_type</span><span class="o">=</span><span class="s1">&#39;triangle&#39;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Now, we add the new faces to the merge_label_graph:</span>
+        <span class="c1"># self.merge_label_graph.add_nodes_from(_)</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">start_shape_faces</span><span class="p">:</span>  <span class="c1"># Replaces above because apparently a TrackedArray worked but ndarray doesnt?</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">merge_label_graph</span><span class="o">.</span><span class="n">add_node</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">node</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="PolyhedralSpace.find_nonterminal_nodes">
+<a class="viewcode-back" href="../../../mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.find_nonterminal_nodes">[docs]</a>
+    <span class="k">def</span> <span class="nf">find_nonterminal_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function will find all of the non-terminal nodes in the design and append to a list that will be used to</span>
+<span class="sd">        apply a variety of production rules to manipulate geometry.</span>
+
+<span class="sd">        Terminal nodes are those which belong to terminal geometries (preserved / excluded spaces). Nonterminal are</span>
+<span class="sd">        all others</span>
+
+<span class="sd">        :return: Nothing, just appends to an ever-changing list of nonterminal nodes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nonterminal_nodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+            <span class="c1"># If a node is not marked as terminal and not already accounted for we go into this check</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s1">&#39;terminal&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">n</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nonterminal_nodes</span><span class="p">:</span>
+                <span class="n">nonterminal_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nonterminal_nodes</span> <span class="o">=</span> <span class="n">nonterminal_nodes</span>  <span class="c1"># Reset this list since nodes can be removed</span></div>
+
+
+
+<div class="viewcode-block" id="PolyhedralSpace.create_trimesh_mesh">
+<a class="viewcode-back" href="../../../mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.create_trimesh_mesh">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_trimesh_mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is simply responsible for reconstructing a trimesh mesh file for the purpose of validating the</span>
+<span class="sd">        mesh file. I deemed this &quot;efficient enough&quot; for the time being, but you could probably write some compiled</span>
+<span class="sd">        code which does this much faster.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">faces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">all_faces</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+        <span class="n">vertex_mapping</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">renumber_vertices</span><span class="p">(</span><span class="n">faces</span><span class="o">=</span><span class="n">faces</span><span class="p">)</span>
+        <span class="n">all_vertices</span> <span class="o">=</span> <span class="n">get_all_verts_in_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">vertex_mapping</span><span class="o">=</span><span class="n">vertex_mapping</span><span class="p">)</span>
+
+        <span class="c1"># Since nodes are constantly removed / added we need to re-number portions of the mesh:</span>
+        <span class="n">all_faces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">faces</span><span class="p">:</span>
+            <span class="c1"># We first use the mapping dictionary to ensure we are accessing the correct index positions:</span>
+            <span class="n">new_row</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">ind</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+                <span class="n">new_row</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vertex_mapping</span><span class="p">[</span><span class="n">ind</span><span class="p">])</span>
+            <span class="n">new_row_1</span> <span class="o">=</span> <span class="p">[</span><span class="n">new_row</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">new_row</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">new_row</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+            <span class="n">all_faces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_row_1</span><span class="p">)</span>
+        <span class="c1"># Now with the faces re-mapped we can create the Trimesh mesh</span>
+        <span class="n">mesh</span> <span class="o">=</span> <span class="n">trimesh</span><span class="o">.</span><span class="n">Trimesh</span><span class="p">(</span><span class="n">vertices</span><span class="o">=</span><span class="n">all_vertices</span><span class="p">,</span> <span class="n">faces</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_faces</span><span class="p">))</span>
+        <span class="n">mesh</span><span class="o">.</span><span class="n">fix_normals</span><span class="p">()</span>
+
+        <span class="c1"># Assign it to the value of mesh:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mesh_file</span> <span class="o">=</span> <span class="n">mesh</span></div>
+
+
+
+<div class="viewcode-block" id="PolyhedralSpace.calculate_input_parameters">
+<a class="viewcode-back" href="../../../mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.calculate_input_parameters">[docs]</a>
+    <span class="k">def</span> <span class="nf">calculate_input_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge_lengths</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">routing_algorithm</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This will return a standardized dictionary that will be used to allow for customized objective functions and</span>
+<span class="sd">        design constraints, allowing for a more generalizable generative tool</span>
+
+<span class="sd">        :param edge_lengths: A list of all edge lengths in units of nm</span>
+<span class="sd">        :param routing_algorithm: Which algorithm is being used, options are currently: DAEDALUS and TALOS</span>
+<span class="sd">        :return: dictionary {property : value} where property is the key value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Calculate center-to-center distances of all edges:</span>
+        <span class="n">center_to_centers</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">e1</span><span class="p">,</span> <span class="n">e2</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">()),</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="c1"># We first need the centroid of each edge pair, so starting with e1:</span>
+            <span class="n">xyz1</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">e1</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">xyz2</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">e1</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">center_e1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="n">xyz1</span><span class="p">,</span> <span class="n">xyz2</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="n">xyz3</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">e2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">xyz4</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">e2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">center_e2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">([</span><span class="n">xyz3</span><span class="p">,</span> <span class="n">xyz4</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="c1"># Now, we want to find the distance between these centroids for d:</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">center_e2</span> <span class="o">-</span> <span class="n">center_e1</span><span class="p">)</span>
+            <span class="n">center_to_centers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dist</span><span class="p">)</span>
+
+        <span class="c1"># Estimate scaffold length:</span>
+        <span class="n">total_length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">edge_lengths</span><span class="p">))</span> <span class="c1"># Total edge length in nanometers</span>
+        <span class="k">if</span> <span class="n">routing_algorithm</span> <span class="o">==</span> <span class="s1">&#39;DAEDALUS&#39;</span><span class="p">:</span>
+            <span class="n">numBasepairs</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">total_length</span> <span class="o">/</span> <span class="n">BDNA</span><span class="o">.</span><span class="n">pitch_per_rise</span><span class="p">)</span>  <span class="c1"># We round to nearest integer</span>
+        <span class="k">elif</span> <span class="n">routing_algorithm</span> <span class="o">==</span> <span class="s1">&#39;TALOS&#39;</span><span class="p">:</span>
+            <span class="n">numBasepairs</span> <span class="o">=</span> <span class="mi">6</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">total_length</span> <span class="o">/</span> <span class="n">BDNA</span><span class="o">.</span><span class="n">pitch_per_rise</span><span class="p">)</span>  <span class="c1"># We round to nearest integer</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Only valid routing algorithms supported are currently DAEDALUS and TALOS.&#39;</span><span class="p">)</span>
+
+
+        <span class="c1"># Face Angles and Surface Areas:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">create_trimesh_mesh</span><span class="p">()</span>
+        <span class="n">surface_areas</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh_file</span><span class="o">.</span><span class="n">area_faces</span><span class="p">)</span>
+
+        <span class="c1">## Face Angles:</span>
+        <span class="n">face_angles</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">angles</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh_file</span><span class="o">.</span><span class="n">face_angles</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">angles</span><span class="p">:</span>
+                <span class="n">face_angles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+
+        <span class="c1"># Principal axes based on the moment_inertia of the mesh file:</span>
+        <span class="n">inertia_axis_unit_vectors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh_file</span><span class="o">.</span><span class="n">principal_inertia_vectors</span>
+
+        <span class="c1"># Convexity Measure:</span>
+        <span class="n">convex_hull</span> <span class="o">=</span> <span class="n">ConvexHull</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh_file</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span>
+
+        <span class="c1"># Calculate the volume of the convex hull</span>
+        <span class="n">convex_hull_volume</span> <span class="o">=</span> <span class="n">convex_hull</span><span class="o">.</span><span class="n">volume</span>
+
+        <span class="c1"># Set values:</span>
+        <span class="n">input_values</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;edge_lengths&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">edge_lengths</span><span class="p">),</span>
+            <span class="s1">&#39;face_angles&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">face_angles</span><span class="p">),</span>
+            <span class="s1">&#39;estimated_scaffold_length&#39;</span><span class="p">:</span> <span class="n">numBasepairs</span><span class="p">,</span>
+            <span class="s1">&#39;center_to_center&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">center_to_centers</span><span class="p">),</span>
+            <span class="s1">&#39;surface_area&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">surface_areas</span><span class="p">),</span>
+            <span class="s1">&#39;inertia_axis_unit_vectors&#39;</span><span class="p">:</span> <span class="n">inertia_axis_unit_vectors</span><span class="p">,</span>
+            <span class="s1">&#39;volume&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh_file</span><span class="o">.</span><span class="n">volume</span><span class="p">,</span>
+            <span class="s1">&#39;convex_hull_volume&#39;</span><span class="p">:</span> <span class="n">convex_hull_volume</span><span class="p">,</span>
+            <span class="s1">&#39;design_graph&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_graph</span><span class="p">,</span>
+            <span class="s1">&#39;bounding_box&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">input_values</span></div>
+
+
+
+<div class="viewcode-block" id="PolyhedralSpace.renumber_vertices">
+<a class="viewcode-back" href="../../../mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.renumber_vertices">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">renumber_vertices</span><span class="p">(</span><span class="n">faces</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function will take in the list of vertices and faces and re-number the faces to verify the index positions</span>
+<span class="sd">        This is needed for writing out the .ply file to ensure proper file creation.</span>
+
+<span class="sd">        :return: Dictionary containing the mapping of old to new vertices values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># First we need to get all the unique face indices:</span>
+        <span class="n">face_vertex_mapping</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">unique_faces</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">faces</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unique_faces</span><span class="p">:</span>
+                    <span class="n">unique_faces</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="c1"># Next we sort this list and start &quot;counting&quot; through the list to create a mapping via a dictionary:</span>
+        <span class="n">unique_faces</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">unique_faces</span><span class="p">)</span>
+        <span class="n">vertex_counter</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">unique_faces</span><span class="p">:</span>
+            <span class="n">face_vertex_mapping</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">vertex_counter</span>
+            <span class="n">vertex_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">face_vertex_mapping</span></div>
+
+
+
+<div class="viewcode-block" id="PolyhedralSpace.jsonify_design_space">
+<a class="viewcode-back" href="../../../mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.jsonify_design_space">[docs]</a>
+    <span class="k">def</span> <span class="nf">jsonify_design_space</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function will convert a design graph to a json-ified object such that I can plot it in the kodak</span>
+<span class="sd">        visualization</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># First call the trimesh mesh update for the current design state:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_trimesh_mesh</span><span class="p">()</span>
+
+        <span class="c1"># Next loop over the trimesh mesh faces and vertices such that we can jsonify the object properly:</span>
+        <span class="n">vertices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh_file</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">faces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh_file</span><span class="o">.</span><span class="n">faces</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="c1"># Create a dictionary containing vertices and faces</span>
+        <span class="n">mesh_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;vertices&quot;</span><span class="p">:</span> <span class="n">vertices</span><span class="p">,</span>
+            <span class="s2">&quot;faces&quot;</span><span class="p">:</span> <span class="n">faces</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">mesh_data</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, A.J. Vetturini.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

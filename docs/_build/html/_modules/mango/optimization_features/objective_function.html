@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mango.optimization_features.objective_function &mdash; mango generative design framework b0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=7d16594f"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            mango generative design framework
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">mango</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">mango generative design framework</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mango.optimization_features.objective_function</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mango.optimization_features.objective_function</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A.J. Vetturini \n</span>
+<span class="sd">IDIG and MMBL \n</span>
+<span class="sd">Carnegie Mellon University \n</span>
+
+<span class="sd">This script simply contains the dataclass for creating an ObjectiveFunction to use to guide the search process for</span>
+<span class="sd">a generative study.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
+
+<div class="viewcode-block" id="ObjectiveFunction">
+<a class="viewcode-back" href="../../../mango.optimization_features.html#mango.optimization_features.objective_function.ObjectiveFunction">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ObjectiveFunction</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class lets the user define a custom function which can be assigned as the objective of the generative process.</span>
+<span class="sd">    This is a slight WIP as I may want to convert this to a Python wrapper, but I am not sure about the logistics (or if</span>
+<span class="sd">    this is even a good idea). This class is very similar to the CustomDesignConstraint class. \n </span>
+
+<span class="sd">    The function can really be defined as anything, however it should be noted that there are no checks here to see how</span>
+<span class="sd">    &quot;good&quot; a constraint is or is not, and that is at the discretion of the user. \n</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ------------</span>
+<span class="sd">    name : String unique identifies of the constraint name \n</span>
+<span class="sd">    objective_equation : A Python function defining the objective. For example, if you have a constraint as: \n</span>
+<span class="sd">                        \t def bar(input_vars, extra_params): \n</span>
+<span class="sd">                            \t \t objective_function_code \n</span>
+
+<span class="sd">                        \t Then you would pass in ObjectiveFunction(name=&#39;bar&#39;, design_constraint=bar, extra_params=extra_params) \n</span>
+<span class="sd">    extra_params : A dictionary of constants / values that a user may want to use in the custom constraint \n</span>
+<span class="sd">    numDecimals : Floating point value to control precision. Allowing too high of precision, depending on the sampling</span>
+<span class="sd">                  sampling, can lead to the optimizers getting stuck in local minima around a certain point.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># Name of the objective function to show on plots</span>
+    <span class="n">objective_equation</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># This is the actual equation (which can ONLY contain ONE term) in LaTeX formatting for sympy</span>
+    <span class="n">extra_params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Extra values that the user may pass in</span>
+    <span class="c1"># Constant value that a user might want to use to properly &quot;scale&quot; the objective function. Note that each Objective</span>
+    <span class="c1"># Function class will only have &quot;one&quot; component so there is only 1 constant value.</span>
+    <span class="n">numDecimals</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># The higher this value the more MOSA can get trapped in local minima</span>
+
+<div class="viewcode-block" id="ObjectiveFunction.evaluate_function">
+<a class="viewcode-back" href="../../../mango.optimization_features.html#mango.optimization_features.objective_function.ObjectiveFunction.evaluate_function">[docs]</a>
+    <span class="k">def</span> <span class="nf">evaluate_function</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_parameters</span><span class="p">):</span>
+        <span class="c1"># If we are using a &quot;simple&quot; (or pre-programmed) function, we have to set it as a callable function:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">objective_equation</span><span class="p">(</span><span class="n">input_parameters</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">extra_params</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">numDecimals</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">objective_equation</span><span class="p">(</span><span class="n">input_parameters</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">numDecimals</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, A.J. Vetturini.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

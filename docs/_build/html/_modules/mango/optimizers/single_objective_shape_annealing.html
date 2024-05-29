@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mango.optimizers.single_objective_shape_annealing &mdash; mango generative design framework b0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=7d16594f"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            mango generative design framework
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">mango</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">mango generative design framework</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mango.optimizers.single_objective_shape_annealing</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mango.optimizers.single_objective_shape_annealing</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A.J. Vetturini \n</span>
+<span class="sd">IDIG and MMBL \n</span>
+<span class="sd">Carnegie Mellon University \n</span>
+
+<span class="sd">Currently this optimizer is only available for the PolyhedralSpace; future work will potentially need to incorporate</span>
+<span class="sd">different spaces and update this class to allow different spaces. \n</span>
+
+<span class="sd">This script incorporates the shape annealing algorithm as developed in Cagan, J., and W. J. Mitchell.</span>
+<span class="sd">“Optimally Directed Shape Generation by Shape Annealing.” Environment and Planning B: Planning and Design 20,</span>
+<span class="sd">no. 1 (1993): 5–12.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Import Modules</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">mango.design_spaces.polyhedral_design_space</span> <span class="kn">import</span> <span class="n">PolyhedralSpace</span>
+<span class="kn">from</span> <span class="nn">mango.grammars.origami_grammars</span> <span class="kn">import</span> <span class="n">GrammarSet</span><span class="p">,</span> <span class="n">CustomGrammarSet</span>
+<span class="kn">from</span> <span class="nn">mango.optimization_features</span> <span class="kn">import</span> <span class="n">design_constraints</span><span class="p">,</span> <span class="n">objective_function</span>
+<span class="kn">from</span> <span class="nn">mango.utils.mango_math</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">random</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">randint</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">dill</span>
+
+<div class="viewcode-block" id="ShapeAnneal">
+<a class="viewcode-back" href="../../../mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ShapeAnneal</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The optimizer is the &quot;heart and soul&quot; of the framework. It contains the logic for applying grammars and controlling</span>
+<span class="sd">    the optimization-driven generative process. There are various hyperparameters that can be tuned which establish</span>
+<span class="sd">    the depth of search and time spent searching. \n \n</span>
+
+<span class="sd">    This data class contains the Shape Annealing algorithm implementation and is skewed towards a single objective</span>
+<span class="sd">    optimization task. It can be used with a weighted sums / epsilon constraint approach to multiobjective, but it</span>
+<span class="sd">    is not necessarily an efficient way as compared to the multiobjective shape annealing implementation.</span>
+
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ------------</span>
+<span class="sd">    design_space : Initial PolyhedralSpace representing the design which is to be optimized \n</span>
+<span class="sd">    grammars : A singular GrammarSet or a list of GrammarSets to use in the generative process \n</span>
+<span class="sd">    design_constraints : The PolyhedralDesignConstraint object which constraint the optimizer \n</span>
+<span class="sd">    objective_function : Objective function to be minimized \n</span>
+<span class="sd">    SAVE_PATH : Path of where to save the resultant generative .aj1 file \n</span>
+<span class="sd">    SAVE_NAME_NO_EXTENSION : Filename of resultant .aj1 file \n</span>
+<span class="sd">    constraint_set : List of constraint name strings that are checked by the optimizer by default \n \n</span>
+
+<span class="sd">    Optional / Other input parameters that can be changed:</span>
+<span class="sd">    --------------------------------------------------------</span>
+<span class="sd">    extension_value_default : Default node extension value to use (default: 0.34 nm) \n</span>
+<span class="sd">    extension_ramp : Dictionary mapping a extension grammar to a Ramp element \n</span>
+<span class="sd">    rotation_value_degrees_default : Default edge rotation value to use (default: 1 degrees) \n</span>
+<span class="sd">    rotation_ramp: Dictionary mapping a rotation grammar to a Ramp element \n</span>
+<span class="sd">    numDecimals : Number of decimal places to round to \n</span>
+<span class="sd">    print_progress : Bool which determines if messages are printed to the terminal (default: TRUE) \n \n</span>
+
+<span class="sd">    Simulated Annealing Hyperparameters that can be controlled \n</span>
+<span class="sd">    Note that the default parameters here won&#39;t necessarily give a &quot;good&quot; result, they must be tuned!</span>
+<span class="sd">    ---------------------------------------------------------------------------------------------------</span>
+<span class="sd">    n : Number of inner loop mutations (default: 50) \n</span>
+<span class="sd">    limit : Set limit / # of accepted shapes within inner most loop of SA (default: 15) \n</span>
+<span class="sd">    n_stop : Max number of iterations to prevent an infinite loop (default: 100000) \n</span>
+<span class="sd">    T_min : Minimal temperature to end the annealing process (default: 1e-8) \n</span>
+<span class="sd">    max_time_of_optimization_minutes : Max time spent generating a design (default: 60 minutes) \n</span>
+<span class="sd">    max_number_of_epochs : Max number of epochs to run the generative study for (default: 50) \n</span>
+<span class="sd">    random_seed : Specified random seed (default: Random value) \n</span>
+<span class="sd">    random_walk_steps : Number of random walk steps to initialize the temperature of the space (default: 2000) \n</span>
+<span class="sd">    cooling_schedule : Cooling schedule used during simulated annealing (default: huang / HRSV) \n</span>
+<span class="sd">    cooling_rate_geometric : Cooling rate to use if using geometric cooling_schedule (default: 0.9) \n</span>
+<span class="sd">    delta_T : Triki annealing schedule adaptation rate, only used if using triki cooling_schedule (default: 0.8) \n</span>
+
+<span class="sd">    Optimization Convergence Parameters:</span>
+<span class="sd">    -------------------------------------</span>
+<span class="sd">    NOTE: Because this work was published in a bio-focused field, we do NOT use a convergence set by default, but rather</span>
+<span class="sd">          let the optimization process carry on for a set time. This is because this framework is really intended for</span>
+<span class="sd">          design conceptualization, and fine tuning a design is not going to be accomplished with this framework. \n</span>
+<span class="sd">    use_convergence : Boolean to use convergence or whether to just run for a set amount of time (default : FALSE) \n</span>
+<span class="sd">    minimal_convergence_size : Integer number of # of designs to consider when calculating convergence (default : 25) \n</span>
+<span class="sd">    convergence_threshold : Floating point threshold for determining design convergence (default = 0.01) \n</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Input parameters that must be passed in:</span>
+    <span class="n">design_space</span><span class="p">:</span> <span class="n">PolyhedralSpace</span>
+    <span class="n">grammars</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">GrammarSet</span><span class="p">,</span> <span class="nb">list</span><span class="p">]</span>  <span class="c1"># Pass a list of any grammar sets used.</span>
+    <span class="n">design_constraints</span><span class="p">:</span> <span class="n">design_constraints</span>
+    <span class="n">objective_function</span><span class="p">:</span> <span class="n">objective_function</span><span class="o">.</span><span class="n">ObjectiveFunction</span>
+    <span class="n">SAVE_PATH</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># This is where the output dill file is saved to</span>
+    <span class="n">SAVE_NAME_NO_EXTENSION</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">print_progress</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Print out messages to monitor the optimization process</span>
+    <span class="c1"># Can be changed to use different constraint sets within a design_constraints obj, just input names of constraint</span>
+    <span class="c1"># functions found within design_constraints to be called</span>
+    <span class="n">constraint_set</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Outside Design Space&#39;</span><span class="p">,</span> <span class="s1">&#39;Vertex in Excluded&#39;</span><span class="p">,</span>
+                                                               <span class="s1">&#39;Edge in Excluded&#39;</span><span class="p">,</span> <span class="s1">&#39;Invalid Edge Length&#39;</span><span class="p">,</span>
+                                                               <span class="s1">&#39;Invalid Scaffold Length&#39;</span><span class="p">,</span> <span class="s1">&#39;Invalid Face Angle&#39;</span><span class="p">,</span>
+                                                               <span class="s1">&#39;Broken preserved edge&#39;</span><span class="p">,</span> <span class="s1">&#39;Intersecting edges&#39;</span><span class="p">,</span>
+                                                               <span class="s1">&#39;Intersecting faces&#39;</span><span class="p">])</span>
+
+    <span class="c1"># Simulated Annealing hyperparameters user can control:</span>
+    <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span>  <span class="c1"># Number of inner loop mutations</span>
+    <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">15</span>  <span class="c1"># Set limit / # of accepted shapes within inner most loop of SA</span>
+    <span class="n">n_stop</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100000</span>  <span class="c1"># Max number of iterations to prevent an infinite loop</span>
+    <span class="n">T_min</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-8</span>  <span class="c1"># Minimal temperature to end the annealing process</span>
+    <span class="n">max_time_of_optimization_minutes</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span>
+    <span class="n">max_number_of_epochs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span>
+    <span class="n">random_seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Random seed a user can specify</span>
+
+    <span class="c1"># Various input parameters that can be changed:</span>
+    <span class="n">extension_value_default</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.34</span>  <span class="c1"># Default value if ramp is not used</span>
+    <span class="n">extension_ramp</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">rotation_value_degrees_default</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">rotation_ramp</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">numDecimals</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>
+
+    <span class="c1"># Parameters use can control to determine convergence</span>
+    <span class="n">use_convergence</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">minimal_convergence_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">25</span>
+    <span class="n">convergence_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+    <span class="c1">## Hyperparameters that can be tuned by user:</span>
+    <span class="n">random_walk_steps</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2000</span>  <span class="c1"># Number of random walk steps to initialize the temperature of the space</span>
+    <span class="n">cooling_schedule</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;Huang&#39;</span>  <span class="c1"># Cooling schedule used defined by user</span>
+
+    <span class="c1"># Cooling Schedule Parameters depending on schedule used (Huang is recommended)</span>
+    <span class="n">cooling_rate_geometric</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span>  <span class="c1"># The cooling schedule for geometric (only used if Geoemtric schedule is used)</span>
+    <span class="n">delta_T</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span>  <span class="c1"># Used with the Triki annealing schedule and controls adaptation. May need to modify this.</span>
+
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sim_time_seconds</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">final_time</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_tracker_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_evolution</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_walk_objective_values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temperature_values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">objectives_during_annealing</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimization_objective_values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tracked_objectives_at_Ti</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># initial temperature</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_seed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">random_seed</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10000000</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;No random seed specified, using the following seed number: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">random_seed</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">random_seed</span><span class="p">)</span>  <span class="c1"># Set the random seed</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">random_seed</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grammars</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="c1"># In the case that multiple GrammarSets are prescribed, we need to &quot;combine&quot; them:</span>
+            <span class="c1"># First validate they are GrammarSets:</span>
+            <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grammars</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">GrammarSet</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Each GrammarSet in the list of grammars must be a GrammarSet datatype, you &#39;</span>
+                                    <span class="sa">f</span><span class="s1">&#39;specified: </span><span class="si">{</span><span class="n">g</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="c1"># Also set the seed in this grammar_set</span>
+                <span class="n">g</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">seed_number</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_seed</span><span class="p">)</span>
+
+            <span class="c1"># If all are grammar sets then we use the &quot;Combined&quot; GrammarSet</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grammar_set</span> <span class="o">=</span> <span class="n">CustomGrammarSet</span><span class="p">(</span><span class="n">grammar_sets</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grammars</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grammars</span><span class="p">,</span> <span class="n">GrammarSet</span><span class="p">):</span>
+            <span class="c1"># In the case a singular set of grammars are specifed (the most common case), we just set grammar_set to</span>
+            <span class="c1"># grammars</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grammars</span><span class="o">.</span><span class="n">set_seed</span><span class="p">(</span><span class="n">seed_number</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_seed</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">grammar_set</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grammars</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># If grammars is neither, then raise an error:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The value of grammars must be either a list of GrammarSet&#39;s or a singular GrammarSet, &quot;</span>
+                             <span class="sa">f</span><span class="s2">&quot;you specified: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">grammars</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">verify_input_values</span><span class="p">()</span>
+        <span class="c1"># Validate ramp conditions:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">extension_ramp</span> <span class="o">!=</span> <span class="p">{}:</span>
+            <span class="c1"># If the user specifies an extension_ramp, then we must validate the values to ensure it is a proper</span>
+            <span class="c1"># data structure:</span>
+            <span class="k">for</span> <span class="n">grammar</span><span class="p">,</span> <span class="n">ramp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">extension_ramp</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">grammar</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grammar_set</span><span class="o">.</span><span class="n">grammar_names</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Invalid ramp specified for </span><span class="si">{</span><span class="n">grammar</span><span class="si">}</span><span class="s1"> as this grammar is not in the list of grammars &#39;</span>
+                                    <span class="sa">f</span><span class="s1">&#39;specified to the problem.&#39;</span><span class="p">)</span>
+            <span class="c1"># If we validate all ramps w/o error, then we just set the flag to true:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">use_extension_ramp</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">use_extension_ramp</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># Repeat above for the rotation_ramp.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation_ramp</span> <span class="o">!=</span> <span class="p">{}:</span>
+            <span class="k">for</span> <span class="n">grammar</span><span class="p">,</span> <span class="n">ramp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation_ramp</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">grammar</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grammar_set</span><span class="o">.</span><span class="n">grammar_names</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Invalid ramp specified for </span><span class="si">{</span><span class="n">grammar</span><span class="si">}</span><span class="s1"> as this grammar is not in the list of grammars &#39;</span>
+                                    <span class="sa">f</span><span class="s1">&#39;specified to the problem.&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">use_rotation_ramp</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">use_rotation_ramp</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<div class="viewcode-block" id="ShapeAnneal.verify_input_values">
+<a class="viewcode-back" href="../../../mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.verify_input_values">[docs]</a>
+    <span class="k">def</span> <span class="nf">verify_input_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Function that simply validates the input parameters before starting an optimization process. &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling_schedule</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;geometric&#39;</span><span class="p">,</span> <span class="s1">&#39;Geometric&#39;</span><span class="p">,</span> <span class="s1">&#39;triki&#39;</span><span class="p">,</span> <span class="s1">&#39;Triki&#39;</span><span class="p">,</span> <span class="s1">&#39;Huang&#39;</span><span class="p">,</span> <span class="s1">&#39;huang&#39;</span><span class="p">,</span> <span class="s1">&#39;HRSV&#39;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid cooling schedule input, only values are: geometric, triki, huang&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ShapeAnneal.initialize_time_tracker_dict">
+<a class="viewcode-back" href="../../../mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.initialize_time_tracker_dict">[docs]</a>
+    <span class="k">def</span> <span class="nf">initialize_time_tracker_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; Initialize a dictionary to track time for internal development purposes &quot;&quot;&quot;</span>
+        <span class="c1"># first create keys for the grammars and constraints. We use &quot;0&quot; since a time-to-execute will never be less than</span>
+        <span class="c1"># 0 and these are just tracking the execution-times of these functions.</span>
+        <span class="k">for</span> <span class="n">grammar</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grammar_set</span><span class="o">.</span><span class="n">grammar_names</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">time_tracker_dict</span><span class="p">[</span><span class="n">grammar</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">constraint</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_constraints</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">time_tracker_dict</span><span class="p">[</span><span class="n">constraint</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Add in some defaults for the objective function evaluation timer</span>
+        <span class="n">nameMax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">objective_function</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_max_time&quot;</span>
+        <span class="n">nameMin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">objective_function</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_min_time&quot;</span>
+        <span class="c1"># Initialize the max and min values to values that will get over-written during the tracking process</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_tracker_dict</span><span class="p">[</span><span class="n">nameMax</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_tracker_dict</span><span class="p">[</span><span class="n">nameMin</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e6</span></div>
+
+
+
+<div class="viewcode-block" id="ShapeAnneal.get_extend_and_rotation_values">
+<a class="viewcode-back" href="../../../mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.get_extend_and_rotation_values">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_extend_and_rotation_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If a ramp is being used, this method gets the current value to use and return it</span>
+
+<span class="sd">        :param epoch: Current epoch number to obtain extension value from ramp</span>
+<span class="sd">        :return: Extension value and rotation value as a tuple: (extension, rotation)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">extension_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_extension_ramp</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">grammar</span><span class="p">,</span> <span class="n">ramp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">extension_ramp</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">extension_value</span> <span class="o">=</span> <span class="n">ramp</span><span class="o">.</span><span class="n">current_ramp_value</span><span class="p">(</span><span class="n">epoch</span><span class="o">=</span><span class="n">epoch</span><span class="p">)</span>  <span class="c1"># We take in the max ramp value</span>
+                <span class="n">extension_map</span><span class="p">[</span><span class="n">grammar</span><span class="p">]</span> <span class="o">=</span> <span class="n">extension_value</span>
+
+        <span class="c1"># Now, if the user is not using a ramp / for grammars not in the ramp we use the default value. Note that some</span>
+        <span class="c1"># of these grammars dont even use an extension / rotation value but we return one anyways due to the structure</span>
+        <span class="c1"># of the functions. The value is essentially &quot;unused&quot; but we still need to access it.</span>
+        <span class="k">for</span> <span class="n">grammar</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grammar_set</span><span class="o">.</span><span class="n">grammar_names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">grammar</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">extension_map</span><span class="p">:</span>
+                <span class="n">extension_map</span><span class="p">[</span><span class="n">grammar</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">extension_value_default</span>
+
+        <span class="c1"># Repeat above for rotation_map</span>
+        <span class="n">rotation_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_rotation_ramp</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">grammar</span><span class="p">,</span> <span class="n">ramp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation_ramp</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">extension_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">ramp</span><span class="o">.</span><span class="n">current_ramp_value</span><span class="p">(</span><span class="n">epoch</span><span class="o">=</span><span class="n">epoch</span><span class="p">))</span>  <span class="c1"># We take in the max ramp value</span>
+                <span class="n">rotation_map</span><span class="p">[</span><span class="n">grammar</span><span class="p">]</span> <span class="o">=</span> <span class="n">extension_value</span>
+
+        <span class="k">for</span> <span class="n">grammar</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">grammar_set</span><span class="o">.</span><span class="n">grammar_names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">grammar</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rotation_map</span><span class="p">:</span>
+                <span class="n">rotation_map</span><span class="p">[</span><span class="n">grammar</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotation_value_degrees_default</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">extension_map</span><span class="p">,</span> <span class="n">rotation_map</span></div>
+
+
+
+<div class="viewcode-block" id="ShapeAnneal.update_design_space">
+<a class="viewcode-back" href="../../../mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.update_design_space">[docs]</a>
+    <span class="k">def</span> <span class="nf">update_design_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_design_space</span><span class="p">:</span> <span class="n">PolyhedralSpace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; This method updates the active design_space object whenever it needs to be completely updated &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_space</span> <span class="o">=</span> <span class="n">new_design_space</span></div>
+
+
+
+<div class="viewcode-block" id="ShapeAnneal.calculate_objective_function_value">
+<a class="viewcode-back" href="../../../mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.calculate_objective_function_value">[docs]</a>
+    <span class="k">def</span> <span class="nf">calculate_objective_function_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">design_space</span><span class="p">:</span> <span class="n">PolyhedralSpace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is responsible for evaluating the design_space using the input objective function. It also records</span>
+<span class="sd">        the execution times for internal development purposes.</span>
+
+<span class="sd">        :param design_space: Design space that is currently being evaluated</span>
+<span class="sd">        :returns: Floating point value of objective function value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">all_edge_lengths</span> <span class="o">=</span> <span class="n">calculate_design_edge_lengths</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design_space</span><span class="o">.</span><span class="n">design_graph</span><span class="p">)</span>
+        <span class="n">input_params</span> <span class="o">=</span> <span class="n">design_space</span><span class="o">.</span><span class="n">calculate_input_parameters</span><span class="p">(</span><span class="n">edge_lengths</span><span class="o">=</span><span class="n">all_edge_lengths</span><span class="p">,</span>
+                                                               <span class="n">routing_algorithm</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">design_constraints</span><span class="o">.</span><span class="n">scaffold_routing_algorithm</span><span class="p">)</span>
+        <span class="n">nameMax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">objective_function</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_max_time&quot;</span>
+        <span class="n">nameMin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">objective_function</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;_min_time&quot;</span>
+        <span class="n">st_t</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">obj_val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">objective_function</span><span class="o">.</span><span class="n">evaluate_function</span><span class="p">(</span><span class="n">input_params</span><span class="p">)</span>
+        <span class="n">end_t</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">elapsed</span> <span class="o">=</span> <span class="n">end_t</span> <span class="o">-</span> <span class="n">st_t</span>
+        <span class="c1"># RECORD TIMES</span>
+        <span class="k">if</span> <span class="n">elapsed</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_tracker_dict</span><span class="p">[</span><span class="n">nameMax</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">time_tracker_dict</span><span class="p">[</span><span class="n">nameMax</span><span class="p">]</span> <span class="o">=</span> <span class="n">elapsed</span>
+        <span class="k">if</span> <span class="n">elapsed</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_tracker_dict</span><span class="p">[</span><span class="n">nameMin</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">time_tracker_dict</span><span class="p">[</span><span class="n">nameMin</span><span class="p">]</span> <span class="o">=</span> <span class="n">elapsed</span>
+        <span class="c1"># RECORD OBJECTIVE FUNCTION VALUE</span>
+        <span class="k">return</span> <span class="n">obj_val</span></div>
+
+
+
+<div class="viewcode-block" id="ShapeAnneal.calculate_and_store_objective_function_values">
+<a class="viewcode-back" href="../../../mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.calculate_and_store_objective_function_values">[docs]</a>
+    <span class="k">def</span> <span class="nf">calculate_and_store_objective_function_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">design_space</span><span class="p">:</span> <span class="n">PolyhedralSpace</span><span class="p">,</span> <span class="n">random_walk</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is called so that the objective function is stored to analyze the optimization performance.</span>
+
+<span class="sd">        :param design_space: Design space that is currently being evaluated</span>
+<span class="sd">        :param random_walk: Boolean determining if this is a random_walk step or not (False)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">obj_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_objective_function_value</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="n">design_space</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">random_walk</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">random_walk_objective_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj_value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">optimization_objective_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj_value</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ShapeAnneal.store_design_for_animation">
+<a class="viewcode-back" href="../../../mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.store_design_for_animation">[docs]</a>
+    <span class="k">def</span> <span class="nf">store_design_for_animation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Method to simply store a design at every epoch in the simulated annealing process to visualize how a design</span>
+<span class="sd">        evolved during the generative process.</span>
+
+<span class="sd">        :param epoch: Current epoch of the optimizer to assign the stored design to</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># First evaluate the objective:</span>
+        <span class="n">obj_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_objective_function_value</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">design_space</span><span class="p">)</span>
+        <span class="c1"># Store in the dictionary in the format EPOCH : (objective_valuation, design_space object)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_evolution</span><span class="p">[</span><span class="n">epoch</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">obj_value</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_space</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ShapeAnneal.initialize_temperature">
+<a class="viewcode-back" href="../../../mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.initialize_temperature">[docs]</a>
+    <span class="k">def</span> <span class="nf">initialize_temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function performs a random walk through the objective space to automatically assign the temperature used</span>
+<span class="sd">        in the acceptance criterion for the first epoch.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># In a random walk we will ALWAYS accept a move, but we need a counter and while loop since we can still</span>
+        <span class="c1"># violate constraints</span>
+        <span class="n">accepted_moves</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">while_loop_counter</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Prevent infinite loop</span>
+
+        <span class="c1"># Get the extension value from the ramp. This will return the defaults if a ramp is not used as a note!</span>
+        <span class="n">extension_map</span><span class="p">,</span> <span class="n">rotation_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_extend_and_rotation_values</span><span class="p">(</span><span class="n">epoch</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">initial_design_to_return</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">design_space</span><span class="p">)</span>
+        <span class="c1"># Random Walk:</span>
+        <span class="k">while</span> <span class="n">accepted_moves</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_walk_steps</span><span class="p">:</span>
+            <span class="n">candidate_design_state</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">design_space</span><span class="p">)</span>
+            <span class="n">new_grammar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grammar_set</span><span class="o">.</span><span class="n">pick_random_grammar</span><span class="p">()</span>
+            <span class="k">if</span> <span class="s1">&#39;rotation&#39;</span> <span class="ow">in</span> <span class="n">new_grammar</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">or</span> <span class="s1">&#39;rotate&#39;</span> <span class="ow">in</span> <span class="n">new_grammar</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                <span class="n">ext</span> <span class="o">=</span> <span class="n">rotation_map</span><span class="p">[</span><span class="n">new_grammar</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ext</span> <span class="o">=</span> <span class="n">extension_map</span><span class="p">[</span><span class="n">new_grammar</span><span class="p">]</span>
+
+            <span class="c1"># Randomly apply grammar and validate the design constraints:</span>
+            <span class="n">grammar_applied_successfully</span><span class="p">,</span> <span class="n">grammar_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grammar_set</span><span class="o">.</span><span class="n">call_grammar_function</span><span class="p">(</span>
+                <span class="n">grammar_selected</span><span class="o">=</span><span class="n">new_grammar</span><span class="p">,</span>
+                <span class="n">design_space</span><span class="o">=</span><span class="n">candidate_design_state</span><span class="p">,</span>
+                <span class="n">extension_value</span><span class="o">=</span><span class="n">ext</span><span class="p">)</span>
+            <span class="c1"># Update the design constraint values and calculate if design is compliant:</span>
+            <span class="k">if</span> <span class="n">grammar_applied_successfully</span><span class="p">:</span>
+                <span class="c1"># Update the design constraint values and calculate if design is compliant:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">design_constraints</span><span class="o">.</span><span class="n">update_params</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="n">candidate_design_state</span><span class="p">)</span>
+                <span class="n">passed_all_constraints</span><span class="p">,</span> <span class="n">constraint_times</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_constraints</span><span class="o">.</span><span class="n">check_constraints</span><span class="p">(</span>
+                    <span class="n">design_space</span><span class="o">=</span><span class="n">candidate_design_state</span><span class="p">,</span> <span class="n">constraint_set</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">constraint_set</span><span class="p">,</span> <span class="n">compare_space</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">design_space</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># If the grammar didn&#39;t apply just set this to False. Doesn&#39;t need to be this way but ;-)</span>
+                <span class="n">passed_all_constraints</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="n">grammar_applied_successfully</span> <span class="ow">and</span> <span class="n">passed_all_constraints</span><span class="p">:</span>
+                <span class="c1"># If the grammar is applied successfully and the constraints are all passed then this new state replaces</span>
+                <span class="c1"># the current design_space</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">calculate_and_store_objective_function_values</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="n">candidate_design_state</span><span class="p">,</span>
+                                                                   <span class="n">random_walk</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">update_design_space</span><span class="p">(</span><span class="n">new_design_space</span><span class="o">=</span><span class="n">candidate_design_state</span><span class="p">)</span>
+                <span class="n">accepted_moves</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="c1">#  No matter what, we delete this candidate from memory so it re-instantiates in while loop for peace of</span>
+            <span class="c1">#  mind regarding objects. If the design_space was accepted in if above, then this all works out!</span>
+            <span class="k">del</span> <span class="n">candidate_design_state</span>
+
+            <span class="c1"># For the sake of no infinite loops, I use a while loop counter here to ensure it doesn&#39;t get stuck:</span>
+            <span class="n">while_loop_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">while_loop_counter</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_walk_steps</span><span class="p">):</span>  <span class="c1"># Prevent infinite loop</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unable to apply </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">random_walk_steps</span><span class="si">}</span><span class="s1"> without violating design constraints which may &#39;</span>
+                              <span class="sa">f</span><span class="s1">&#39;lead to an inferior solution set, be aware!&#39;</span><span class="p">)</span>
+                <span class="n">accepted_moves</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_walk_steps</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># Just break the loop condition...</span>
+
+        <span class="c1"># After the while loop has ended, we set the value of temperature to the std. dev of the objectives tracked:</span>
+        <span class="n">newTemp</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">random_walk_objective_values</span><span class="p">)),</span> <span class="bp">self</span><span class="o">.</span><span class="n">numDecimals</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">newTemp</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Could not find any variation in the objective function valuation for the&#39;</span>
+                            <span class="sa">f</span><span class="s1">&#39;specified function </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">objective_function</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s1">. Please increase random_walk_steps or &#39;</span>
+                            <span class="sa">f</span><span class="s1">&#39;verify the objective function is evaluating properly!&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="n">newTemp</span>  <span class="c1"># Assign the std. dev to the initial temperature value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temperature_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>  <span class="c1"># Store this initial value in the list</span>
+        <span class="c1"># Return to the initial state to start the optimization process from</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_design_space</span><span class="p">(</span><span class="n">new_design_space</span><span class="o">=</span><span class="n">initial_design_to_return</span><span class="p">)</span>
+        <span class="c1"># Store the initial design now that temperature is initialized:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">store_design_for_animation</span><span class="p">(</span><span class="n">epoch</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ShapeAnneal.keep_annealing">
+<a class="viewcode-back" href="../../../mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.keep_annealing">[docs]</a>
+    <span class="k">def</span> <span class="nf">keep_annealing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">cur_epoch</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function determines when the SA algorithm should end based on a length of time or if the temperature</span>
+<span class="sd">        hyperparameter gets too low</span>
+
+<span class="sd">        :param cur_epoch: Current epoch of SA</span>
+<span class="sd">        :param start_time: Start time of how long the inner while loop has been running</span>
+<span class="sd">        :return: True = Keep running, False = END</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">elapsed_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+        <span class="n">hours</span><span class="p">,</span> <span class="n">remainder</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">elapsed_time</span><span class="p">,</span> <span class="mi">3600</span><span class="p">)</span>
+        <span class="n">minutes</span><span class="p">,</span> <span class="n">seconds</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">remainder</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
+        <span class="n">time_formatted</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:0&gt;2}</span><span class="s2">:</span><span class="si">{:0&gt;2}</span><span class="s2">:</span><span class="si">{:05.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">hours</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">minutes</span><span class="p">),</span> <span class="n">seconds</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_convergence</span><span class="p">:</span>
+            <span class="c1"># If the user signals to use a convergence criterion we use this to determine if we should end</span>
+            <span class="c1">## First grab the last N (N=minimal convergence size) datapoints:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">objectives_during_annealing</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">minimal_convergence_size</span><span class="p">:</span>
+                <span class="c1"># If we do not have enough datapoints, we can NOT converge</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="n">obj_vals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">objectives_during_annealing</span><span class="p">[</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">minimal_convergence_size</span><span class="p">:]</span>
+            <span class="n">changes</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">obj_vals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">obj_vals</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj_vals</span><span class="p">))]</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">change</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">convergence_threshold</span> <span class="k">for</span> <span class="n">change</span> <span class="ow">in</span> <span class="n">changes</span><span class="p">):</span>
+                <span class="c1"># If the convergence is beneath the threshold for all changes, we return False signalling &quot;end process&quot;</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="c1"># However we still check max number of epochs to prevent an infinite loop:</span>
+            <span class="k">if</span> <span class="n">cur_epoch</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_number_of_epochs</span><span class="p">:</span>
+                <span class="c1"># If the current epoch is the value of the max_number, then we end</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">print_progress</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Shape Annealing ended due to the max number of epochs being met: &#39;</span>
+                          <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_number_of_epochs</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">final_time</span> <span class="o">=</span> <span class="n">time_formatted</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="c1"># Otherwise return True to signal &quot;keep optimizing&quot;</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1">### First check if temperatures are low enough to end the run:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_min</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">print_progress</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Shape Annealing ended due to temperatures dropping below threshold of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">T_min</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">final_time</span> <span class="o">=</span> <span class="n">time_formatted</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="c1">### Next check if max time has elapsed</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_time_of_optimization_minutes</span> <span class="o">*</span> <span class="mi">60</span><span class="p">):</span>
+                <span class="c1"># If the current elapsed time is greater than the threshold in seconds (why i multiply by 60 above), we end</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">print_progress</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Shape Annealing ended due to max time input of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_time_of_optimization_minutes</span><span class="si">}</span><span class="s1"> minutes&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">final_time</span> <span class="o">=</span> <span class="n">time_formatted</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="n">cur_epoch</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_number_of_epochs</span><span class="p">:</span>
+                <span class="c1"># If the current epoch is the value of the max_number, then we end</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">print_progress</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Shape Annealing ended due to the max number of epochs being met: &#39;</span>
+                          <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">max_number_of_epochs</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">final_time</span> <span class="o">=</span> <span class="n">time_formatted</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Otherwise we return True meaning we keep looping</span>
+                <span class="k">return</span> <span class="kc">True</span></div>
+
+
+
+<div class="viewcode-block" id="ShapeAnneal.metropolis">
+<a class="viewcode-back" href="../../../mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.metropolis">[docs]</a>
+    <span class="k">def</span> <span class="nf">metropolis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">active_design</span><span class="p">:</span> <span class="n">PolyhedralSpace</span><span class="p">,</span> <span class="n">candidate_design</span><span class="p">:</span> <span class="n">PolyhedralSpace</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function determines if a candidate_design should be accepted and replace the active design. The</span>
+<span class="sd">        metropolis algorithm is used to determine this acceptance:</span>
+
+<span class="sd">        :param active_design: S1 state in Sim. Annealing</span>
+<span class="sd">        :param candidate_design: S2 state in Sim. Annealing</span>
+<span class="sd">        :return: True: replace the design, False: Use probability test</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_objective_function_value</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="n">active_design</span><span class="p">)</span>
+        <span class="n">s2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_objective_function_value</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="n">candidate_design</span><span class="p">)</span>
+        <span class="c1"># In Metropolis-Hastings if the new is less that the previous we accept unconditionally for minimization</span>
+        <span class="k">if</span> <span class="n">s2</span> <span class="o">&lt;</span> <span class="n">s1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tracked_objectives_at_Ti</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>  <span class="c1"># Store the objective value for annealing schedule if accepted</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">objectives_during_annealing</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>  <span class="c1"># Store objective also for all objective func. values tracking</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Otherwise, we use a probability acceptance and a random value to determine if we should accept:</span>
+            <span class="n">test_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="nb">abs</span><span class="p">(</span><span class="n">s2</span> <span class="o">-</span> <span class="n">s1</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">test_value</span><span class="p">:</span>
+                <span class="c1"># If the random value is less than this test value, we accept the worse move</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tracked_objectives_at_Ti</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>  <span class="c1"># Store the objective value for annealing schedule if accepted</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">objectives_during_annealing</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s2</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Otherwise, we do not accept the candidate design</span>
+                <span class="k">return</span> <span class="kc">False</span></div>
+
+
+
+<div class="viewcode-block" id="ShapeAnneal.quench_temperatures">
+<a class="viewcode-back" href="../../../mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.quench_temperatures">[docs]</a>
+    <span class="k">def</span> <span class="nf">quench_temperatures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cur_epoch</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is in charge of cooling the temperature in SA with a few different cooling schedules as a</span>
+<span class="sd">        potential use.</span>
+
+<span class="sd">        WIP: Should add some simple regex, this is a dumb way of checking strings used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># First we store the design for the animation at the current epoch:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">store_design_for_animation</span><span class="p">(</span><span class="n">epoch</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">objectives_during_annealing</span><span class="p">))</span>  <span class="c1"># This aligns chart better?</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling_schedule</span> <span class="o">==</span> <span class="s1">&#39;geometric&#39;</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling_schedule</span> <span class="o">==</span> <span class="s1">&#39;Geoemtric&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling_rate_geometric</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling_schedule</span> <span class="o">==</span> <span class="s1">&#39;triki&#39;</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling_schedule</span> <span class="o">==</span> <span class="s1">&#39;Triki&#39;</span><span class="p">:</span>
+            <span class="c1"># Using a worst-case-scenario where all measured objectives are the same value, use a constant alpha of .5</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">tracked_objectives_at_Ti</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tracked_objectives_at_Ti</span><span class="p">):</span>
+                <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.5</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">alpha</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_T</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tracked_objectives_at_Ti</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">alpha</span> <span class="o">&lt;</span> <span class="mf">0.5</span><span class="p">:</span>
+                    <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># We set a floor to the lowest the cooling rate can be</span>
+            <span class="c1"># After calculating the new Triki cooling rate for this objective, we update temperature:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">*=</span> <span class="n">alpha</span>
+            <span class="c1"># Also, we reset the tracked objective list:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tracked_objectives_at_Ti</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># Should reset the value of self.fX_obj_at_Ti  to []</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling_schedule</span> <span class="o">==</span> <span class="s1">&#39;Huang&#39;</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">cooling_schedule</span> <span class="o">==</span> <span class="s1">&#39;huang&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">x</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">tracked_objectives_at_Ti</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tracked_objectives_at_Ti</span><span class="p">):</span>
+                <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.5</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">alpha</span> <span class="o">=</span> <span class="nb">max</span><span class="p">((</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.7</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tracked_objectives_at_Ti</span><span class="p">))))</span>
+            <span class="c1"># After calculating the new Triki cooling rate for this objective, we update temperature:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">*=</span> <span class="n">alpha</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid cooling schedule selected, options are: geometric, triki, huang&#39;</span><span class="p">)</span>
+
+        <span class="c1"># We also append the temperature to the temperature_tracker list and reset the tracker list:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">print_progress</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Objective Valuation at Epoch </span><span class="si">{</span><span class="n">cur_epoch</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tracked_objectives_at_Ti</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span> <span class="ow">or</span> <span class="ne">IndexError</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;No designs evaluated at epoch: </span><span class="si">{</span><span class="n">cur_epoch</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">temperature_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tracked_objectives_at_Ti</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+
+
+<div class="viewcode-block" id="ShapeAnneal.begin_annealing">
+<a class="viewcode-back" href="../../../mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.begin_annealing">[docs]</a>
+    <span class="k">def</span> <span class="nf">begin_annealing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This is the top-level method that a user calls to begin the generative process. Nothing is passed in or returned</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Generate start shape and initialize time tracking dictionaries for logging optimizer performance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize_time_tracker_dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_space</span><span class="o">.</span><span class="n">generate_start_shape</span><span class="p">()</span>
+
+        <span class="c1">### STEP 0: (added this later, oops) Validate that the generated start shape actually passed all design</span>
+        <span class="c1"># constraints to ensure that the optimization process can begin. Here, we also intialize the design constraint</span>
+        <span class="c1"># tracking for computational efficiency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">design_constraints</span><span class="o">.</span><span class="n">create_constraint_dictionary</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">design_space</span><span class="p">)</span>
+        <span class="n">passed_all_constraints</span><span class="p">,</span> <span class="n">constraint_times</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_constraints</span><span class="o">.</span><span class="n">check_constraints</span><span class="p">(</span>
+            <span class="n">design_space</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">design_space</span><span class="p">,</span> <span class="n">constraint_set</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">constraint_set</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">passed_all_constraints</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid input design: The triangulated initial shape did not pass all design constraints&#39;</span>
+                            <span class="s1">&#39; of the problem, please review the constraints and initial triangulation of the problem&#39;</span>
+                            <span class="s1">&#39; definition. Please reach out to dev team if this is unclear.&#39;</span><span class="p">)</span>
+
+        <span class="c1">### STEP 1:  Initialize temperatures with all available grammars to get a better understanding of the</span>
+        <span class="c1">#            design space w/ our grammars:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">print_progress</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Initializing temperatures for start state&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize_temperature</span><span class="p">()</span>
+
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">curEpoch</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">keep_annealing</span><span class="p">(</span><span class="n">start_time</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span> <span class="n">cur_epoch</span><span class="o">=</span><span class="n">curEpoch</span><span class="p">):</span>
+            <span class="n">success</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>  <span class="c1"># Count of successive state applications</span>
+
+            <span class="c1"># Inner loop of n steps to modify design:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">):</span>
+                <span class="n">active_design_state</span><span class="p">,</span> <span class="n">candidate_design_state</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">design_space</span><span class="p">),</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">design_space</span><span class="p">)</span>
+                <span class="n">extension_map</span><span class="p">,</span> <span class="n">rotation_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_extend_and_rotation_values</span><span class="p">(</span><span class="n">epoch</span><span class="o">=</span><span class="n">curEpoch</span><span class="p">)</span>
+                <span class="c1"># Randomly pick and apply a grammar:</span>
+                <span class="n">new_grammar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grammar_set</span><span class="o">.</span><span class="n">pick_random_grammar</span><span class="p">()</span>
+                <span class="k">if</span> <span class="s1">&#39;Rotation&#39;</span> <span class="ow">in</span> <span class="n">new_grammar</span> <span class="ow">or</span> <span class="s1">&#39;Rotate&#39;</span> <span class="ow">in</span> <span class="n">new_grammar</span> <span class="ow">or</span> <span class="s1">&#39;rotation&#39;</span> <span class="ow">in</span> <span class="n">new_grammar</span><span class="p">:</span>
+                    <span class="n">ext</span> <span class="o">=</span> <span class="n">rotation_map</span><span class="p">[</span><span class="n">new_grammar</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">ext</span> <span class="o">=</span> <span class="n">extension_map</span><span class="p">[</span><span class="n">new_grammar</span><span class="p">]</span>
+
+                <span class="n">grammar_applied_successfully</span><span class="p">,</span> <span class="n">grammar_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grammar_set</span><span class="o">.</span><span class="n">call_grammar_function</span><span class="p">(</span>
+                    <span class="n">grammar_selected</span><span class="o">=</span><span class="n">new_grammar</span><span class="p">,</span>
+                    <span class="n">design_space</span><span class="o">=</span><span class="n">candidate_design_state</span><span class="p">,</span>
+                    <span class="n">extension_value</span><span class="o">=</span><span class="n">ext</span><span class="p">)</span>  <span class="c1"># Only pass in the specified value</span>
+                <span class="k">if</span> <span class="n">grammar_applied_successfully</span><span class="p">:</span>
+                    <span class="c1"># Update the design constraint values and calculate if design is compliant:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">design_constraints</span><span class="o">.</span><span class="n">update_params</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="n">candidate_design_state</span><span class="p">)</span>
+                    <span class="n">passed_all_constraints</span><span class="p">,</span> <span class="n">constraint_times</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_constraints</span><span class="o">.</span><span class="n">check_constraints</span><span class="p">(</span>
+                        <span class="n">design_space</span><span class="o">=</span><span class="n">candidate_design_state</span><span class="p">,</span> <span class="n">constraint_set</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">constraint_set</span><span class="p">,</span> <span class="n">compare_space</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">design_space</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">passed_all_constraints</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># If grammar wasn&#39;t applied don&#39;t both calculating these constraints</span>
+
+                <span class="c1"># For tracking we update the time_tracker for the given grammars:</span>
+                <span class="k">if</span> <span class="n">grammar_time</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_tracker_dict</span><span class="p">[</span><span class="n">new_grammar</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">time_tracker_dict</span><span class="p">[</span><span class="n">new_grammar</span><span class="p">]</span> <span class="o">=</span> <span class="n">grammar_time</span>
+
+                <span class="c1"># Now check if we passed all constraints and applied the grammar successfully to check to see if we</span>
+                <span class="c1"># should accept this design state:</span>
+                <span class="k">if</span> <span class="n">passed_all_constraints</span> <span class="ow">and</span> <span class="n">grammar_applied_successfully</span><span class="p">:</span>
+                    <span class="c1"># If this condition is met we evaluate both the active and candidate designs:</span>
+                    <span class="n">accept_design</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metropolis</span><span class="p">(</span><span class="n">active_design</span><span class="o">=</span><span class="n">active_design_state</span><span class="p">,</span>
+                                                    <span class="n">candidate_design</span><span class="o">=</span><span class="n">candidate_design_state</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">accept_design</span><span class="p">:</span>
+                        <span class="c1"># If the design is accepted then we update the design state and calculate and store the</span>
+                        <span class="c1"># objective function value</span>
+                        <span class="k">del</span> <span class="n">active_design_state</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">update_design_space</span><span class="p">(</span><span class="n">new_design_space</span><span class="o">=</span><span class="n">candidate_design_state</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">calculate_and_store_objective_function_values</span><span class="p">(</span><span class="n">design_space</span><span class="o">=</span><span class="n">candidate_design_state</span><span class="p">,</span>
+                                                                           <span class="n">random_walk</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                        <span class="n">success</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="c1"># Now we check to see this inner loop should break early:</span>
+                <span class="k">if</span> <span class="n">success</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">limit</span><span class="p">:</span>
+                    <span class="k">break</span>
+
+            <span class="c1"># After the for loop we check if successes is 0. If so then the equilibrium value is met and we end!</span>
+            <span class="c1"># Note: This is a bad convergence criterion with the use of a ramp element / in general imo</span>
+            <span class="c1">#       I&#39;d rather use the L1 or just for a # of epochs, this isn&#39;t inherently always true.</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;if success == 0:</span>
+<span class="sd">                break&quot;&quot;&quot;</span>
+
+            <span class="c1"># Now just quench temperatures and increment the epoch counter</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">quench_temperatures</span><span class="p">(</span><span class="n">cur_epoch</span><span class="o">=</span><span class="n">curEpoch</span><span class="p">)</span>
+            <span class="n">curEpoch</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># After the while loop ends we export the design:</span>
+        <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sim_time_seconds</span> <span class="o">=</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span>
+
+        <span class="c1"># Finally, we save the output by calling the function:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_output</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="ShapeAnneal.save_output">
+<a class="viewcode-back" href="../../../mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.save_output">[docs]</a>
+    <span class="k">def</span> <span class="nf">save_output</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is called at the end of a SA algorithm to save the output file</span>
+
+<span class="sd">        :return: Nothing, will simply write a dill binary file containing class information at final iteration</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># I am using the &#39;aj1&#39; extension because I want to track which versions of my software can generate which</span>
+        <span class="c1"># types of solutions and plots. For example, if I add in features later on I want to differentiate those types</span>
+        <span class="c1"># of simulation output.</span>
+        <span class="k">def</span> <span class="nf">is_valid_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+            <span class="kn">import</span> <span class="nn">re</span>
+            <span class="c1"># Define a regular expression for a valid filename (letters, numbers, and underscores only)</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[a-zA-Z0-9_]+$&#39;</span><span class="p">)</span>
+
+            <span class="c1"># Check if the filename matches the pattern</span>
+            <span class="k">if</span> <span class="n">pattern</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># Check if the save path exists, if not make it:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SAVE_PATH</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SAVE_PATH</span><span class="p">)</span>
+
+        <span class="c1"># Create file:</span>
+        <span class="k">if</span> <span class="n">is_valid_filename</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SAVE_NAME_NO_EXTENSION</span><span class="p">):</span>
+            <span class="n">save_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SAVE_NAME_NO_EXTENSION</span> <span class="o">+</span> <span class="s1">&#39;.aj1&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Detected an invalid filename, therefore resetting to randomized filename.&quot;</span><span class="p">)</span>
+            <span class="n">save_name</span> <span class="o">=</span> <span class="s1">&#39;Single_Objective_Export_Data.aj1&#39;</span>
+
+
+        <span class="n">output_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SAVE_PATH</span><span class="p">,</span> <span class="n">save_name</span><span class="p">)</span>
+        <span class="n">copy_of_data</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">copy_of_data</span><span class="o">.</span><span class="n">design_constraints</span><span class="o">.</span><span class="n">names_to_functions</span>  <span class="c1"># This messes up this dill object</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">dill</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">copy_of_data</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># Check if the error is due to a specific type and skip over it</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Error exporting file: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, A.J. Vetturini.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

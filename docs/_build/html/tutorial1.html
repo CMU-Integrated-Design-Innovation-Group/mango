@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tutorial 1: Setting up a generative design study using single objective optimization &mdash; mango generative design framework b0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=7d16594f"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorial 2: Reviewing the results of a generative design process" href="tutorial2.html" />
+    <link rel="prev" title="Tutorials" href="tutorials.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            mango generative design framework
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="modules.html">mango</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tutorials.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Tutorial 1: Setting up a generative design study using single objective optimization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#defining-the-inputs-for-the-design-space">Defining the inputs for the design space</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#defining-a-custom-constraint">Defining a custom constraint</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#defining-the-objective-of-the-optimization-problem">Defining the objective of the optimization problem</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#defining-the-optimizer">Defining the optimizer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial2.html">Tutorial 2: Reviewing the results of a generative design process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorial3.html">Tutorial 3: Creating custom interactive results for kodak UI</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mango generative design framework</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="tutorials.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Tutorial 1: Setting up a generative design study using single objective optimization</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tutorial1.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tutorial-1-setting-up-a-generative-design-study-using-single-objective-optimization">
+<h1>Tutorial 1: Setting up a generative design study using single objective optimization<a class="headerlink" href="#tutorial-1-setting-up-a-generative-design-study-using-single-objective-optimization" title="Link to this heading"></a></h1>
+<p>This tutorial is going to step through some of the basics on how the
+mango generative design package is intended to be used and showcase what
+it is capable of. The full series of three tutorials should give you
+enough understanding of how the package is configured, taking you from
+input of a bounding box through output of DNA origami design files.</p>
+<p>This tutorial will focus on setting up the generative design space,
+defining the optimization problem, configuring a custom constraint, and
+finally running the generative design process.</p>
+<section id="defining-the-inputs-for-the-design-space">
+<h2>Defining the inputs for the design space<a class="headerlink" href="#defining-the-inputs-for-the-design-space" title="Link to this heading"></a></h2>
+<p>The following blocks of code discuss how a design space is initialized
+using only a minimal set of input conditions known as the bounding box,
+a list of preserved regions, and an optional list of excluded regions.</p>
+<p>The bounding box gives a bounding area to confine the space to in units
+of nm x nm x nm The preserved regions are a list of PreservedVertex or
+PreservedEdge objects that define material that is not to be removed
+during the generative process. The excluded regions are optional, but
+prevent DNA from being added to these areas (e.g., a nanoparticle)</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import the required packages:</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">mango.design_spaces.bounding_box</span> <span class="kn">import</span> <span class="n">CubicBox</span>
+<span class="kn">from</span> <span class="nn">mango.mango_features.preserved_regions</span> <span class="kn">import</span> <span class="n">PreservedEdge</span><span class="p">,</span> <span class="n">PreservedVertex</span>
+<span class="kn">from</span> <span class="nn">mango.mango_features.excluded_regions</span> <span class="kn">import</span> <span class="n">Sphere</span>
+<span class="kn">from</span> <span class="nn">mango.design_spaces.polyhedral_design_space</span> <span class="kn">import</span> <span class="n">PolyhedralSpace</span>
+
+<span class="c1"># Define a box that is a constant 50 x 50 x 50 nm:</span>
+<span class="n">new_box</span> <span class="o">=</span> <span class="n">CubicBox</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="c1"># Define preserved vertices at the mid-face of all 6 bounding box faces (units of nm)</span>
+<span class="n">preserved_regions</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">PreservedVertex</span><span class="p">(</span><span class="n">v1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">25</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">25</span><span class="p">])),</span>
+        <span class="n">PreservedVertex</span><span class="p">(</span><span class="n">v1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">25</span><span class="p">])),</span>
+        <span class="n">PreservedVertex</span><span class="p">(</span><span class="n">v1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">])),</span>
+        <span class="n">PreservedVertex</span><span class="p">(</span><span class="n">v1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">50</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">])),</span>
+        <span class="n">PreservedEdge</span><span class="p">(</span><span class="n">v1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">25.</span><span class="p">,</span> <span class="mf">35.</span><span class="p">,</span> <span class="mi">50</span><span class="p">]),</span> <span class="n">v2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">25.</span><span class="p">,</span> <span class="mf">15.</span><span class="p">,</span> <span class="mi">50</span><span class="p">])),</span>
+        <span class="n">PreservedEdge</span><span class="p">(</span><span class="n">v1</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">25.</span><span class="p">,</span> <span class="mf">35.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]),</span> <span class="n">v2</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">25.</span><span class="p">,</span> <span class="mf">15.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])),</span>
+    <span class="p">]</span>
+
+<span class="c1"># We will prevent material from being added to a spherial region defined as below in units of nm.</span>
+<span class="n">excluded_regions</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Sphere</span><span class="p">(</span><span class="n">diameter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">25</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">25</span><span class="p">])),</span>
+            <span class="n">Sphere</span><span class="p">(</span><span class="n">diameter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">25</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">25</span><span class="p">])),</span>
+        <span class="p">]</span>
+
+<span class="c1"># Lastly, we pass in these values as the required input to the Polyhedral Design Space:</span>
+<span class="n">design_space</span> <span class="o">=</span> <span class="n">PolyhedralSpace</span><span class="p">(</span><span class="n">bounding_box</span><span class="o">=</span><span class="n">new_box</span><span class="p">,</span> <span class="n">preserved</span><span class="o">=</span><span class="n">preserved_regions</span><span class="p">,</span> <span class="n">excluded</span><span class="o">=</span><span class="n">excluded_regions</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="defining-a-custom-constraint">
+<h2>Defining a custom constraint<a class="headerlink" href="#defining-a-custom-constraint" title="Link to this heading"></a></h2>
+<p>Before we setup the default constraints, we must first define a custom
+constraint (if we have any). Here, I will us an example of a repulsive
+force one might presume wireframe origami would exude in a given space.
+Here, we are considering the closest point-to-point distance of all
+non-connected bundles of DNA. If this distance is less than our
+threshold, then we will reject that design as we may be presuming (in
+this example) that these designs exceeding this threshold would not
+physically form in solution. NOTE: This threshold is meant to serve as a
+simplistic example and has no physical meaning</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import some default library modules:</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">combinations</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="kn">import</span> <span class="n">cdist</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+
+<span class="c1"># Import mango utilities:</span>
+<span class="kn">from</span> <span class="nn">mango.utils.mango_math</span> <span class="kn">import</span> <span class="n">xyz_from_graph</span><span class="p">,</span> <span class="n">length_and_direction_between_nodes</span>
+
+<span class="c1"># We start by defining a function which takes in two values: input_vars and extra_params</span>
+<span class="c1"># The value of input_vars is essentially re-calculated every design iteration, and the design_graph</span>
+<span class="c1"># is what we can use to determine if a design is valid or not. extra_params is effectively a list</span>
+<span class="c1"># of constants (but can also be a parameterized function that gets re-calculated)</span>
+<span class="k">def</span> <span class="nf">edge_cutoff_constraint</span><span class="p">(</span><span class="n">input_vars</span><span class="p">,</span> <span class="n">extra_params</span><span class="p">):</span>
+    <span class="n">cur_design</span> <span class="o">=</span> <span class="n">input_vars</span><span class="p">[</span><span class="s1">&#39;design_graph&#39;</span><span class="p">]</span>
+    <span class="c1"># We presume that the nearest distance is at least the diamater of BDNA + some threshold</span>
+    <span class="n">threshold_to_check</span> <span class="o">=</span> <span class="n">extra_params</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">extra_params</span><span class="p">[</span><span class="s1">&#39;threshold&#39;</span><span class="p">]</span>
+
+
+    <span class="k">def</span> <span class="nf">line_segment_points</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">num_points</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate points along the line segment from start + threshold to end - threshold.</span>
+<span class="sd">        We do this to avoid comparing the small distance between two edges sharing a point.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">direction_vector</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span>  <span class="c1"># Vector from start to end</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">direction_vector</span><span class="p">)</span>  <span class="c1"># Length of the vector</span>
+        <span class="n">unit_vector</span> <span class="o">=</span> <span class="n">direction_vector</span> <span class="o">/</span> <span class="n">length</span>  <span class="c1"># Unit vector from start to end</span>
+
+        <span class="c1"># Calculate the new starting and ending points, adjusted inwards by the threshold</span>
+        <span class="n">new_start</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="n">unit_vector</span> <span class="o">*</span> <span class="n">threshold</span>
+        <span class="n">new_end</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">unit_vector</span> <span class="o">*</span> <span class="n">threshold</span>
+
+        <span class="c1"># Generate points between the adjusted start and end points</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">new_start</span><span class="p">,</span> <span class="n">new_end</span><span class="p">,</span> <span class="n">num_points</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">disconnected_edge_pairs</span><span class="p">(</span><span class="n">nx_graph</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">edge1</span><span class="p">,</span> <span class="n">edge2</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="n">nx_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">(),</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">set</span><span class="p">(</span><span class="n">edge1</span><span class="p">)</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">edge2</span><span class="p">):</span>
+                <span class="k">yield</span> <span class="n">edge1</span><span class="p">,</span> <span class="n">edge2</span>
+
+    <span class="c1"># For all two disconnected edges in the graph:</span>
+    <span class="c1">## This will presume that the minimal face angle constraint will keep the &quot;connected&quot; edges a</span>
+    <span class="c1">## reasonable distance apart.</span>
+    <span class="k">for</span> <span class="n">e1</span><span class="p">,</span> <span class="n">e2</span> <span class="ow">in</span> <span class="n">disconnected_edge_pairs</span><span class="p">(</span><span class="n">cur_design</span><span class="p">):</span>
+        <span class="c1"># Graph points e1 = [P1, P2] and e2 =[P3, P4]</span>
+        <span class="n">P1</span><span class="p">,</span> <span class="n">P2</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">cur_design</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">e1</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">cur_design</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">e1</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">P3</span><span class="p">,</span> <span class="n">P4</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">cur_design</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">e2</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">cur_design</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">e2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c1"># Before comparing points, we also must consider if P1 is closer to P3 or P4 so that we are</span>
+        <span class="c1"># fairly comparing distance arrays using cdist</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">P3</span> <span class="o">-</span> <span class="n">P1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">P4</span> <span class="o">-</span> <span class="n">P1</span><span class="p">):</span>
+            <span class="c1"># If the distance to P4 from P1 is smaller than to P3, then we re-assign P3 and P4</span>
+            <span class="n">temp_value</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">P4</span><span class="p">)</span>
+            <span class="n">P4</span> <span class="o">=</span> <span class="n">P3</span>
+            <span class="n">P3</span> <span class="o">=</span> <span class="n">temp_value</span>
+        <span class="n">points1</span> <span class="o">=</span> <span class="n">line_segment_points</span><span class="p">(</span><span class="n">P1</span><span class="p">,</span> <span class="n">P2</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">num_points</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">points2</span> <span class="o">=</span> <span class="n">line_segment_points</span><span class="p">(</span><span class="n">P3</span><span class="p">,</span> <span class="n">P4</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">num_points</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="c1"># Calculate all pairwise distances between points on the two line segments</span>
+        <span class="n">distances</span> <span class="o">=</span> <span class="n">cdist</span><span class="p">(</span><span class="n">points1</span><span class="p">,</span> <span class="n">points2</span><span class="p">,</span> <span class="s1">&#39;euclidean&#39;</span><span class="p">)</span>
+        <span class="n">min_dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">distances</span><span class="p">)</span>  <span class="c1"># Find the smallest distance in the matrix</span>
+        <span class="c1"># If any edge-to-edge distance is less than our cutoff distance, we reject the design:</span>
+        <span class="k">if</span> <span class="n">min_dist</span> <span class="o">&lt;</span> <span class="n">threshold_to_check</span><span class="p">:</span>
+            <span class="c1"># If the minimal distance found is less than threshold, return True signalling &quot;invalid design&quot;</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="c1"># Otherwise, after checking all pairs, we return False signalling &quot;valid design&quot;</span>
+    <span class="k">return</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import design constraint features and assign:</span>
+<span class="kn">from</span> <span class="nn">mango.optimization_features</span> <span class="kn">import</span> <span class="n">design_constraints</span>
+
+<span class="c1"># We define the custom constraint simple as:</span>
+<span class="n">custom_constraint</span> <span class="o">=</span> <span class="n">design_constraints</span><span class="o">.</span><span class="n">CustomDesignConstraint</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Cutoff Distance Constraint&#39;</span><span class="p">,</span>
+                                                              <span class="n">design_constraint</span><span class="o">=</span><span class="n">edge_cutoff_constraint</span><span class="p">,</span>
+                                                              <span class="n">extra_params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;threshold&#39;</span><span class="p">:</span> <span class="mf">4.0</span><span class="p">,</span> <span class="c1"># units nm</span>
+                                                                            <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mf">3.75</span><span class="p">})</span>
+<span class="c1"># NOTE: edge_cutoff_constraint must be written as is, do not use edge_cutoff_constraint()</span>
+
+<span class="c1"># Now we set up the default constraints and re-assign the min face and edge length:</span>
+<span class="n">constraints</span> <span class="o">=</span> <span class="n">design_constraints</span><span class="o">.</span><span class="n">PolyhedralDefaultConstraints</span><span class="p">(</span>
+        <span class="n">min_face_angle</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">min_edge_length</span> <span class="o">=</span> <span class="mi">42</span><span class="p">,</span>  <span class="c1"># 42 basepairs for min length</span>
+        <span class="n">max_number_basepairs_in_scaffold</span><span class="o">=</span><span class="mi">7249</span><span class="p">,</span>
+
+        <span class="c1"># Finally assign the custom constraint as a list of CustomDesignConstraint object(s):</span>
+        <span class="n">extra_constraints</span><span class="o">=</span><span class="p">[</span><span class="n">custom_constraint</span><span class="p">]</span>
+      <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="defining-the-objective-of-the-optimization-problem">
+<h2>Defining the objective of the optimization problem<a class="headerlink" href="#defining-the-objective-of-the-optimization-problem" title="Link to this heading"></a></h2>
+<p>Similarly to defining a custom design constraint, we must define out a
+custom objective to be minimized. I am working on implementing the
+maximizer code (if there is enough request), but also as a general note:
+you can transform a maximization problem -&gt; minimization problem by
+taking the inverse of the maximizing function.</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mango.optimization_features.objective_function</span> <span class="kn">import</span> <span class="n">ObjectiveFunction</span>
+<span class="c1"># Function to estimate the volume of a cylinder-representing-DNA</span>
+<span class="k">def</span> <span class="nf">cylinder_volume</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">dna_diameter</span><span class="p">):</span>
+    <span class="n">total_volume</span> <span class="o">=</span> <span class="mf">0.</span>
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+        <span class="n">cylinder_length</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">length_and_direction_between_nodes</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">node1</span><span class="o">=</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">node2</span><span class="o">=</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">r_cyl_total</span> <span class="o">=</span> <span class="n">dna_diameter</span> <span class="o">/</span> <span class="mi">2</span>  <span class="c1"># Presume constant shell &quot;thickness&quot; on all cylinders</span>
+        <span class="n">total_volume</span> <span class="o">+=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">r_cyl_total</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">cylinder_length</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">total_volume</span>
+
+<span class="c1"># Our objective will simply divide the total bounding box volume by the volume of the DNA (and adding more DNA will lower this function!)</span>
+<span class="k">def</span> <span class="nf">porosity_objective</span><span class="p">(</span><span class="n">input_vars</span><span class="p">,</span> <span class="n">extra_params</span><span class="p">):</span>
+    <span class="n">cur_design</span> <span class="o">=</span> <span class="n">input_vars</span><span class="p">[</span><span class="s1">&#39;design_graph&#39;</span><span class="p">]</span>
+    <span class="n">total_volume</span> <span class="o">=</span> <span class="n">cylinder_volume</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">cur_design</span><span class="p">,</span> <span class="n">dna_diameter</span><span class="o">=</span><span class="n">extra_params</span><span class="p">[</span><span class="s1">&#39;d&#39;</span><span class="p">])</span>
+    <span class="n">curPorosity</span> <span class="o">=</span> <span class="n">extra_params</span><span class="p">[</span><span class="s1">&#39;cell_volume&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">total_volume</span>
+    <span class="k">return</span> <span class="n">curPorosity</span>
+
+<span class="c1"># Specify objective function:</span>
+<span class="n">extra_params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="mf">3.75</span><span class="p">,</span>  <span class="c1"># Diameter of helix bundles in design (presume 2 helix bundle is about 4nm effective radius)</span>
+    <span class="s1">&#39;cell_volume&#39;</span><span class="p">:</span> <span class="n">new_box</span><span class="o">.</span><span class="n">shape</span><span class="o">.</span><span class="n">volume</span>  <span class="c1"># This is held constant in this generative process</span>
+<span class="p">}</span>
+<span class="n">objective</span> <span class="o">=</span> <span class="n">ObjectiveFunction</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Porosity Measure&#39;</span><span class="p">,</span> <span class="n">objective_equation</span><span class="o">=</span><span class="n">porosity_objective</span><span class="p">,</span>
+                              <span class="n">extra_params</span><span class="o">=</span><span class="n">extra_params</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="defining-the-optimizer">
+<h2>Defining the optimizer<a class="headerlink" href="#defining-the-optimizer" title="Link to this heading"></a></h2>
+<p>Here I will discuss how the optimizer class is created. Note that the
+only optimizers in this package (as of this writing) are simulated
+annealing and multiobjective simulated annealing. Generally, the larger
+the hyperparameters the “deeper” the search where the trade off is time
+spent searching. However, we should note that this framework is truly
+designed for conceptual / design exploration, and fine tuning (or
+optimizing) a design with the currently developed grammars will likely
+not be efficient.</p>
+<p>I recommend starting simple and slowly “ramping up” the hyperparameters
+to find a sweet spot of computation time and results analysis</p>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mango.optimizers.single_objective_shape_annealing</span> <span class="kn">import</span> <span class="n">ShapeAnneal</span>
+<span class="kn">from</span> <span class="nn">mango.grammars.origami_grammars</span> <span class="kn">import</span> <span class="n">TriangulationGrammars</span>
+
+<span class="n">opt</span> <span class="o">=</span> <span class="n">ShapeAnneal</span><span class="p">(</span>
+        <span class="n">design_space</span><span class="o">=</span><span class="n">design_space</span><span class="p">,</span>
+        <span class="n">grammars</span><span class="o">=</span><span class="n">TriangulationGrammars</span><span class="p">(),</span>
+        <span class="n">design_constraints</span><span class="o">=</span><span class="n">constraints</span><span class="p">,</span>
+        <span class="n">objective_function</span><span class="o">=</span><span class="n">objective</span><span class="p">,</span>
+        <span class="n">SAVE_PATH</span><span class="o">=</span><span class="s2">&quot;./output_folder&quot;</span><span class="p">,</span>
+        <span class="n">SAVE_NAME_NO_EXTENSION</span><span class="o">=</span><span class="s1">&#39;my_first_generated_design&#39;</span><span class="p">,</span>
+        <span class="n">extension_value_default</span><span class="o">=</span><span class="mf">1.36</span><span class="p">,</span>  <span class="c1"># Make constant 4bp moves</span>
+        <span class="n">rotation_value_degrees_default</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+        <span class="n">max_number_of_epochs</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="c1"># This is very low, meant to run this in ~5/10 mins</span>
+        <span class="n">n</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">limit</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>  <span class="c1"># Any more than 50% of moves leading to lower obj == COOL T!</span>
+        <span class="n">max_time_of_optimization_minutes</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+        <span class="n">random_seed</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="c1"># Stochastic algorithm means random seeds are important!</span>
+        <span class="n">print_progress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># To start the generative process, you can simply run the following:</span>
+<span class="n">opt</span><span class="o">.</span><span class="n">begin_annealing</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tutorials.html" class="btn btn-neutral float-left" title="Tutorials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorial2.html" class="btn btn-neutral float-right" title="Tutorial 2: Reviewing the results of a generative design process" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, A.J. Vetturini.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,2135 @@
+   --------------------------------------------------
+           Connections for the edge section          
+   --------------------------------------------------
+          0 section  ->  Neighbor connection
+          1 section  ->  Neighbor connection
+   --------------------------------------------------
+
+   * File name: design1_DNA30_DX_48bp.ply
+
+   ...Removed the existing working directory
+
+ +==================================================+
+ | 1. Input - Target Geometry                       |
+ +==================================================+
+
+  1.1. Target geometry
+   * Geometry name        : design1_DNA30
+   * Geometry file type   : ply
+   * The number of faces  : 26
+   * The number of points : 15
+   * The number of edges  : 39
+   * Input path           : ./data_output2/
+   * Output path          : ./data_output2/design1_DNA30_DX_48bp
+
+  1.2. Edge section
+   * Type                   : honeycomb
+   * The number of duplexes : 2
+   * The number of rows     : 1
+   * The number of columns  : 2
+   * Reference row          : 1
+   * Reference col(min/max) : 1 / 2
+
+  1.3. Minimum edge length
+   * The min. edge length   : 48
+
+
+ +===================================================+
+ | 2. Geometry modification                          |
+ +===================================================+
+
+  2.1. Find neighboring points
+
+  2.2. Find neighboring edges
+
+  2.3. Build the junction data
+
+  2.4. Build the local coordinate
+
+  2.5. Seperate edges from the vertex
+   * The number of initial vertex   : 15
+   * The number of initial edges    : 39
+   * The number of seperated points : 78
+   * The number of seperated lines  : 39
+
+  2.6. Update the junction data
+
+  2.7. Find the scale factor to be scaled up
+   * The min. edge length : 48
+   * Scale factor         : .176
+
+  2.8. Scale up all edges
+
+
+ +==================================================+
+ | 3. Build the edge section                        |
+ +==================================================+
+
+  3.1. Information
+   * Type                           : honeycomb
+   * The number of duplexes         : 2
+   * The number of rows             : 1
+   * The number of columns          : 2
+   * Reference row                  : 1
+   * Reference col(min/max)         : 1 / 2
+   * The number of modified points  : 78
+   * The number of modified edges   : 39
+   * The number of sectional points : 156
+   * The number of sectional edges  : 78
+
+  3.2. Update the junctional data
+
+  3.3. Generate the edge section
+
+  3.4. Update local vectors
+
+
+ +==================================================+
+ | 4. Build the basepairs                           |
+ +==================================================+
+
+  4.1. Pre-calculate the number of basepairs
+   * The number of multiple points : 156
+   * The number of multiple lines  : 78
+   * The number of basepairs       : 6888
+   * The number of connections     : 6810
+
+  4.2. Discretize multiple lines into basepairs
+
+  4.3. build the connection for the vertex
+   * The number of vertices          : 15
+   * The number of duplexes per edge : 2
+
+  4.4. Modify the length of the duplex at the vertex
+   * Find the proper length of duplex at the vertex
+   * Update the junction data
+   * Detailed info. on the connectivity
+
+  4.5. Delete the ghost node to avoid crash
+   * The number of nodes before modfication : 8316
+   * The number of nodes after modfication  : 8316
+
+  4.6. Make the sticky-end at the 5'- end
+   * The number of added sticky bps : 0
+   * The number of added elements   : 0
+
+  4.7. The Edge length
+   * The minimum edge length : 33 bp
+   * The maximum edge length : 222 bp
+   * # different edge length : 59
+     + # edges with 33-bp length : 1
+     + # edges with 34-bp length : 1
+     + # edges with 35-bp length : 1
+     + # edges with 37-bp length : 1
+     + # edges with 38-bp length : 3
+     + # edges with 39-bp length : 1
+     + # edges with 67-bp length : 1
+     + # edges with 68-bp length : 1
+     + # edges with 69-bp length : 1
+     + # edges with 70-bp length : 1
+     + # edges with 72-bp length : 3
+     + # edges with 73-bp length : 1
+     + # edges with 74-bp length : 2
+     + # edges with 77-bp length : 1
+     + # edges with 78-bp length : 2
+     + # edges with 79-bp length : 2
+     + # edges with 80-bp length : 2
+     + # edges with 84-bp length : 2
+     + # edges with 85-bp length : 1
+     + # edges with 86-bp length : 1
+     + # edges with 89-bp length : 2
+     + # edges with 90-bp length : 1
+     + # edges with 91-bp length : 2
+     + # edges with 92-bp length : 1
+     + # edges with 95-bp length : 1
+     + # edges with 96-bp length : 1
+     + # edges with 97-bp length : 1
+     + # edges with 98-bp length : 1
+     + # edges with 100-bp length : 1
+     + # edges with 101-bp length : 3
+     + # edges with 102-bp length : 1
+     + # edges with 103-bp length : 2
+     + # edges with 104-bp length : 2
+     + # edges with 106-bp length : 1
+     + # edges with 107-bp length : 1
+     + # edges with 108-bp length : 2
+     + # edges with 109-bp length : 2
+     + # edges with 110-bp length : 2
+     + # edges with 112-bp length : 1
+     + # edges with 113-bp length : 1
+     + # edges with 121-bp length : 1
+     + # edges with 123-bp length : 1
+     + # edges with 127-bp length : 2
+     + # edges with 143-bp length : 1
+     + # edges with 146-bp length : 1
+     + # edges with 148-bp length : 1
+     + # edges with 170-bp length : 1
+     + # edges with 183-bp length : 1
+     + # edges with 184-bp length : 1
+     + # edges with 185-bp length : 1
+     + # edges with 188-bp length : 1
+     + # edges with 189-bp length : 1
+     + # edges with 190-bp length : 1
+     + # edges with 192-bp length : 1
+     + # edges with 195-bp length : 1
+     + # edges with 216-bp length : 1
+     + # edges with 218-bp length : 1
+     + # edges with 221-bp length : 1
+     + # edges with 222-bp length : 1
+
+ +==================================================+
+ | 5. Scaffold routing                              |
+ +==================================================+
+
+  5.1. Initialize DNA data
+   * # of initial nts in the scaffold : 8316
+   * # of initial nts in stapples     : 8316
+
+  5.2. Build the position vector for nucleotides
+   * Type                     : honeycomb
+   * Starting bp ID           : 4
+   * Axial rise distance [nm] : .340
+   * Radius of helix [nm]     : 1.000
+   * The gap between helixes  : .250
+   * Angle of minor groove    : 150.000
+   * Angle correction factor  : .000
+
+  5.3. Edge connection at the vertex
+   * Vertex design                 : mitered
+   * The number of vertices        : 15
+   * # of rows on the edge section : 1
+   * # of cols on the edge section : 2
+   * Detailed info. on the connection
+   * # of nts in the scaffold      : 8575
+   * # of nts in staples           : 8561
+   * # of unpaired nts in scaffold : 259
+   * # of unpaired nts in staples  : 245
+   * Unparied nts in scaf and stap : 
+        th junc    scaf      stap   scaf + stap
+        -------    ----      ----   -----------
+          1         23         22         45
+          2         16         15         31
+          3         30         21         51
+          4         24         13         37
+          5         28         20         48
+          6         20         20         40
+          7         22         19         41
+          8         15         15         30
+          9         15         15         30
+         10         16         10         26
+         11         12         18         30
+         12          8         12         20
+         13         15         13         28
+         14          7         18         25
+         15          8         14         22
+
+  5.4. Set the strand ID on nts of the scaffold
+   * Set the strand ID in dna.base_scaf data
+   * # of segmented scaffolds : 26
+
+  5.5. Find centered scaffold crossovers
+   * The number of multiple edges   : 78
+   * The number of sections         : 2
+   * # of centered scaffold Xovers  : 78
+
+  5.6. Modify centered crossover to avoid
+   * # of deleted self connecting Xovers    : 0
+   * # of deleted duplicate indexing Xovers : 0
+   * # of scaffold Xovers                   : 78
+
+  5.7. Scaffold routing
+   * Build dual-graph
+     - # of nodes in the dual-graph : 26
+     - # of edges in the dual-graph : 39
+   * Generate the spanning tree
+   * Find the minimum spanning tree
+     - The toal cost for this path : 25
+     - The minimum spanning tree
+        Arc    Tail node  Head node  Cost
+        ---    ---------  ---------  ----
+        26         1        16         1
+        27         1         5         1
+        29         1         2         1
+        25         2        12         1
+        28         2        17         1
+        16        17        19         1
+        19        17        20         1
+        11        20        22         1
+        12        20        21         1
+        14        21        26         1
+         6         9        26         1
+         7         9        10         1
+        20         9        11         1
+         9        10        25         1
+        33         8        10         1
+        34         8        14         1
+        39         6         8         1
+         3        14        23         1
+        32         7        14         1
+        31         7        24         1
+        24         3        24         1
+        21         3        15         1
+         4        13        15         1
+        10        15        18         1
+        23         4        13         1
+  5.8. Find possible staple double-crossovers
+   * # of possible staple Xovers : 284
+
+
+ +===================================================+
+ | 6. Sequence design                                |
+ +===================================================+
+
+  6.1. Build dnaTop data
+   * total # of nucleotides   : 17136
+   * # of nts in the scaffold : 8575
+   * # of nts in staples      : 8561
+
+  6.2. Build strand data
+   * Total # of strands            : 119
+   * # of strands for the scaffold : 1
+   * # of strands for staples      : 118
+   * Detailed info. on DNA strand data
+
+  6.3. Make linear staples by nick
+   * # of staples : 118
+
+     2-strd, # nts:  251, # nts@Tn:   20
+       1-rgn, T: 1, len:  13, str P:   2, cen P:   7, end P:  14
+       2-rgn, T: 1, len:  27, str P:  19, cen P:  33, end P:  45
+       3-rgn, T: 1, len:  14, str P:  48, cen P:  53, end P:  61
+       4-rgn, T: 1, len:  19, str P:  64, cen P:  74, end P:  82
+       5-rgn, T: 1, len:  23, str P:  85, cen P:  95, end P: 107
+       6-rgn, T: 1, len:  12, str P: 110, cen P: 116, end P: 121
+       7-rgn, T: 1, len:  11, str P: 124, cen P: 128, end P: 134
+       8-rgn, T: 1, len:  20, str P: 140, cen P: 150, end P: 159
+       9-rgn, T: 1, len:   8, str P: 162, cen P: 164, end P: 169
+      10-rgn, T: 1, len:   8, str P: 177, cen P: 181, end P: 184
+      11-rgn, T: 1, len:  21, str P: 187, cen P: 196, end P: 207
+      12-rgn, T: 1, len:  23, str P: 214, cen P: 226, end P: 236
+      13-rgn, T: 2, len:  12, str P: 239, cen P: 244, end P: 250
+
+      ----- Make nick -----
+      3->cut rgn, len:  53, cut pos:  53, rmn len: 198->max cut-nick
+      5->cut rgn, len:  42, cut pos:  95, rmn len: 156->max cut-nick
+      8->cut rgn, len:  55, cut pos: 150, rmn len: 101->max cut-nick
+     11->cut rgn, len:  46, cut pos: 196, rmn len:  55->max cut-nick
+     12-final rgn2, len:  55
+
+     3-strd, # nts:   84, # nts@Tn:    0
+       1-rgn, T: 2, len:  12, str P:   2, cen P:   7, end P:  13
+       2-rgn, T: 2, len:  14, str P:  16, cen P:  22, end P:  29
+       3-rgn, T: 2, len:  14, str P:  32, cen P:  38, end P:  45
+       4-rgn, T: 2, len:  24, str P:  48, cen P:  59, end P:  71
+       5-rgn, T: 2, len:  10, str P:  74, cen P:  78, end P:  83
+
+      ----- Make nick -----
+      4->cut rgn, len:  59, cut pos:  59, rmn len:  25->max cut-nick
+      5-final rgn2, len:  25
+
+     4-strd, # nts:  198, # nts@Tn:   15
+       1-rgn, T: 2, len:  11, str P:   2, cen P:   7, end P:  12
+       2-rgn, T: 1, len:   7, str P:  15, cen P:  17, end P:  21
+       3-rgn, T: 1, len:   9, str P:  28, cen P:  33, end P:  36
+       4-rgn, T: 1, len:  26, str P:  39, cen P:  50, end P:  64
+       5-rgn, T: 1, len:  19, str P:  70, cen P:  80, end P:  88
+       6-rgn, T: 1, len:  17, str P:  91, cen P:  98, end P: 107
+       7-rgn, T: 1, len:  26, str P: 111, cen P: 124, end P: 136
+       8-rgn, T: 1, len:  21, str P: 139, cen P: 148, end P: 159
+       9-rgn, T: 1, len:   6, str P: 163, cen P: 166, end P: 168
+      10-rgn, T: 1, len:  11, str P: 171, cen P: 175, end P: 181
+      11-rgn, T: 1, len:  13, str P: 185, cen P: 192, end P: 197
+
+      ----- Make nick -----
+      4->cut rgn, len:  50, cut pos:  50, rmn len: 148->max cut-nick
+      6->cut rgn, len:  48, cut pos:  98, rmn len: 100->max cut-nick
+      8->cut rgn, len:  50, cut pos: 148, rmn len:  50->max cut-nick
+      9-final rgn2, len:  50
+
+     8-strd, # nts:   84, # nts@Tn:    0
+       1-rgn, T: 2, len:  12, str P:   2, cen P:   7, end P:  13
+       2-rgn, T: 2, len:  24, str P:  16, cen P:  27, end P:  39
+       3-rgn, T: 2, len:  14, str P:  42, cen P:  48, end P:  55
+       4-rgn, T: 2, len:  14, str P:  58, cen P:  64, end P:  71
+       5-rgn, T: 2, len:  10, str P:  74, cen P:  78, end P:  83
+
+      ----- Make nick -----
+      3->cut rgn, len:  48, cut pos:  48, rmn len:  36->max cut-nick
+      4-final rgn2, len:  36
+
+    12-strd, # nts:  280, # nts@Tn:   20
+       1-rgn, T: 2, len:  11, str P:   2, cen P:   7, end P:  12
+       2-rgn, T: 1, len:  24, str P:  15, cen P:  25, end P:  38
+       3-rgn, T: 1, len:  25, str P:  42, cen P:  55, end P:  66
+       4-rgn, T: 1, len:   8, str P:  69, cen P:  71, end P:  76
+       5-rgn, T: 1, len:  23, str P:  83, cen P:  95, end P: 105
+       6-rgn, T: 1, len:  24, str P: 108, cen P: 118, end P: 131
+       7-rgn, T: 1, len:  16, str P: 136, cen P: 144, end P: 151
+       8-rgn, T: 1, len:  16, str P: 154, cen P: 160, end P: 169
+       9-rgn, T: 1, len:  12, str P: 175, cen P: 181, end P: 186
+      10-rgn, T: 1, len:  22, str P: 189, cen P: 198, end P: 210
+      11-rgn, T: 1, len:  23, str P: 216, cen P: 228, end P: 238
+      12-rgn, T: 1, len:  24, str P: 241, cen P: 251, end P: 264
+      13-rgn, T: 1, len:  12, str P: 268, cen P: 274, end P: 279
+
+      ----- Make nick -----
+      3->cut rgn, len:  55, cut pos:  55, rmn len: 225->max cut-nick
+      5->cut rgn, len:  40, cut pos:  95, rmn len: 185->max cut-nick
+      7->cut rgn, len:  49, cut pos: 144, rmn len: 136->max cut-nick
+     10->cut rgn, len:  54, cut pos: 198, rmn len:  82->max cut-nick
+     12->cut rgn, len:  53, cut pos: 251, rmn len:  29->max cut-nick
+     13-final rgn2, len:  29
+
+    16-strd, # nts:   84, # nts@Tn:    0
+       1-rgn, T: 2, len:  12, str P:   2, cen P:   7, end P:  13
+       2-rgn, T: 2, len:  24, str P:  16, cen P:  27, end P:  39
+       3-rgn, T: 2, len:  14, str P:  42, cen P:  48, end P:  55
+       4-rgn, T: 2, len:  14, str P:  58, cen P:  64, end P:  71
+       5-rgn, T: 2, len:  10, str P:  74, cen P:  78, end P:  83
+
+      ----- Make nick -----
+      3->cut rgn, len:  48, cut pos:  48, rmn len:  36->max cut-nick
+      4-final rgn2, len:  36
+
+    20-strd, # nts:   84, # nts@Tn:    0
+       1-rgn, T: 2, len:  12, str P:   2, cen P:   7, end P:  13
+       2-rgn, T: 2, len:  14, str P:  16, cen P:  22, end P:  29
+       3-rgn, T: 2, len:  14, str P:  32, cen P:  38, end P:  45
+       4-rgn, T: 2, len:  24, str P:  48, cen P:  59, end P:  71
+       5-rgn, T: 2, len:  10, str P:  74, cen P:  78, end P:  83
+
+      ----- Make nick -----
+      4->cut rgn, len:  59, cut pos:  59, rmn len:  25->max cut-nick
+      5-final rgn2, len:  25
+
+    22-strd, # nts:  209, # nts@Tn:   18
+       1-rgn, T: 1, len:  11, str P:   2, cen P:   6, end P:  12
+       2-rgn, T: 1, len:  16, str P:  16, cen P:  24, end P:  31
+       3-rgn, T: 1, len:  15, str P:  34, cen P:  40, end P:  48
+       4-rgn, T: 1, len:  21, str P:  52, cen P:  63, end P:  72
+       5-rgn, T: 1, len:  18, str P:  75, cen P:  82, end P:  92
+       6-rgn, T: 1, len:  22, str P:  98, cen P: 109, end P: 119
+       7-rgn, T: 1, len:  18, str P: 122, cen P: 129, end P: 139
+       8-rgn, T: 1, len:  20, str P: 145, cen P: 155, end P: 164
+       9-rgn, T: 1, len:  11, str P: 167, cen P: 171, end P: 177
+      10-rgn, T: 1, len:  12, str P: 185, cen P: 191, end P: 196
+      11-rgn, T: 2, len:  10, str P: 199, cen P: 203, end P: 208
+
+      ----- Make nick -----
+      3->cut rgn, len:  40, cut pos:  40, rmn len: 169->max cut-nick
+      5->cut rgn, len:  42, cut pos:  82, rmn len: 127->max cut-nick
+      7->cut rgn, len:  47, cut pos: 129, rmn len:  80->max cut-nick
+      9->cut rgn, len:  42, cut pos: 171, rmn len:  38->max cut-nick
+     10-final rgn2, len:  38
+
+    23-strd, # nts:   84, # nts@Tn:    0
+       1-rgn, T: 2, len:  12, str P:   2, cen P:   7, end P:  13
+       2-rgn, T: 2, len:  24, str P:  16, cen P:  27, end P:  39
+       3-rgn, T: 2, len:  14, str P:  42, cen P:  48, end P:  55
+       4-rgn, T: 2, len:  14, str P:  58, cen P:  64, end P:  71
+       5-rgn, T: 2, len:  10, str P:  74, cen P:  78, end P:  83
+
+      ----- Make nick -----
+      3->cut rgn, len:  48, cut pos:  48, rmn len:  36->max cut-nick
+      4-final rgn2, len:  36
+
+    25-strd, # nts:  730, # nts@Tn:   59
+       1-rgn, T: 1, len:  17, str P:   2, cen P:   9, end P:  18
+       2-rgn, T: 1, len:  21, str P:  23, cen P:  34, end P:  43
+       3-rgn, T: 1, len:  17, str P:  46, cen P:  53, end P:  62
+       4-rgn, T: 1, len:  24, str P:  66, cen P:  78, end P:  89
+       5-rgn, T: 1, len:  11, str P:  92, cen P:  96, end P: 102
+       6-rgn, T: 1, len:  16, str P: 106, cen P: 114, end P: 121
+       7-rgn, T: 1, len:  11, str P: 124, cen P: 128, end P: 134
+       8-rgn, T: 1, len:  16, str P: 141, cen P: 149, end P: 156
+       9-rgn, T: 1, len:  16, str P: 159, cen P: 165, end P: 174
+      10-rgn, T: 1, len:  18, str P: 177, cen P: 186, end P: 194
+      11-rgn, T: 1, len:  17, str P: 197, cen P: 204, end P: 213
+      12-rgn, T: 1, len:  22, str P: 218, cen P: 229, end P: 239
+      13-rgn, T: 1, len:   9, str P: 242, cen P: 245, end P: 250
+      14-rgn, T: 1, len:  15, str P: 254, cen P: 262, end P: 268
+      15-rgn, T: 1, len:  19, str P: 271, cen P: 279, end P: 289
+      16-rgn, T: 1, len:  15, str P: 295, cen P: 303, end P: 309
+      17-rgn, T: 1, len:  15, str P: 312, cen P: 318, end P: 326
+      18-rgn, T: 1, len:   9, str P: 332, cen P: 337, end P: 340
+      19-rgn, T: 1, len:  10, str P: 343, cen P: 346, end P: 352
+      20-rgn, T: 1, len:  18, str P: 356, cen P: 365, end P: 373
+      21-rgn, T: 1, len:  18, str P: 376, cen P: 383, end P: 393
+      22-rgn, T: 1, len:  19, str P: 398, cen P: 408, end P: 416
+      23-rgn, T: 1, len:  13, str P: 419, cen P: 424, end P: 431
+      24-rgn, T: 1, len:   9, str P: 439, cen P: 444, end P: 447
+      25-rgn, T: 1, len:  13, str P: 450, cen P: 455, end P: 462
+      26-rgn, T: 1, len:  14, str P: 466, cen P: 473, end P: 479
+      27-rgn, T: 1, len:  21, str P: 482, cen P: 491, end P: 502
+      28-rgn, T: 1, len:  16, str P: 507, cen P: 515, end P: 522
+      29-rgn, T: 1, len:  13, str P: 525, cen P: 530, end P: 537
+      30-rgn, T: 1, len:  24, str P: 541, cen P: 553, end P: 564
+      31-rgn, T: 1, len:  17, str P: 567, cen P: 574, end P: 583
+      32-rgn, T: 1, len:   9, str P: 590, cen P: 595, end P: 598
+      33-rgn, T: 1, len:  15, str P: 601, cen P: 607, end P: 615
+      34-rgn, T: 1, len:  11, str P: 618, cen P: 624, end P: 628
+      35-rgn, T: 1, len:  23, str P: 631, cen P: 641, end P: 653
+      36-rgn, T: 1, len:  16, str P: 659, cen P: 667, end P: 674
+      37-rgn, T: 1, len:   7, str P: 677, cen P: 679, end P: 683
+      38-rgn, T: 1, len:  23, str P: 689, cen P: 701, end P: 711
+      39-rgn, T: 2, len:  16, str P: 714, cen P: 721, end P: 729
+
+      ----- Make nick -----
+      3->cut rgn, len:  53, cut pos:  53, rmn len: 677->max cut-nick
+      5->cut rgn, len:  43, cut pos:  96, rmn len: 634->max cut-nick
+      8->cut rgn, len:  53, cut pos: 149, rmn len: 581->max cut-nick
+     11->cut rgn, len:  55, cut pos: 204, rmn len: 526->max cut-nick
+     14->cut rgn, len:  58, cut pos: 262, rmn len: 468->max cut-nick
+     17->cut rgn, len:  56, cut pos: 318, rmn len: 412->max cut-nick
+     20->cut rgn, len:  47, cut pos: 365, rmn len: 365->max cut-nick
+     23->cut rgn, len:  59, cut pos: 424, rmn len: 306->max cut-nick
+     26->cut rgn, len:  49, cut pos: 473, rmn len: 257->max cut-nick
+     29->cut rgn, len:  57, cut pos: 530, rmn len: 200->max cut-nick
+     31->cut rgn, len:  44, cut pos: 574, rmn len: 156->max cut-nick
+     34->cut rgn, len:  50, cut pos: 624, rmn len: 106->max cut-nick
+     36->cut rgn, len:  43, cut pos: 667, rmn len:  63->max cut-nick
+     38-final rgn4, len:   34
+     38-final rgn5, len:   29
+
+    26-strd, # nts:  234, # nts@Tn:   10
+       1-rgn, T: 2, len:  19, str P:   2, cen P:  11, end P:  20
+       2-rgn, T: 1, len:  23, str P:  23, cen P:  33, end P:  45
+       3-rgn, T: 1, len:   6, str P:  48, cen P:  51, end P:  53
+       4-rgn, T: 1, len:  13, str P:  56, cen P:  61, end P:  68
+       5-rgn, T: 1, len:  19, str P:  72, cen P:  82, end P:  90
+       6-rgn, T: 1, len:  21, str P:  93, cen P: 102, end P: 113
+       7-rgn, T: 1, len:  20, str P: 119, cen P: 129, end P: 138
+       8-rgn, T: 1, len:  21, str P: 141, cen P: 150, end P: 161
+       9-rgn, T: 1, len:  23, str P: 165, cen P: 177, end P: 187
+      10-rgn, T: 1, len:  24, str P: 190, cen P: 200, end P: 213
+      11-rgn, T: 1, len:  18, str P: 216, cen P: 225, end P: 233
+
+      ----- Make nick -----
+      2->cut rgn, len:  33, cut pos:  33, rmn len: 201->max cut-nick
+      5->cut rgn, len:  49, cut pos:  82, rmn len: 152->max cut-nick
+      7->cut rgn, len:  47, cut pos: 129, rmn len: 105->max cut-nick
+      9->cut rgn, len:  48, cut pos: 177, rmn len:  57->max cut-nick
+     10-final rgn2, len:  57
+
+    27-strd, # nts:   84, # nts@Tn:    0
+       1-rgn, T: 2, len:  12, str P:   2, cen P:   7, end P:  13
+       2-rgn, T: 2, len:  24, str P:  16, cen P:  27, end P:  39
+       3-rgn, T: 2, len:  14, str P:  42, cen P:  48, end P:  55
+       4-rgn, T: 2, len:  14, str P:  58, cen P:  64, end P:  71
+       5-rgn, T: 2, len:  10, str P:  74, cen P:  78, end P:  83
+
+      ----- Make nick -----
+      3->cut rgn, len:  48, cut pos:  48, rmn len:  36->max cut-nick
+      4-final rgn2, len:  36
+
+    29-strd, # nts:  207, # nts@Tn:   13
+       1-rgn, T: 1, len:  18, str P:   2, cen P:   9, end P:  19
+       2-rgn, T: 1, len:  15, str P:  22, cen P:  30, end P:  36
+       3-rgn, T: 1, len:  14, str P:  39, cen P:  44, end P:  52
+       4-rgn, T: 1, len:  22, str P:  57, cen P:  68, end P:  78
+       5-rgn, T: 1, len:  22, str P:  81, cen P:  90, end P: 102
+       6-rgn, T: 1, len:  14, str P: 106, cen P: 113, end P: 119
+       7-rgn, T: 1, len:   7, str P: 122, cen P: 124, end P: 128
+       8-rgn, T: 1, len:  25, str P: 133, cen P: 146, end P: 157
+       9-rgn, T: 1, len:   8, str P: 160, cen P: 162, end P: 167
+      10-rgn, T: 1, len:  16, str P: 173, cen P: 181, end P: 188
+      11-rgn, T: 2, len:  16, str P: 191, cen P: 198, end P: 206
+
+      ----- Make nick -----
+      3->cut rgn, len:  44, cut pos:  44, rmn len: 163->max cut-nick
+      5->cut rgn, len:  46, cut pos:  90, rmn len: 117->max cut-nick
+      8->cut rgn, len:  56, cut pos: 146, rmn len:  61->max cut-nick
+     10-final rgn4, len:   35
+     10-final rgn5, len:   26
+
+    31-strd, # nts:   84, # nts@Tn:    0
+       1-rgn, T: 2, len:  12, str P:   2, cen P:   7, end P:  13
+       2-rgn, T: 2, len:  24, str P:  16, cen P:  27, end P:  39
+       3-rgn, T: 2, len:  14, str P:  42, cen P:  48, end P:  55
+       4-rgn, T: 2, len:  14, str P:  58, cen P:  64, end P:  71
+       5-rgn, T: 2, len:  10, str P:  74, cen P:  78, end P:  83
+
+      ----- Make nick -----
+      3->cut rgn, len:  48, cut pos:  48, rmn len:  36->max cut-nick
+      4-final rgn2, len:  36
+
+    34-strd, # nts:   84, # nts@Tn:    0
+       1-rgn, T: 2, len:  12, str P:   2, cen P:   7, end P:  13
+       2-rgn, T: 2, len:  24, str P:  16, cen P:  27, end P:  39
+       3-rgn, T: 2, len:  14, str P:  42, cen P:  48, end P:  55
+       4-rgn, T: 2, len:  14, str P:  58, cen P:  64, end P:  71
+       5-rgn, T: 2, len:  10, str P:  74, cen P:  78, end P:  83
+
+      ----- Make nick -----
+      3->cut rgn, len:  48, cut pos:  48, rmn len:  36->max cut-nick
+      4-final rgn2, len:  36
+
+    37-strd, # nts:  263, # nts@Tn:   21
+       1-rgn, T: 2, len:  17, str P:   2, cen P:  10, end P:  18
+       2-rgn, T: 1, len:  24, str P:  21, cen P:  31, end P:  44
+       3-rgn, T: 1, len:  15, str P:  47, cen P:  55, end P:  61
+       4-rgn, T: 1, len:   8, str P:  64, cen P:  66, end P:  71
+       5-rgn, T: 1, len:   9, str P:  78, cen P:  83, end P:  86
+       6-rgn, T: 1, len:   8, str P:  89, cen P:  91, end P:  96
+       7-rgn, T: 1, len:  15, str P: 101, cen P: 109, end P: 115
+       8-rgn, T: 1, len:  18, str P: 118, cen P: 125, end P: 135
+       9-rgn, T: 1, len:  12, str P: 142, cen P: 148, end P: 153
+      10-rgn, T: 1, len:  10, str P: 156, cen P: 159, end P: 165
+      11-rgn, T: 1, len:  12, str P: 174, cen P: 180, end P: 185
+      12-rgn, T: 1, len:  15, str P: 188, cen P: 194, end P: 202
+      13-rgn, T: 1, len:  16, str P: 204, cen P: 210, end P: 219
+      14-rgn, T: 1, len:  24, str P: 222, cen P: 232, end P: 245
+      15-rgn, T: 1, len:  16, str P: 247, cen P: 253, end P: 262
+
+      ----- Make nick -----
+      3->cut rgn, len:  55, cut pos:  55, rmn len: 208->max cut-nick
+      7->cut rgn, len:  54, cut pos: 109, rmn len: 154->max cut-nick
+     10->cut rgn, len:  50, cut pos: 159, rmn len: 104->max cut-nick
+     13->cut rgn, len:  51, cut pos: 210, rmn len:  53->max cut-nick
+     14-final rgn2, len:  53
+
+    54-strd, # nts:  383, # nts@Tn:   22
+       1-rgn, T: 1, len:  24, str P:   2, cen P:  12, end P:  25
+       2-rgn, T: 1, len:  28, str P:  29, cen P:  43, end P:  56
+       3-rgn, T: 1, len:  24, str P:  59, cen P:  69, end P:  82
+       4-rgn, T: 1, len:  25, str P:  89, cen P: 102, end P: 113
+       5-rgn, T: 1, len:  21, str P: 116, cen P: 125, end P: 136
+       6-rgn, T: 1, len:  16, str P: 140, cen P: 148, end P: 155
+       7-rgn, T: 1, len:  23, str P: 158, cen P: 168, end P: 180
+       8-rgn, T: 1, len:  29, str P: 185, cen P: 200, end P: 213
+       9-rgn, T: 1, len:  21, str P: 216, cen P: 225, end P: 236
+      10-rgn, T: 1, len:  24, str P: 243, cen P: 255, end P: 266
+      11-rgn, T: 1, len:   8, str P: 269, cen P: 271, end P: 276
+      12-rgn, T: 1, len:   6, str P: 282, cen P: 285, end P: 287
+      13-rgn, T: 1, len:   5, str P: 290, cen P: 291, end P: 294
+      14-rgn, T: 1, len:  30, str P: 297, cen P: 312, end P: 326
+      15-rgn, T: 2, len:  14, str P: 329, cen P: 335, end P: 342
+      16-rgn, T: 2, len:  14, str P: 345, cen P: 351, end P: 358
+      17-rgn, T: 2, len:  22, str P: 361, cen P: 371, end P: 382
+
+      ----- Make nick -----
+      2->cut rgn, len:  43, cut pos:  43, rmn len: 340->max cut-nick
+      4->cut rgn, len:  59, cut pos: 102, rmn len: 281->max cut-nick
+      6->cut rgn, len:  46, cut pos: 148, rmn len: 235->max cut-nick
+      8->cut rgn, len:  52, cut pos: 200, rmn len: 183->max cut-nick
+     10->cut rgn, len:  55, cut pos: 255, rmn len: 128->max cut-nick
+     14->cut rgn, len:  57, cut pos: 312, rmn len:  71->max cut-nick
+     16-final rgn4, len:   39
+     16-final rgn5, len:   32
+
+    58-strd, # nts:   84, # nts@Tn:    0
+       1-rgn, T: 2, len:  12, str P:   2, cen P:   7, end P:  13
+       2-rgn, T: 2, len:  24, str P:  16, cen P:  27, end P:  39
+       3-rgn, T: 2, len:  14, str P:  42, cen P:  48, end P:  55
+       4-rgn, T: 2, len:  14, str P:  58, cen P:  64, end P:  71
+       5-rgn, T: 2, len:  10, str P:  74, cen P:  78, end P:  83
+
+      ----- Make nick -----
+      3->cut rgn, len:  48, cut pos:  48, rmn len:  36->max cut-nick
+      4-final rgn2, len:  36
+
+    60-strd, # nts:   84, # nts@Tn:    0
+       1-rgn, T: 2, len:  12, str P:   2, cen P:   7, end P:  13
+       2-rgn, T: 2, len:  14, str P:  16, cen P:  22, end P:  29
+       3-rgn, T: 2, len:  14, str P:  32, cen P:  38, end P:  45
+       4-rgn, T: 2, len:  24, str P:  48, cen P:  59, end P:  71
+       5-rgn, T: 2, len:  10, str P:  74, cen P:  78, end P:  83
+
+      ----- Make nick -----
+      4->cut rgn, len:  59, cut pos:  59, rmn len:  25->max cut-nick
+      5-final rgn2, len:  25
+
+    61-strd, # nts:  177, # nts@Tn:   15
+       1-rgn, T: 1, len:  16, str P:   2, cen P:   8, end P:  17
+       2-rgn, T: 1, len:   6, str P:  19, cen P:  20, end P:  24
+       3-rgn, T: 1, len:  10, str P:  27, cen P:  30, end P:  36
+       4-rgn, T: 1, len:  10, str P:  43, cen P:  48, end P:  52
+       5-rgn, T: 1, len:  13, str P:  55, cen P:  60, end P:  67
+       6-rgn, T: 1, len:  15, str P:  71, cen P:  79, end P:  85
+       7-rgn, T: 1, len:   7, str P:  88, cen P:  90, end P:  94
+       8-rgn, T: 1, len:  28, str P: 100, cen P: 114, end P: 127
+       9-rgn, T: 1, len:  10, str P: 130, cen P: 133, end P: 139
+      10-rgn, T: 1, len:  17, str P: 144, cen P: 153, end P: 160
+      11-rgn, T: 2, len:  14, str P: 163, cen P: 169, end P: 176
+
+      ----- Make nick -----
+      4->cut rgn, len:  48, cut pos:  48, rmn len: 129->max cut-nick
+      6->cut rgn, len:  31, cut pos:  79, rmn len:  98->max cut-nick
+      9->cut rgn, len:  54, cut pos: 133, rmn len:  44->max cut-nick
+     10-final rgn2, len:  44
+
+    63-strd, # nts:   84, # nts@Tn:    0
+       1-rgn, T: 2, len:  12, str P:   2, cen P:   7, end P:  13
+       2-rgn, T: 2, len:  14, str P:  16, cen P:  22, end P:  29
+       3-rgn, T: 2, len:  14, str P:  32, cen P:  38, end P:  45
+       4-rgn, T: 2, len:  24, str P:  48, cen P:  59, end P:  71
+       5-rgn, T: 2, len:  10, str P:  74, cen P:  78, end P:  83
+
+      ----- Make nick -----
+      4->cut rgn, len:  59, cut pos:  59, rmn len:  25->max cut-nick
+      5-final rgn2, len:  25
+
+    65-strd, # nts:   84, # nts@Tn:    0
+       1-rgn, T: 2, len:  12, str P:   2, cen P:   7, end P:  13
+       2-rgn, T: 2, len:  14, str P:  16, cen P:  22, end P:  29
+       3-rgn, T: 2, len:  14, str P:  32, cen P:  38, end P:  45
+       4-rgn, T: 2, len:  24, str P:  48, cen P:  59, end P:  71
+       5-rgn, T: 2, len:  10, str P:  74, cen P:  78, end P:  83
+
+      ----- Make nick -----
+      4->cut rgn, len:  59, cut pos:  59, rmn len:  25->max cut-nick
+      5-final rgn2, len:  25
+
+    66-strd, # nts:   84, # nts@Tn:    0
+       1-rgn, T: 2, len:  12, str P:   2, cen P:   7, end P:  13
+       2-rgn, T: 2, len:  24, str P:  16, cen P:  27, end P:  39
+       3-rgn, T: 2, len:  14, str P:  42, cen P:  48, end P:  55
+       4-rgn, T: 2, len:  14, str P:  58, cen P:  64, end P:  71
+       5-rgn, T: 2, len:  10, str P:  74, cen P:  78, end P:  83
+
+      ----- Make nick -----
+      3->cut rgn, len:  48, cut pos:  48, rmn len:  36->max cut-nick
+      4-final rgn2, len:  36
+
+    73-strd, # nts:  139, # nts@Tn:   18
+       1-rgn, T: 2, len:  10, str P:   2, cen P:   6, end P:  11
+       2-rgn, T: 1, len:  20, str P:  14, cen P:  22, end P:  33
+       3-rgn, T: 1, len:   9, str P:  40, cen P:  45, end P:  48
+       4-rgn, T: 1, len:  11, str P:  51, cen P:  55, end P:  61
+       5-rgn, T: 1, len:  11, str P:  67, cen P:  73, end P:  77
+       6-rgn, T: 1, len:  12, str P:  80, cen P:  84, end P:  91
+       7-rgn, T: 1, len:  13, str P:  96, cen P: 103, end P: 108
+       8-rgn, T: 1, len:  11, str P: 111, cen P: 115, end P: 121
+       9-rgn, T: 1, len:  12, str P: 127, cen P: 133, end P: 138
+
+      ----- Make nick -----
+      4->cut rgn, len:  55, cut pos:  55, rmn len:  84->max cut-nick
+      7->cut rgn, len:  48, cut pos: 103, rmn len:  36->max cut-nick
+      8-final rgn2, len:  36
+
+    76-strd, # nts:   84, # nts@Tn:    0
+       1-rgn, T: 2, len:  12, str P:   2, cen P:   7, end P:  13
+       2-rgn, T: 2, len:  24, str P:  16, cen P:  27, end P:  39
+       3-rgn, T: 2, len:  14, str P:  42, cen P:  48, end P:  55
+       4-rgn, T: 2, len:  14, str P:  58, cen P:  64, end P:  71
+       5-rgn, T: 2, len:  10, str P:  74, cen P:  78, end P:  83
+
+      ----- Make nick -----
+      3->cut rgn, len:  48, cut pos:  48, rmn len:  36->max cut-nick
+      4-final rgn2, len:  36
+
+    79-strd, # nts:   84, # nts@Tn:    0
+       1-rgn, T: 2, len:  12, str P:   2, cen P:   7, end P:  13
+       2-rgn, T: 2, len:  14, str P:  16, cen P:  22, end P:  29
+       3-rgn, T: 2, len:  14, str P:  32, cen P:  38, end P:  45
+       4-rgn, T: 2, len:  24, str P:  48, cen P:  59, end P:  71
+       5-rgn, T: 2, len:  10, str P:  74, cen P:  78, end P:  83
+
+      ----- Make nick -----
+      4->cut rgn, len:  59, cut pos:  59, rmn len:  25->max cut-nick
+      5-final rgn2, len:  25
+
+    81-strd, # nts:   84, # nts@Tn:    0
+       1-rgn, T: 2, len:  12, str P:   2, cen P:   7, end P:  13
+       2-rgn, T: 2, len:  24, str P:  16, cen P:  27, end P:  39
+       3-rgn, T: 2, len:  14, str P:  42, cen P:  48, end P:  55
+       4-rgn, T: 2, len:  14, str P:  58, cen P:  64, end P:  71
+       5-rgn, T: 2, len:  10, str P:  74, cen P:  78, end P:  83
+
+      ----- Make nick -----
+      3->cut rgn, len:  48, cut pos:  48, rmn len:  36->max cut-nick
+      4-final rgn2, len:  36
+
+    93-strd, # nts:   84, # nts@Tn:    0
+       1-rgn, T: 2, len:  12, str P:   2, cen P:   7, end P:  13
+       2-rgn, T: 2, len:  14, str P:  16, cen P:  22, end P:  29
+       3-rgn, T: 2, len:  14, str P:  32, cen P:  38, end P:  45
+       4-rgn, T: 2, len:  24, str P:  48, cen P:  59, end P:  71
+       5-rgn, T: 2, len:  10, str P:  74, cen P:  78, end P:  83
+
+      ----- Make nick -----
+      4->cut rgn, len:  59, cut pos:  59, rmn len:  25->max cut-nick
+      5-final rgn2, len:  25
+
+    96-strd, # nts:   84, # nts@Tn:    0
+       1-rgn, T: 2, len:  12, str P:   2, cen P:   7, end P:  13
+       2-rgn, T: 2, len:  24, str P:  16, cen P:  27, end P:  39
+       3-rgn, T: 2, len:  14, str P:  42, cen P:  48, end P:  55
+       4-rgn, T: 2, len:  14, str P:  58, cen P:  64, end P:  71
+       5-rgn, T: 2, len:  10, str P:  74, cen P:  78, end P:  83
+
+      ----- Make nick -----
+      3->cut rgn, len:  48, cut pos:  48, rmn len:  36->max cut-nick
+      4-final rgn2, len:  36
+
+   111-strd, # nts:   84, # nts@Tn:    0
+       1-rgn, T: 2, len:  12, str P:   2, cen P:   7, end P:  13
+       2-rgn, T: 2, len:  14, str P:  16, cen P:  22, end P:  29
+       3-rgn, T: 2, len:  14, str P:  32, cen P:  38, end P:  45
+       4-rgn, T: 2, len:  24, str P:  48, cen P:  59, end P:  71
+       5-rgn, T: 2, len:  10, str P:  74, cen P:  78, end P:  83
+
+      ----- Make nick -----
+      4->cut rgn, len:  59, cut pos:  59, rmn len:  25->max cut-nick
+      5-final rgn2, len:  25
+
+   114-strd, # nts:  156, # nts@Tn:   14
+       1-rgn, T: 2, len:  12, str P:   2, cen P:   7, end P:  13
+       2-rgn, T: 1, len:  23, str P:  16, cen P:  26, end P:  38
+       3-rgn, T: 1, len:  12, str P:  44, cen P:  50, end P:  55
+       4-rgn, T: 1, len:   8, str P:  58, cen P:  60, end P:  65
+       5-rgn, T: 1, len:   9, str P:  72, cen P:  77, end P:  80
+       6-rgn, T: 1, len:  10, str P:  83, cen P:  86, end P:  92
+       7-rgn, T: 1, len:  21, str P:  98, cen P: 109, end P: 118
+       8-rgn, T: 1, len:  23, str P: 121, cen P: 131, end P: 143
+       9-rgn, T: 1, len:  11, str P: 145, cen P: 149, end P: 155
+
+      ----- Make nick -----
+      3->cut rgn, len:  50, cut pos:  50, rmn len: 106->max cut-nick
+      7->cut rgn, len:  59, cut pos: 109, rmn len:  47->max cut-nick
+      8-final rgn2, len:  47
+
+   116-strd, # nts:   84, # nts@Tn:    0
+       1-rgn, T: 2, len:  12, str P:   2, cen P:   7, end P:  13
+       2-rgn, T: 2, len:  24, str P:  16, cen P:  27, end P:  39
+       3-rgn, T: 2, len:  14, str P:  42, cen P:  48, end P:  55
+       4-rgn, T: 2, len:  14, str P:  58, cen P:  64, end P:  71
+       5-rgn, T: 2, len:  10, str P:  74, cen P:  78, end P:  83
+
+      ----- Make nick -----
+      3->cut rgn, len:  48, cut pos:  48, rmn len:  36->max cut-nick
+      4-final rgn2, len:  36
+
+   117-strd, # nts:   84, # nts@Tn:    0
+       1-rgn, T: 2, len:  12, str P:   2, cen P:   7, end P:  13
+       2-rgn, T: 2, len:  24, str P:  16, cen P:  27, end P:  39
+       3-rgn, T: 2, len:  14, str P:  42, cen P:  48, end P:  55
+       4-rgn, T: 2, len:  14, str P:  58, cen P:  64, end P:  71
+       5-rgn, T: 2, len:  10, str P:  74, cen P:  78, end P:  83
+
+      ----- Make nick -----
+      3->cut rgn, len:  48, cut pos:  48, rmn len:  36->max cut-nick
+      4-final rgn2, len:  36
+
+  6.4. Make the linear scaffold by the nick
+   * The edge number at the nick : 49
+
+  6.5. Rebuild strand data
+   * Total # of strands        : 196
+   * # of scaffold strands     : 1
+   * # of staple strands       : 195
+   * The minimum staple length : 25
+   * The maximum staple length : 59
+   * Detailed info. on DNA strand data
+
+  6.5. Rebuild strand data
+   * Total # of strands        : 196
+   * # of scaffold strands     : 1
+   * # of staple strands       : 195
+   * The minimum staple length : 25
+   * The maximum staple length : 59
+   * Detailed info. on DNA strand data
+
+     Short length order of staples
+     #ID    # ori. ID     Staple length
+     ---    ---------     -------------
+      1           4            25
+      2          27            25
+      3          91            25
+      4          97            25
+      5         103            25
+      6         129            25
+      7         148            25
+      8         174            25
+      9          42            26
+     10         110            29
+     11         195            29
+     12         191            31
+     13         189            32
+     14          52            33
+     15          98            34
+     16          43            35
+     17          20            36
+     18          32            36
+     19          40            36
+     20          10            36
+     21          46            36
+     22          51            36
+     23          86            36
+     24         107            36
+     25         118            36
+     26         124            36
+     27         133            36
+     28         154            36
+     29         181            36
+     30         184            36
+     31          30            38
+     32          83            39
+     33          15            40
+     34          99            40
+     35          29            40
+     36          18            42
+     37          41            42
+     38          21            42
+     39          17            42
+     40          44            42
+     41          22            42
+     42          47            42
+     43          49            42
+     44          34            42
+     45          54            42
+     46          55            42
+     47          58            42
+     48          59            42
+     49          60            42
+     50          61            42
+     51          62            42
+     52          63            42
+     53          64            42
+     54          66            42
+     55          67            42
+     56          68            42
+     57          69            42
+     58          70            42
+     59          71            42
+     60          75            42
+     61          76            42
+     62          77            42
+     63          79            42
+     64          80            42
+     65          81            42
+     66          33            42
+     67          89            42
+     68          95            42
+     69          16            42
+     70         101            42
+     71           6            42
+     72          25            42
+     73         108            42
+     74         109            42
+     75          11            42
+     76         111            42
+     77         112            42
+     78         114            42
+     79         115            42
+     80         116            42
+     81         119            42
+     82         120            42
+     83         125            42
+     84         127            42
+     85           7            42
+     86         131            42
+     87          28            42
+     88         134            42
+     89         135            42
+     90         136            42
+     91         137            42
+     92         138            42
+     93         139            42
+     94         140            42
+     95         141            42
+     96         142            42
+     97         143            42
+     98         146            42
+     99           8            42
+    100         149            42
+    101         151            42
+    102         152            42
+    103         155            42
+    104         156            42
+    105         157            42
+    106         160            42
+    107         161            42
+    108         162            42
+    109         165            42
+    110         166            42
+    111         167            42
+    112         168            42
+    113         169            42
+    114         170            42
+    115         171            42
+    116         172            42
+    117         175            42
+    118         176            42
+    119         179            42
+    120         186            42
+    121         187            42
+    122          13            42
+    123          12            42
+    124         190            43
+    125          93            44
+    126         188            44
+    127         193            44
+    128          48            46
+    129         145            46
+    130         104            46
+    131         163            46
+    132          38            47
+    133          35            47
+    134         159            47
+    135         177            47
+    136          50            48
+    137         153            48
+    138         106            48
+    139         132            48
+    140          45            48
+    141         113            48
+    142          39            48
+    143          37            48
+    144           9            48
+    145         180            48
+    146          19            48
+    147         183            48
+    148          31            48
+    149         122            48
+    150          85            48
+    151         123            48
+    152         192            48
+    153          74            49
+    154          14            49
+    155         126            49
+    156           5            50
+    157          88            50
+    158          92            50
+    159         185            50
+    160          72            50
+    161         196            50
+    162          65            51
+    163         158            52
+    164          57            53
+    165         100            53
+    166         150            53
+    167         105            53
+    168          23            53
+    169         144            54
+    170          84            54
+    171          94            54
+    172           2            55
+    173          56            55
+    174         182            55
+    175         121            55
+    176          87            55
+    177          24            55
+    178         117            55
+    179          36            56
+    180         194            56
+    181          53            57
+    182          73            57
+    183          78            57
+    184         130            58
+    185          82            59
+    186          90            59
+    187         102            59
+    188         173            59
+    189         178            59
+    190          96            59
+    191          26            59
+    192         128            59
+    193         147            59
+    194           3            59
+    195         164            59
+
+  6.6. Print 14nt dsDNA domains
+   * # of staple strands     : 195
+   * # of total 14nt domains : 411
+   * Detailed info. on the dsDNA domain
+
+     2-stap, # nts:  55, # nts@Tn: 5, 14nt(2)- T, 4nt(0)- F
+       1-rgn [vertex], len:11(12), str P:  2, end P: 12
+       2-rgn [vertex], len:23(24), str P: 18, end P: 40
+       3-rgn [ edge ], len:12(14), str P: 43, end P: 54
+
+     3-stap, # nts:  59, # nts@Tn: 0, 14nt(3)- T, 4nt(0)- F
+       1-rgn [ edge ], len:15(17), str P:  2, end P: 16
+       2-rgn [ edge ], len:14(16), str P: 19, end P: 32
+       3-rgn [ edge ], len:14(16), str P: 35, end P: 48
+       4-rgn [ edge ], len: 8(10), str P: 51, end P: 58
+
+     4-stap, # nts:  25, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len:14(16), str P:  2, end P: 15
+       2-rgn [ edge ], len: 7( 9), str P: 18, end P: 24
+
+     5-stap, # nts:  50, # nts@Tn: 2, 14nt(1)- T, 4nt(0)- F
+       1-rgn [vertex], len: 9(10), str P:  2, end P: 10
+       2-rgn [vertex], len:26(27), str P: 13, end P: 38
+       3-rgn [ edge ], len: 9(11), str P: 41, end P: 49
+
+     6-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+     7-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+     8-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+     9-stap, # nts:  48, # nts@Tn: 0, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len:12(14), str P:  2, end P: 13
+       2-rgn [ edge ], len:24(26), str P: 16, end P: 39
+       3-rgn [ edge ], len: 6( 8), str P: 42, end P: 47
+
+    10-stap, # nts:  36, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 6( 8), str P:  2, end P:  7
+       2-rgn [ edge ], len:14(16), str P: 10, end P: 23
+       3-rgn [ edge ], len:10(12), str P: 26, end P: 35
+
+    11-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    12-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    13-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    14-stap, # nts:  49, # nts@Tn: 3, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [vertex], len:25(26), str P: 13, end P: 37
+       3-rgn [vertex], len: 8( 9), str P: 41, end P: 48
+
+    15-stap, # nts:  40, # nts@Tn: 5, 14nt(0)- F, 4nt(0)- F
+       1-rgn [ edge ], len:10(12), str P:  2, end P: 11
+       2-rgn [vertex], len: 9(10), str P: 14, end P: 22
+       3-rgn [vertex], len:12(13), str P: 28, end P: 39
+
+    16-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    17-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    18-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    19-stap, # nts:  48, # nts@Tn: 0, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len:12(14), str P:  2, end P: 13
+       2-rgn [ edge ], len:24(26), str P: 16, end P: 39
+       3-rgn [ edge ], len: 6( 8), str P: 42, end P: 47
+
+    20-stap, # nts:  36, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 6( 8), str P:  2, end P:  7
+       2-rgn [ edge ], len:14(16), str P: 10, end P: 23
+       3-rgn [ edge ], len:10(12), str P: 26, end P: 35
+
+    21-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    22-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    23-stap, # nts:  53, # nts@Tn: 3, 14nt(2)- T, 4nt(0)- F
+       1-rgn [vertex], len:14(15), str P:  2, end P: 15
+       2-rgn [vertex], len:27(28), str P: 19, end P: 45
+       3-rgn [ edge ], len: 5( 7), str P: 48, end P: 52
+
+    24-stap, # nts:  55, # nts@Tn: 2, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len:11(13), str P:  2, end P: 12
+       2-rgn [vertex], len:25(26), str P: 15, end P: 39
+       3-rgn [vertex], len:13(14), str P: 42, end P: 54
+
+    25-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    26-stap, # nts:  59, # nts@Tn: 0, 14nt(3)- T, 4nt(0)- F
+       1-rgn [ edge ], len:15(17), str P:  2, end P: 16
+       2-rgn [ edge ], len:14(16), str P: 19, end P: 32
+       3-rgn [ edge ], len:14(16), str P: 35, end P: 48
+       4-rgn [ edge ], len: 8(10), str P: 51, end P: 58
+
+    27-stap, # nts:  25, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len:14(16), str P:  2, end P: 15
+       2-rgn [ edge ], len: 7( 9), str P: 18, end P: 24
+
+    28-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    29-stap, # nts:  40, # nts@Tn: 2, 14nt(1)- T, 4nt(0)- F
+       1-rgn [vertex], len:12(13), str P:  2, end P: 13
+       2-rgn [vertex], len:16(17), str P: 16, end P: 31
+       3-rgn [ edge ], len: 6( 8), str P: 34, end P: 39
+
+    30-stap, # nts:  38, # nts@Tn: 6, 14nt(0)- F, 4nt(0)- F
+       1-rgn [vertex], len: 6( 7), str P:  2, end P:  7
+       2-rgn [vertex], len:12(13), str P: 14, end P: 25
+       3-rgn [ edge ], len:10(12), str P: 28, end P: 37
+
+    31-stap, # nts:  48, # nts@Tn: 0, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len:12(14), str P:  2, end P: 13
+       2-rgn [ edge ], len:24(26), str P: 16, end P: 39
+       3-rgn [ edge ], len: 6( 8), str P: 42, end P: 47
+
+    32-stap, # nts:  36, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 6( 8), str P:  2, end P:  7
+       2-rgn [ edge ], len:14(16), str P: 10, end P: 23
+       3-rgn [ edge ], len:10(12), str P: 26, end P: 35
+
+    33-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    34-stap, # nts:  42, # nts@Tn: 1, 14nt(1)- T, 4nt(0)- F
+       1-rgn [vertex], len: 8( 9), str P:  2, end P:  9
+       2-rgn [vertex], len:19(20), str P: 11, end P: 29
+       3-rgn [ edge ], len:10(12), str P: 32, end P: 41
+
+    35-stap, # nts:  47, # nts@Tn: 6, 14nt(0)- F, 4nt(0)- F
+       1-rgn [vertex], len: 8( 9), str P:  2, end P:  9
+       2-rgn [vertex], len: 9(10), str P: 14, end P: 22
+       3-rgn [vertex], len:11(12), str P: 25, end P: 35
+       4-rgn [vertex], len: 9(10), str P: 38, end P: 46
+
+    36-stap, # nts:  56, # nts@Tn: 4, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 5( 7), str P:  2, end P:  6
+       2-rgn [vertex], len:20(21), str P:  9, end P: 28
+       3-rgn [vertex], len:15(16), str P: 33, end P: 47
+       4-rgn [ edge ], len: 6( 8), str P: 50, end P: 55
+
+    37-stap, # nts:  48, # nts@Tn: 2, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 8(10), str P:  2, end P:  9
+       2-rgn [vertex], len:22(23), str P: 12, end P: 33
+       3-rgn [vertex], len:12(13), str P: 36, end P: 47
+
+    38-stap, # nts:  47, # nts@Tn: 4, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 7( 9), str P:  2, end P:  8
+       2-rgn [vertex], len:22(23), str P: 11, end P: 32
+       3-rgn [vertex], len:10(11), str P: 37, end P: 46
+
+    39-stap, # nts:  48, # nts@Tn: 0, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len:12(14), str P:  2, end P: 13
+       2-rgn [ edge ], len:24(26), str P: 16, end P: 39
+       3-rgn [ edge ], len: 6( 8), str P: 42, end P: 47
+
+    40-stap, # nts:  36, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 6( 8), str P:  2, end P:  7
+       2-rgn [ edge ], len:14(16), str P: 10, end P: 23
+       3-rgn [ edge ], len:10(12), str P: 26, end P: 35
+
+    41-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    42-stap, # nts:  26, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 6( 8), str P:  2, end P:  7
+       2-rgn [ edge ], len:16(18), str P: 10, end P: 25
+
+    43-stap, # nts:  35, # nts@Tn: 4, 14nt(0)- F, 4nt(0)- F
+       1-rgn [ edge ], len:10(12), str P:  2, end P: 11
+       2-rgn [vertex], len: 9(10), str P: 14, end P: 22
+       3-rgn [vertex], len: 8( 9), str P: 27, end P: 34
+
+    44-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    45-stap, # nts:  48, # nts@Tn: 0, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len:12(14), str P:  2, end P: 13
+       2-rgn [ edge ], len:24(26), str P: 16, end P: 39
+       3-rgn [ edge ], len: 6( 8), str P: 42, end P: 47
+
+    46-stap, # nts:  36, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 6( 8), str P:  2, end P:  7
+       2-rgn [ edge ], len:14(16), str P: 10, end P: 23
+       3-rgn [ edge ], len:10(12), str P: 26, end P: 35
+
+    47-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    48-stap, # nts:  46, # nts@Tn: 6, 14nt(0)- F, 4nt(0)- F
+       1-rgn [ edge ], len: 8(10), str P:  2, end P:  9
+       2-rgn [vertex], len: 9(10), str P: 12, end P: 20
+       3-rgn [vertex], len: 8( 9), str P: 27, end P: 34
+       4-rgn [ edge ], len: 9(11), str P: 37, end P: 45
+
+    49-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    50-stap, # nts:  48, # nts@Tn: 0, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len:12(14), str P:  2, end P: 13
+       2-rgn [ edge ], len:24(26), str P: 16, end P: 39
+       3-rgn [ edge ], len: 6( 8), str P: 42, end P: 47
+
+    51-stap, # nts:  36, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 6( 8), str P:  2, end P:  7
+       2-rgn [ edge ], len:14(16), str P: 10, end P: 23
+       3-rgn [ edge ], len:10(12), str P: 26, end P: 35
+
+    52-stap, # nts:  33, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len:19(21), str P:  2, end P: 20
+       2-rgn [ edge ], len:10(12), str P: 23, end P: 32
+
+    53-stap, # nts:  57, # nts@Tn: 1, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [vertex], len:25(26), str P: 13, end P: 37
+       3-rgn [vertex], len:18(19), str P: 39, end P: 56
+
+    54-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    55-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    56-stap, # nts:  55, # nts@Tn: 1, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len:17(19), str P:  2, end P: 18
+       2-rgn [vertex], len:25(26), str P: 21, end P: 45
+       3-rgn [vertex], len: 8( 9), str P: 47, end P: 54
+
+    57-stap, # nts:  53, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 8(10), str P:  2, end P:  9
+       2-rgn [ edge ], len:41(43), str P: 12, end P: 52
+
+    58-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    59-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    60-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    61-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    62-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    63-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    64-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    65-stap, # nts:  51, # nts@Tn: 7, 14nt(1)- T, 4nt(0)- F
+       1-rgn [vertex], len: 6( 7), str P:  2, end P:  7
+       2-rgn [vertex], len:12(13), str P: 15, end P: 26
+       3-rgn [ edge ], len:22(24), str P: 29, end P: 50
+
+    66-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    67-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    68-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    69-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    70-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    71-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    72-stap, # nts:  50, # nts@Tn: 5, 14nt(0)- F, 4nt(0)- F
+       1-rgn [ edge ], len:11(13), str P:  2, end P: 12
+       2-rgn [vertex], len: 8( 9), str P: 15, end P: 22
+       3-rgn [vertex], len: 9(10), str P: 28, end P: 36
+       4-rgn [ edge ], len:11(13), str P: 39, end P: 49
+
+    73-stap, # nts:  57, # nts@Tn: 3, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 5( 7), str P:  2, end P:  6
+       2-rgn [vertex], len:22(23), str P:  9, end P: 30
+       3-rgn [vertex], len:16(17), str P: 34, end P: 49
+       4-rgn [ edge ], len: 5( 7), str P: 52, end P: 56
+
+    74-stap, # nts:  49, # nts@Tn: 8, 14nt(1)- T, 4nt(0)- F
+       1-rgn [vertex], len: 7( 8), str P:  2, end P:  8
+       2-rgn [vertex], len: 9(10), str P: 15, end P: 23
+       3-rgn [vertex], len:14(15), str P: 26, end P: 39
+       4-rgn [vertex], len: 7( 8), str P: 42, end P: 48
+
+    75-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    76-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    77-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    78-stap, # nts:  57, # nts@Tn: 5, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len:10(12), str P:  2, end P: 11
+       2-rgn [vertex], len: 9(10), str P: 14, end P: 22
+       3-rgn [vertex], len: 6( 7), str P: 27, end P: 32
+       4-rgn [vertex], len: 6( 7), str P: 35, end P: 40
+       5-rgn [vertex], len:15(16), str P: 42, end P: 56
+
+    79-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    80-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    81-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    82-stap, # nts:  59, # nts@Tn: 3, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 7( 9), str P:  2, end P:  8
+       2-rgn [vertex], len:19(20), str P: 11, end P: 29
+       3-rgn [vertex], len:19(20), str P: 33, end P: 51
+       4-rgn [ edge ], len: 5( 7), str P: 54, end P: 58
+
+    83-stap, # nts:  39, # nts@Tn: 0, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len:13(15), str P:  2, end P: 14
+       2-rgn [ edge ], len:14(16), str P: 17, end P: 30
+       3-rgn [ edge ], len: 6( 8), str P: 33, end P: 38
+
+    84-stap, # nts:  54, # nts@Tn: 8, 14nt(0)- F, 4nt(0)- F
+       1-rgn [ edge ], len: 5( 7), str P:  2, end P:  6
+       2-rgn [vertex], len: 9(10), str P:  9, end P: 17
+       3-rgn [vertex], len: 9(10), str P: 23, end P: 31
+       4-rgn [vertex], len: 9(10), str P: 34, end P: 42
+       5-rgn [vertex], len: 8( 9), str P: 46, end P: 53
+
+    85-stap, # nts:  48, # nts@Tn: 0, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len:12(14), str P:  2, end P: 13
+       2-rgn [ edge ], len:24(26), str P: 16, end P: 39
+       3-rgn [ edge ], len: 6( 8), str P: 42, end P: 47
+
+    86-stap, # nts:  36, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 6( 8), str P:  2, end P:  7
+       2-rgn [ edge ], len:14(16), str P: 10, end P: 23
+       3-rgn [ edge ], len:10(12), str P: 26, end P: 35
+
+    87-stap, # nts:  55, # nts@Tn: 1, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 6( 8), str P:  2, end P:  7
+       2-rgn [vertex], len:17(18), str P: 10, end P: 26
+       3-rgn [vertex], len:18(19), str P: 28, end P: 45
+       4-rgn [ edge ], len: 7( 9), str P: 48, end P: 54
+
+    88-stap, # nts:  50, # nts@Tn: 8, 14nt(1)- T, 4nt(1)- T
+       1-rgn [vertex], len: 3( 4), str P:  2, end P:  4
+       2-rgn [vertex], len:16(17), str P:  7, end P: 22
+       3-rgn [vertex], len:11(12), str P: 25, end P: 35
+       4-rgn [vertex], len: 8( 9), str P: 42, end P: 49
+
+    89-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    90-stap, # nts:  59, # nts@Tn: 0, 14nt(3)- T, 4nt(0)- F
+       1-rgn [ edge ], len:15(17), str P:  2, end P: 16
+       2-rgn [ edge ], len:14(16), str P: 19, end P: 32
+       3-rgn [ edge ], len:14(16), str P: 35, end P: 48
+       4-rgn [ edge ], len: 8(10), str P: 51, end P: 58
+
+    91-stap, # nts:  25, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len:14(16), str P:  2, end P: 15
+       2-rgn [ edge ], len: 7( 9), str P: 18, end P: 24
+
+    92-stap, # nts:  50, # nts@Tn: 5, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 5( 7), str P:  2, end P:  6
+       2-rgn [vertex], len:19(20), str P:  9, end P: 27
+       3-rgn [vertex], len:12(13), str P: 33, end P: 44
+       4-rgn [ edge ], len: 3( 5), str P: 47, end P: 49
+
+    93-stap, # nts:  44, # nts@Tn: 3, 14nt(2)- T, 4nt(0)- F
+       1-rgn [vertex], len: 6( 7), str P:  2, end P:  7
+       2-rgn [vertex], len:17(18), str P: 11, end P: 27
+       3-rgn [ edge ], len:14(16), str P: 30, end P: 43
+
+    94-stap, # nts:  54, # nts@Tn: 4, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 5( 7), str P:  2, end P:  6
+       2-rgn [vertex], len: 8( 9), str P:  9, end P: 16
+       3-rgn [vertex], len:28(29), str P: 21, end P: 48
+       4-rgn [ edge ], len: 3( 5), str P: 51, end P: 53
+
+    95-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+    96-stap, # nts:  59, # nts@Tn: 0, 14nt(3)- T, 4nt(0)- F
+       1-rgn [ edge ], len:15(17), str P:  2, end P: 16
+       2-rgn [ edge ], len:14(16), str P: 19, end P: 32
+       3-rgn [ edge ], len:14(16), str P: 35, end P: 48
+       4-rgn [ edge ], len: 8(10), str P: 51, end P: 58
+
+    97-stap, # nts:  25, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len:14(16), str P:  2, end P: 15
+       2-rgn [ edge ], len: 7( 9), str P: 18, end P: 24
+
+    98-stap, # nts:  34, # nts@Tn: 4, 14nt(0)- F, 4nt(0)- F
+       1-rgn [ edge ], len: 6( 8), str P:  2, end P:  7
+       2-rgn [vertex], len: 8( 9), str P: 10, end P: 17
+       3-rgn [vertex], len:12(13), str P: 22, end P: 33
+
+    99-stap, # nts:  40, # nts@Tn: 4, 14nt(1)- T, 4nt(0)- F
+       1-rgn [vertex], len:24(25), str P:  4, end P: 27
+       2-rgn [vertex], len: 8( 9), str P: 32, end P: 39
+
+   100-stap, # nts:  53, # nts@Tn: 6, 14nt(1)- T, 4nt(0)- F
+       1-rgn [vertex], len: 9(10), str P:  2, end P: 10
+       2-rgn [vertex], len: 9(10), str P: 16, end P: 24
+       3-rgn [vertex], len:16(17), str P: 27, end P: 42
+       4-rgn [vertex], len: 9(10), str P: 44, end P: 52
+
+   101-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   102-stap, # nts:  59, # nts@Tn: 0, 14nt(3)- T, 4nt(0)- F
+       1-rgn [ edge ], len:15(17), str P:  2, end P: 16
+       2-rgn [ edge ], len:14(16), str P: 19, end P: 32
+       3-rgn [ edge ], len:14(16), str P: 35, end P: 48
+       4-rgn [ edge ], len: 8(10), str P: 51, end P: 58
+
+   103-stap, # nts:  25, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len:14(16), str P:  2, end P: 15
+       2-rgn [ edge ], len: 7( 9), str P: 18, end P: 24
+
+   104-stap, # nts:  46, # nts@Tn: 2, 14nt(1)- T, 4nt(0)- F
+       1-rgn [vertex], len: 9(10), str P:  2, end P: 10
+       2-rgn [vertex], len:24(25), str P: 13, end P: 36
+       3-rgn [ edge ], len: 7( 9), str P: 39, end P: 45
+
+   105-stap, # nts:  53, # nts@Tn: 3, 14nt(2)- T, 4nt(0)- F
+       1-rgn [vertex], len:18(19), str P:  2, end P: 19
+       2-rgn [vertex], len:21(22), str P: 23, end P: 43
+       3-rgn [ edge ], len: 7( 9), str P: 46, end P: 52
+
+   106-stap, # nts:  48, # nts@Tn: 0, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len:12(14), str P:  2, end P: 13
+       2-rgn [ edge ], len:24(26), str P: 16, end P: 39
+       3-rgn [ edge ], len: 6( 8), str P: 42, end P: 47
+
+   107-stap, # nts:  36, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 6( 8), str P:  2, end P:  7
+       2-rgn [ edge ], len:14(16), str P: 10, end P: 23
+       3-rgn [ edge ], len:10(12), str P: 26, end P: 35
+
+   108-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   109-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   110-stap, # nts:  29, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:16(18), str P: 13, end P: 28
+
+   111-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   112-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   113-stap, # nts:  48, # nts@Tn: 4, 14nt(2)- T, 4nt(0)- F
+       1-rgn [vertex], len:14(15), str P:  2, end P: 15
+       2-rgn [vertex], len:19(20), str P: 20, end P: 38
+       3-rgn [ edge ], len: 7( 9), str P: 41, end P: 47
+
+   114-stap, # nts:  42, # nts@Tn: 4, 14nt(1)- T, 4nt(0)- F
+       1-rgn [vertex], len:10(11), str P:  2, end P: 11
+       2-rgn [vertex], len:20(21), str P: 16, end P: 35
+       3-rgn [ edge ], len: 4( 6), str P: 38, end P: 41
+
+   115-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   116-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   117-stap, # nts:  55, # nts@Tn: 6, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len:10(12), str P:  2, end P: 11
+       2-rgn [vertex], len:20(21), str P: 14, end P: 33
+       3-rgn [vertex], len: 9(10), str P: 40, end P: 48
+       4-rgn [ edge ], len: 4( 6), str P: 51, end P: 54
+
+   118-stap, # nts:  36, # nts@Tn: 4, 14nt(0)- F, 4nt(0)- F
+       1-rgn [ edge ], len: 4( 6), str P:  2, end P:  5
+       2-rgn [vertex], len:12(13), str P:  8, end P: 19
+       3-rgn [vertex], len:12(13), str P: 24, end P: 35
+
+   119-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   120-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   121-stap, # nts:  55, # nts@Tn: 5, 14nt(0)- F, 4nt(0)- F
+       1-rgn [vertex], len:12(13), str P:  2, end P: 13
+       2-rgn [vertex], len:12(13), str P: 15, end P: 26
+       3-rgn [vertex], len:12(13), str P: 29, end P: 40
+       4-rgn [vertex], len:10(11), str P: 45, end P: 54
+
+   122-stap, # nts:  48, # nts@Tn: 8, 14nt(1)- T, 4nt(0)- F
+       1-rgn [vertex], len: 5( 6), str P:  2, end P:  6
+       2-rgn [vertex], len:11(12), str P: 12, end P: 22
+       3-rgn [vertex], len:13(14), str P: 25, end P: 37
+       4-rgn [vertex], len: 7( 8), str P: 41, end P: 47
+
+   123-stap, # nts:  48, # nts@Tn: 0, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len:12(14), str P:  2, end P: 13
+       2-rgn [ edge ], len:24(26), str P: 16, end P: 39
+       3-rgn [ edge ], len: 6( 8), str P: 42, end P: 47
+
+   124-stap, # nts:  36, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 6( 8), str P:  2, end P:  7
+       2-rgn [ edge ], len:14(16), str P: 10, end P: 23
+       3-rgn [ edge ], len:10(12), str P: 26, end P: 35
+
+   125-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   126-stap, # nts:  49, # nts@Tn: 3, 14nt(1)- T, 4nt(0)- F
+       1-rgn [vertex], len:12(13), str P:  2, end P: 13
+       2-rgn [vertex], len: 6( 7), str P: 15, end P: 20
+       3-rgn [vertex], len:14(15), str P: 23, end P: 36
+       4-rgn [vertex], len:10(11), str P: 39, end P: 48
+
+   127-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   128-stap, # nts:  59, # nts@Tn: 0, 14nt(3)- T, 4nt(0)- F
+       1-rgn [ edge ], len:15(17), str P:  2, end P: 16
+       2-rgn [ edge ], len:14(16), str P: 19, end P: 32
+       3-rgn [ edge ], len:14(16), str P: 35, end P: 48
+       4-rgn [ edge ], len: 8(10), str P: 51, end P: 58
+
+   129-stap, # nts:  25, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len:14(16), str P:  2, end P: 15
+       2-rgn [ edge ], len: 7( 9), str P: 18, end P: 24
+
+   130-stap, # nts:  58, # nts@Tn: 5, 14nt(1)- T, 4nt(0)- F
+       1-rgn [vertex], len: 9(10), str P:  2, end P: 10
+       2-rgn [vertex], len:22(23), str P: 14, end P: 35
+       3-rgn [vertex], len:10(11), str P: 38, end P: 47
+       4-rgn [vertex], len: 8( 9), str P: 50, end P: 57
+
+   131-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   132-stap, # nts:  48, # nts@Tn: 0, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len:12(14), str P:  2, end P: 13
+       2-rgn [ edge ], len:24(26), str P: 16, end P: 39
+       3-rgn [ edge ], len: 6( 8), str P: 42, end P: 47
+
+   133-stap, # nts:  36, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 6( 8), str P:  2, end P:  7
+       2-rgn [ edge ], len:14(16), str P: 10, end P: 23
+       3-rgn [ edge ], len:10(12), str P: 26, end P: 35
+
+   134-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   135-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   136-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   137-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   138-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   139-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   140-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   141-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   142-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   143-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   144-stap, # nts:  54, # nts@Tn: 4, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 6( 8), str P:  2, end P:  7
+       2-rgn [vertex], len:17(18), str P: 10, end P: 26
+       3-rgn [vertex], len:12(13), str P: 31, end P: 42
+       4-rgn [ edge ], len: 9(11), str P: 45, end P: 53
+
+   145-stap, # nts:  46, # nts@Tn: 2, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len:10(12), str P:  2, end P: 11
+       2-rgn [vertex], len:22(23), str P: 14, end P: 35
+       3-rgn [vertex], len: 8( 9), str P: 38, end P: 45
+
+   146-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   147-stap, # nts:  59, # nts@Tn: 0, 14nt(3)- T, 4nt(0)- F
+       1-rgn [ edge ], len:15(17), str P:  2, end P: 16
+       2-rgn [ edge ], len:14(16), str P: 19, end P: 32
+       3-rgn [ edge ], len:14(16), str P: 35, end P: 48
+       4-rgn [ edge ], len: 8(10), str P: 51, end P: 58
+
+   148-stap, # nts:  25, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len:14(16), str P:  2, end P: 15
+       2-rgn [ edge ], len: 7( 9), str P: 18, end P: 24
+
+   149-stap, # nts:  42, # nts@Tn: 2, 14nt(1)- T, 4nt(0)- F
+       1-rgn [vertex], len: 8( 9), str P:  2, end P:  9
+       2-rgn [vertex], len:21(22), str P: 12, end P: 32
+       3-rgn [ edge ], len: 7( 9), str P: 35, end P: 41
+
+   150-stap, # nts:  53, # nts@Tn: 4, 14nt(1)- T, 4nt(0)- F
+       1-rgn [vertex], len:12(13), str P:  2, end P: 13
+       2-rgn [vertex], len:23(24), str P: 18, end P: 40
+       3-rgn [ edge ], len:10(12), str P: 43, end P: 52
+
+   151-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   152-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   153-stap, # nts:  48, # nts@Tn: 0, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len:12(14), str P:  2, end P: 13
+       2-rgn [ edge ], len:24(26), str P: 16, end P: 39
+       3-rgn [ edge ], len: 6( 8), str P: 42, end P: 47
+
+   154-stap, # nts:  36, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 6( 8), str P:  2, end P:  7
+       2-rgn [ edge ], len:14(16), str P: 10, end P: 23
+       3-rgn [ edge ], len:10(12), str P: 26, end P: 35
+
+   155-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   156-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   157-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   158-stap, # nts:  52, # nts@Tn: 3, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 6( 8), str P:  2, end P:  7
+       2-rgn [vertex], len:24(25), str P: 10, end P: 33
+       3-rgn [vertex], len:15(16), str P: 37, end P: 51
+
+   159-stap, # nts:  47, # nts@Tn: 4, 14nt(1)- T, 4nt(0)- F
+       1-rgn [vertex], len:10(11), str P:  2, end P: 11
+       2-rgn [vertex], len:22(23), str P: 16, end P: 37
+       3-rgn [ edge ], len: 7( 9), str P: 40, end P: 46
+
+   160-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   161-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   162-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   163-stap, # nts:  46, # nts@Tn: 3, 14nt(1)- T, 4nt(0)- F
+       1-rgn [vertex], len: 8( 9), str P:  2, end P:  9
+       2-rgn [vertex], len:22(23), str P: 13, end P: 34
+       3-rgn [ edge ], len: 9(11), str P: 37, end P: 45
+
+   164-stap, # nts:  59, # nts@Tn: 5, 14nt(3)- T, 4nt(0)- F
+       1-rgn [ edge ], len:12(14), str P:  2, end P: 13
+       2-rgn [vertex], len:25(26), str P: 16, end P: 40
+       3-rgn [vertex], len:13(14), str P: 46, end P: 58
+
+   165-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   166-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   167-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   168-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   169-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   170-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   171-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   172-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   173-stap, # nts:  59, # nts@Tn: 0, 14nt(3)- T, 4nt(0)- F
+       1-rgn [ edge ], len:15(17), str P:  2, end P: 16
+       2-rgn [ edge ], len:14(16), str P: 19, end P: 32
+       3-rgn [ edge ], len:14(16), str P: 35, end P: 48
+       4-rgn [ edge ], len: 8(10), str P: 51, end P: 58
+
+   174-stap, # nts:  25, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len:14(16), str P:  2, end P: 15
+       2-rgn [ edge ], len: 7( 9), str P: 18, end P: 24
+
+   175-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   176-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   177-stap, # nts:  47, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 8(10), str P:  2, end P:  9
+       2-rgn [ edge ], len:35(37), str P: 12, end P: 46
+
+   178-stap, # nts:  59, # nts@Tn:10, 14nt(0)- F, 4nt(0)- F
+       1-rgn [ edge ], len: 4( 6), str P:  2, end P:  5
+       2-rgn [vertex], len: 9(10), str P:  8, end P: 16
+       3-rgn [vertex], len: 9(10), str P: 22, end P: 30
+       4-rgn [vertex], len:10(11), str P: 33, end P: 42
+       5-rgn [vertex], len:11(12), str P: 48, end P: 58
+
+   179-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   180-stap, # nts:  48, # nts@Tn: 0, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len:12(14), str P:  2, end P: 13
+       2-rgn [ edge ], len:24(26), str P: 16, end P: 39
+       3-rgn [ edge ], len: 6( 8), str P: 42, end P: 47
+
+   181-stap, # nts:  36, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 6( 8), str P:  2, end P:  7
+       2-rgn [ edge ], len:14(16), str P: 10, end P: 23
+       3-rgn [ edge ], len:10(12), str P: 26, end P: 35
+
+   182-stap, # nts:  55, # nts@Tn: 5, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len:12(14), str P:  2, end P: 13
+       2-rgn [vertex], len:22(23), str P: 16, end P: 37
+       3-rgn [vertex], len:12(13), str P: 43, end P: 54
+
+   183-stap, # nts:  48, # nts@Tn: 0, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len:12(14), str P:  2, end P: 13
+       2-rgn [ edge ], len:24(26), str P: 16, end P: 39
+       3-rgn [ edge ], len: 6( 8), str P: 42, end P: 47
+
+   184-stap, # nts:  36, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 6( 8), str P:  2, end P:  7
+       2-rgn [ edge ], len:14(16), str P: 10, end P: 23
+       3-rgn [ edge ], len:10(12), str P: 26, end P: 35
+
+   185-stap, # nts:  50, # nts@Tn: 4, 14nt(2)- T, 4nt(0)- F
+       1-rgn [ edge ], len:12(14), str P:  2, end P: 13
+       2-rgn [vertex], len:24(25), str P: 16, end P: 39
+       3-rgn [vertex], len: 6( 7), str P: 44, end P: 49
+
+   186-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   187-stap, # nts:  42, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 9(11), str P:  2, end P: 10
+       2-rgn [ edge ], len:19(21), str P: 13, end P: 31
+       3-rgn [ edge ], len: 8(10), str P: 34, end P: 41
+
+   188-stap, # nts:  44, # nts@Tn: 2, 14nt(1)- T, 4nt(0)- F
+       1-rgn [vertex], len: 7( 8), str P:  2, end P:  8
+       2-rgn [vertex], len:24(25), str P: 11, end P: 34
+       3-rgn [ edge ], len: 7( 9), str P: 37, end P: 43
+
+   189-stap, # nts:  32, # nts@Tn: 0, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 6( 8), str P:  2, end P:  7
+       2-rgn [ edge ], len:22(24), str P: 10, end P: 31
+
+   190-stap, # nts:  43, # nts@Tn: 2, 14nt(2)- T, 4nt(0)- F
+       1-rgn [vertex], len:25(26), str P:  2, end P: 26
+       2-rgn [vertex], len:14(15), str P: 29, end P: 42
+
+   191-stap, # nts:  31, # nts@Tn: 2, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len: 3( 5), str P:  2, end P:  4
+       2-rgn [vertex], len:14(15), str P:  7, end P: 20
+       3-rgn [vertex], len: 8( 9), str P: 23, end P: 30
+
+   192-stap, # nts:  48, # nts@Tn: 6, 14nt(1)- T, 4nt(0)- F
+       1-rgn [ edge ], len:23(25), str P:  2, end P: 24
+       2-rgn [vertex], len:10(11), str P: 27, end P: 36
+       3-rgn [vertex], len: 5( 6), str P: 43, end P: 47
+
+   193-stap, # nts:  44, # nts@Tn: 1, 14nt(2)- T, 4nt(0)- F
+       1-rgn [vertex], len:19(20), str P:  2, end P: 20
+       2-rgn [vertex], len:15(16), str P: 22, end P: 36
+       3-rgn [ edge ], len: 5( 7), str P: 39, end P: 43
+
+   194-stap, # nts:  56, # nts@Tn: 5, 14nt(2)- T, 4nt(0)- F
+       1-rgn [vertex], len:12(13), str P:  2, end P: 13
+       2-rgn [vertex], len:14(15), str P: 16, end P: 29
+       3-rgn [vertex], len: 8( 9), str P: 32, end P: 39
+       4-rgn [vertex], len:13(14), str P: 43, end P: 55
+
+   195-stap, # nts:  29, # nts@Tn: 2, 14nt(1)- T, 4nt(0)- F
+       1-rgn [vertex], len:13(14), str P:  2, end P: 14
+       2-rgn [vertex], len:12(13), str P: 17, end P: 28
+
+   196-stap, # nts:  50, # nts@Tn: 4, 14nt(1)- T, 4nt(0)- F
+       1-rgn [vertex], len:11(12), str P:  2, end P: 12
+       2-rgn [vertex], len: 6( 7), str P: 15, end P: 20
+       3-rgn [vertex], len:12(13), str P: 23, end P: 34
+       4-rgn [vertex], len:13(14), str P: 37, end P: 49
+
+   * # of staples with 14nt dsDNA domains : 184
+     * One   14nt dsDNA domain  : 143
+     * Two   14nt dsDNA domains : 32
+     * Three 14nt dsDNA domains : 9
+     * More  14nt dsDNA domains : 0
+
+   * Length of the dsDNA domain (bp)
+      *   1 bp dsDNA domain : 0
+      *   2 bp dsDNA domain : 0
+      *   3 bp dsDNA domain : 0
+      *   4 bp dsDNA domain : 1
+      *   5 bp dsDNA domain : 3
+      *   6 bp dsDNA domain : 6
+      *   7 bp dsDNA domain : 17
+      *   8 bp dsDNA domain : 39
+      *   9 bp dsDNA domain : 35
+      *  10 bp dsDNA domain : 117
+      *  11 bp dsDNA domain : 100
+      *  12 bp dsDNA domain : 28
+      *  13 bp dsDNA domain : 22
+      *  14 bp dsDNA domain : 23
+      *  15 bp dsDNA domain : 8
+      *  16 bp dsDNA domain : 43
+      *  17 bp dsDNA domain : 12
+      *  18 bp dsDNA domain : 5
+      *  19 bp dsDNA domain : 4
+      *  20 bp dsDNA domain : 6
+      *  21 bp dsDNA domain : 89
+      *  22 bp dsDNA domain : 2
+      *  23 bp dsDNA domain : 8
+      *  24 bp dsDNA domain : 4
+      *  25 bp dsDNA domain : 6
+
+  6.7. Set staple sequences
+   * Scaffold sequence        : user
+   * # of scaffolds           : 1
+   * # of nts in the scaffold : 8575
+  6.6. Set sequence from file
+   * # of sequence from file : 30000
+   * # of scaffold           : 1
+   * # of nts in scaffold    : 8575
+   * Detailed info. on DNAtop data
+
+
+ +===================================================+
+ | 7. Outputs                                        |
+ +===================================================+
+
+  7.1. Write output files
+   * Write JSON and etc.
+   * Write CanDo file (*.cndo)
+
+ +==================================================+
+ | 8. Summary                                       |
+ +==================================================+
+
+ 8.1. Design parameters
+   * Scaffold sequence              : user
+   * Vertex design                  : mitered
+   * Vertex angle                   : opt
+   * Vertex clash                   : const
+   * Constant edge length from mesh : off
+   * Gap b/w two scaf xovers        : 3
+   * Gap b/w xover(stap) and bound  : 6
+   * Gap b/w stap and scaf xovers   : 6
+   * Min. gap dsDNA domain for nick : 8
+   * Gap b/w xover and nick         : 3
+   * Staple break rule              : max
+   * Unpaired scaffold nucleotides  : on
+   * # of changing for min staple   : 0
+   * # of changing for max staple   : 0
+
+ 8.2. Target geometry
+   * File name            : design1_DNA30_DX_48bp
+   * The number of faces  : 26
+   * The number of points : 15
+   * The number of edges  : 39
+   * Minimum edge-length  : 48
+
+ 8.3. Basepair
+   * # of basepairs            : 8316
+   * # of mitered nts          : 1428 [17.172 %]
+   * Edge length [ min - max ] : [33 - 222]
+   * Min # xovers [scaf, stap] : 1 [0, 1]
+
+ 8.4. Scaffold
+   * # of the scaffold  : 1
+   * # of total nts     : 8575
+   * # of unpaired nts  : 259
+   * # of double Xovers : 25
+
+ 8.5. Staple
+   * # of staples         : 195
+    @ with the 4nt dsDNA  : 1 [.513 %]
+    @ with the 14nt dsDNA : 184 [94.359 %]
+   * # of nts             : 8561
+    @ in 4nt dsDNA        : 4 [.047 %]
+    @ in 14nt dsDNA       : 4621 [53.977 %]
+   * # of unpaired nts    : 245
+   * # of total Xover     : 284
+   * # of single-Xovers   : 0
+   * # of double-Xovers   : 142
+   * Length [min-max-ave] : [25 - 59 - 43.903]
+
+ +=== completed =====================================+
+ | DAEDALUS2 generated output files.                 |
+ +===================================================+

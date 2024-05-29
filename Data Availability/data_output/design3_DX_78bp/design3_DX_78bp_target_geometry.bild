@@ -1,0 +1,124 @@
+.color red
+.sphere    -16.03     0.00  -101.22     0.75
+.sphere     89.44     0.00     0.00     0.75
+.sphere     -0.00   -44.72     0.00     0.75
+.sphere    -89.44     0.00     0.00     0.75
+.sphere     -0.00    44.72     0.00     0.75
+.sphere     16.03     0.00   101.22     0.75
+.color dark green
+.cylinder    -16.03     0.00  -101.22    -0.00   -44.72     0.00     0.30
+.cylinder     -0.00   -44.72     0.00   -89.44     0.00     0.00     0.30
+.cylinder    -89.44     0.00     0.00   -16.03     0.00  -101.22     0.30
+.cylinder    -89.44     0.00     0.00    -0.00    44.72     0.00     0.30
+.cylinder     -0.00    44.72     0.00   -16.03     0.00  -101.22     0.30
+.cylinder     16.03     0.00   101.22    -0.00   -44.72     0.00     0.30
+.cylinder     -0.00   -44.72     0.00    89.44     0.00     0.00     0.30
+.cylinder     89.44     0.00     0.00    16.03     0.00   101.22     0.30
+.cylinder     89.44     0.00     0.00    -0.00    44.72     0.00     0.30
+.cylinder     -0.00    44.72     0.00    16.03     0.00   101.22     0.30
+.cylinder     89.44     0.00     0.00   -16.03     0.00  -101.22     0.30
+.cylinder     16.03     0.00   101.22   -89.44     0.00     0.00     0.30
+.cmov    -15.03     1.00  -100.22
+.color red
+.font Helvetica 12 bold
+           1
+.cmov     90.44     1.00     1.00
+.color red
+.font Helvetica 12 bold
+           2
+.cmov      1.00   -43.72     1.00
+.color red
+.font Helvetica 12 bold
+           3
+.cmov    -88.44     1.00     1.00
+.color red
+.font Helvetica 12 bold
+           4
+.cmov      1.00    45.72     1.00
+.color red
+.font Helvetica 12 bold
+           5
+.cmov     17.03     1.00   102.22
+.color red
+.font Helvetica 12 bold
+           6
+.cmov     -7.51   -21.86   -50.11
+.color dark green
+.font Helvetica 12 bold
+           1(111.8)
+.cmov    -44.22   -21.86     0.50
+.color dark green
+.font Helvetica 12 bold
+           2(100.0)
+.cmov    -52.23     0.50   -50.11
+.color dark green
+.font Helvetica 12 bold
+           3(125.0)
+.cmov    -44.22    22.86     0.50
+.color dark green
+.font Helvetica 12 bold
+           4(100.0)
+.cmov     -7.51    22.86   -50.11
+.color dark green
+.font Helvetica 12 bold
+           5(111.8)
+.cmov      8.51   -21.86    51.11
+.color dark green
+.font Helvetica 12 bold
+           6(111.8)
+.cmov     45.22   -21.86     0.50
+.color dark green
+.font Helvetica 12 bold
+           7(100.0)
+.cmov     53.23     0.50    51.11
+.color dark green
+.font Helvetica 12 bold
+           8(125.0)
+.cmov     45.22    22.86     0.50
+.color dark green
+.font Helvetica 12 bold
+           9(100.0)
+.cmov      8.51    22.86    51.11
+.color dark green
+.font Helvetica 12 bold
+          10(111.8)
+.cmov     37.21     0.50   -50.11
+.color dark green
+.font Helvetica 12 bold
+          11(146.2)
+.cmov    -36.21     0.50    51.11
+.color dark green
+.font Helvetica 12 bold
+          12(146.2)
+.cmov    -34.16   -13.91   -32.74
+.color black
+.font Helvetica 12 bold
+      1
+.cmov    -34.16    15.91   -32.74
+.color black
+.font Helvetica 12 bold
+      2
+.cmov     36.16   -13.91    34.74
+.color black
+.font Helvetica 12 bold
+      3
+.cmov     36.16    15.91    34.74
+.color black
+.font Helvetica 12 bold
+      4
+.cmov     25.47    15.91   -32.74
+.color black
+.font Helvetica 12 bold
+      5
+.cmov     25.47   -13.91   -32.74
+.color black
+.font Helvetica 12 bold
+      6
+.cmov    -23.47   -13.91    34.74
+.color black
+.font Helvetica 12 bold
+      7
+.cmov    -23.47    15.91    34.74
+.color black
+.font Helvetica 12 bold
+      8

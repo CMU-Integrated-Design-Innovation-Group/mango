@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Establishing design space &mdash; mango generative design framework b0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=7d16594f"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Grammars" href="mango.grammars.html" />
+    <link rel="prev" title="mango package" href="mango.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            mango generative design framework
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">mango</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="mango.html">mango package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="mango.html#package-components">Package Components</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Establishing design space</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html">Grammars</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html">Input design features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html">Optimization problem definition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html">Optimizers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.utils.html">Utilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html">Visualization Options</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mango generative design framework</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">mango</a></li>
+          <li class="breadcrumb-item"><a href="mango.html">mango package</a></li>
+      <li class="breadcrumb-item active">Establishing design space</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/mango.design_spaces.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="establishing-design-space">
+<h1>Establishing design space<a class="headerlink" href="#establishing-design-space" title="Link to this heading"></a></h1>
+<section id="module-mango.design_spaces.bounding_box">
+<span id="bounding-boxes"></span><h2>Bounding Boxes<a class="headerlink" href="#module-mango.design_spaces.bounding_box" title="Link to this heading"></a></h2>
+<p>A.J. Vetturini</p>
+<p>IDIG and MMBL</p>
+<p>Carnegie Mellon University</p>
+<p>This module defines the bounding box surrounding the polyhedral design space, it has many classes for the variety of
+box-types that the bounding_box can presume.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.CubicBox">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.design_spaces.bounding_box.</span></span><span class="sig-name descname"><span class="pre">CubicBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#CubicBox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.CubicBox" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This is a bounding box exhibiting Isometric (Cubic) Conditions by default. All edges are held to the same length and
+all angles are held to 90 degrees.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
+<p>a : Magnitude of all parallelepiped edges</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.CubicBox.a">
+<span class="sig-name descname"><span class="pre">a</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.CubicBox.a" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.CubicBox.return_box_traces">
+<span class="sig-name descname"><span class="pre">return_box_traces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#CubicBox.return_box_traces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.CubicBox.return_box_traces" title="Link to this definition"></a></dt>
+<dd><p>This function returns traces displaying the a b c and alpha beta gamma values via plotly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text_size</strong> – Desired font size in units of pt</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Various traces that are assigned to a plotly figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.CubicBox.update_shape">
+<span class="sig-name descname"><span class="pre">update_shape</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#CubicBox.update_shape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.CubicBox.update_shape" title="Link to this definition"></a></dt>
+<dd><p>Function that simple updated the shape and bounding_graphs based on the updated values</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.HexagonalBox">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.design_spaces.bounding_box.</span></span><span class="sig-name descname"><span class="pre">HexagonalBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#HexagonalBox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.HexagonalBox" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This is a bounding box exhibiting Hexagonal Conditions by default. Here the edges in X and Y are held the same
+and a value of the height is specified. Further, the angles alpha and beta are held to 60 whereas gamma is 120.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>a : Magnitude of parallelepiped aligned in x, y</p>
+<p>c: Magnitude of parallelepiped aligned in z</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.HexagonalBox.a">
+<span class="sig-name descname"><span class="pre">a</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.HexagonalBox.a" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.HexagonalBox.c">
+<span class="sig-name descname"><span class="pre">c</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.HexagonalBox.c" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.HexagonalBox.return_box_traces">
+<span class="sig-name descname"><span class="pre">return_box_traces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#HexagonalBox.return_box_traces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.HexagonalBox.return_box_traces" title="Link to this definition"></a></dt>
+<dd><p>This function returns traces displaying the a b c and alpha beta gamma values via plotly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text_size</strong> – Desired font size in units of pt</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Various traces that are assigned to a plotly figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.HexagonalBox.update_shape">
+<span class="sig-name descname"><span class="pre">update_shape</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#HexagonalBox.update_shape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.HexagonalBox.update_shape" title="Link to this definition"></a></dt>
+<dd><p>Function that simple updated the shape and bounding_graphs based on the updated values</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.MonoclinicBox">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.design_spaces.bounding_box.</span></span><span class="sig-name descname"><span class="pre">MonoclinicBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#MonoclinicBox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.MonoclinicBox" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This is a bounding box exhibiting Monoclinic Conditions by default. It’s edge lengths can be different along with
+an angle specified between c and a, but alpha and gamma are held to 90 degrees by default</p>
+<section id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>a : Magnitude of parallelepiped aligned in x</p>
+<p>b : Magnitude of parallelepiped aligned in y</p>
+<p>c: Magnitude of parallelepiped aligned in z</p>
+<p>beta : Angle of parallelepiped between c and a</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.MonoclinicBox.a">
+<span class="sig-name descname"><span class="pre">a</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.MonoclinicBox.a" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.MonoclinicBox.b">
+<span class="sig-name descname"><span class="pre">b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.MonoclinicBox.b" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.MonoclinicBox.beta">
+<span class="sig-name descname"><span class="pre">beta</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.MonoclinicBox.beta" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.MonoclinicBox.c">
+<span class="sig-name descname"><span class="pre">c</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.MonoclinicBox.c" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.MonoclinicBox.edges_unique">
+<span class="sig-name descname"><span class="pre">edges_unique</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#MonoclinicBox.edges_unique"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.MonoclinicBox.edges_unique" title="Link to this definition"></a></dt>
+<dd><p>Validates if any one edge is the same value</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.MonoclinicBox.return_box_traces">
+<span class="sig-name descname"><span class="pre">return_box_traces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#MonoclinicBox.return_box_traces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.MonoclinicBox.return_box_traces" title="Link to this definition"></a></dt>
+<dd><p>This function returns traces displaying the a b c and alpha beta gamma values via plotly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text_size</strong> – Desired font size in units of pt</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Various traces that are assigned to a plotly figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.MonoclinicBox.update_shape">
+<span class="sig-name descname"><span class="pre">update_shape</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#MonoclinicBox.update_shape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.MonoclinicBox.update_shape" title="Link to this definition"></a></dt>
+<dd><p>Function that simple updated the shape and bounding_graphs based on the updated values</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.OrthorhombicBox">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.design_spaces.bounding_box.</span></span><span class="sig-name descname"><span class="pre">OrthorhombicBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#OrthorhombicBox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.OrthorhombicBox" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This is a bounding box exhibiting Orthorhombic Conditions by default. It’s edge lengths can be different but the
+defining angles of the box are all held perpendicular (90 degrees).</p>
+<section id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>a : Magnitude of parallelepiped aligned in x</p>
+<p>b : Magnitude of parallelepiped aligned in y</p>
+<p>c: Magnitude of parallelepiped aligned in z</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.OrthorhombicBox.a">
+<span class="sig-name descname"><span class="pre">a</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.OrthorhombicBox.a" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.OrthorhombicBox.b">
+<span class="sig-name descname"><span class="pre">b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.OrthorhombicBox.b" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.OrthorhombicBox.c">
+<span class="sig-name descname"><span class="pre">c</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.OrthorhombicBox.c" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.OrthorhombicBox.edges_unique">
+<span class="sig-name descname"><span class="pre">edges_unique</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#OrthorhombicBox.edges_unique"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.OrthorhombicBox.edges_unique" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.OrthorhombicBox.return_box_traces">
+<span class="sig-name descname"><span class="pre">return_box_traces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#OrthorhombicBox.return_box_traces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.OrthorhombicBox.return_box_traces" title="Link to this definition"></a></dt>
+<dd><p>This function returns traces displaying the a b c and alpha beta gamma values via plotly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text_size</strong> – Desired font size in units of pt</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Various traces that are assigned to a plotly figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.OrthorhombicBox.update_shape">
+<span class="sig-name descname"><span class="pre">update_shape</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#OrthorhombicBox.update_shape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.OrthorhombicBox.update_shape" title="Link to this definition"></a></dt>
+<dd><p>Function that simple updated the shape and bounding_graphs based on the updated values</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.Parallelepiped">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.design_spaces.bounding_box.</span></span><span class="sig-name descname"><span class="pre">Parallelepiped</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles_in_degrees</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#Parallelepiped"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.Parallelepiped" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This is a high level class that is used to initialize the various default conditions.</p>
+<section id="id4">
+<h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>a : Magnitude of parallelepiped aligned in x</p>
+<p>b : Magnitude of parallelepiped aligned in y</p>
+<p>c: Magnitude of parallelepiped aligned in z</p>
+<p>alpha : Angle of parallelepiped between b and c</p>
+<p>beta : Angle of parallelepiped between c and a</p>
+<p>gamma: Angle of parallelepiped between b and a</p>
+<p>cell_type : What system is being shown (used in calculating volume)</p>
+<p>angles_in_degrees : Default TRUE, If false: will presume alpha beta gamma are in radians</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.Parallelepiped.a">
+<span class="sig-name descname"><span class="pre">a</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.Parallelepiped.a" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.Parallelepiped.alpha">
+<span class="sig-name descname"><span class="pre">alpha</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.Parallelepiped.alpha" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.Parallelepiped.angles_in_degrees">
+<span class="sig-name descname"><span class="pre">angles_in_degrees</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.Parallelepiped.angles_in_degrees" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.Parallelepiped.b">
+<span class="sig-name descname"><span class="pre">b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.Parallelepiped.b" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.Parallelepiped.beta">
+<span class="sig-name descname"><span class="pre">beta</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.Parallelepiped.beta" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.Parallelepiped.c">
+<span class="sig-name descname"><span class="pre">c</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.Parallelepiped.c" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.Parallelepiped.calculate_vertices_and_edges">
+<span class="sig-name descname"><span class="pre">calculate_vertices_and_edges</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#Parallelepiped.calculate_vertices_and_edges"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.Parallelepiped.calculate_vertices_and_edges" title="Link to this definition"></a></dt>
+<dd><p>How all the vertices are manually calculated</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of all vertices defining the 8 corners of the parallelepiped</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.Parallelepiped.cell_type">
+<span class="sig-name descname"><span class="pre">cell_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.Parallelepiped.cell_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.Parallelepiped.edge_intersecting_box">
+<span class="sig-name descname"><span class="pre">edge_intersecting_box</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">point1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#Parallelepiped.edge_intersecting_box"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.Parallelepiped.edge_intersecting_box" title="Link to this definition"></a></dt>
+<dd><p>Determines if there is an intersection point between a line segment and a plane in the mesh.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>point1</strong> – Starting point of a line segment [X Y Z]</p></li>
+<li><p><strong>point2</strong> – Ending point of a line segment [X Y Z]</p></li>
+</ul>
+</dd>
+</dl>
+<p>:return True if an edge is intersecting a face, false if not</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.Parallelepiped.gamma">
+<span class="sig-name descname"><span class="pre">gamma</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.Parallelepiped.gamma" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.Parallelepiped.get_midpoint_of_each_face">
+<span class="sig-name descname"><span class="pre">get_midpoint_of_each_face</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vertices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#Parallelepiped.get_midpoint_of_each_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.Parallelepiped.get_midpoint_of_each_face" title="Link to this definition"></a></dt>
+<dd><p>This function will determine the mid-point of each face. We can then add grammars to “move” these face-based
+points if desired, for now we will hold this constant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vertices</strong> – List of vertex node numbers we can access to pull correct values from graph</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of midpoints in any face</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.Parallelepiped.intersection_point">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">intersection_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line_start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abcd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#Parallelepiped.intersection_point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.Parallelepiped.intersection_point" title="Link to this definition"></a></dt>
+<dd><p>Calculate the intersection point between a line segment and a plane if it exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>line_start</strong> – Starting point of a line segment [X Y Z]</p></li>
+<li><p><strong>line_end</strong> – Ending point of a line segment [X Y Z]</p></li>
+<li><p><strong>abcd</strong> – Defining parameters of a face in Cartesian space</p></li>
+</ul>
+</dd>
+</dl>
+<p>:return True if there is an intersection, False if not</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.Parallelepiped.update_face_equations">
+<span class="sig-name descname"><span class="pre">update_face_equations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#Parallelepiped.update_face_equations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.Parallelepiped.update_face_equations" title="Link to this definition"></a></dt>
+<dd><p>This function will calculate each face equation to use for comparisons and is called when a grammar is applied
+to extend the face directions, for example.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.Parallelepiped.update_volume">
+<span class="sig-name descname"><span class="pre">update_volume</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#Parallelepiped.update_volume"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.Parallelepiped.update_volume" title="Link to this definition"></a></dt>
+<dd><p>Calculates and updates the volume attribute</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.RhombohedralBox">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.design_spaces.bounding_box.</span></span><span class="sig-name descname"><span class="pre">RhombohedralBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#RhombohedralBox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.RhombohedralBox" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This is a bounding box exhibiting Rhombohedral Conditions by default. Here, all edges and angles are held to the
+same values, respectively.</p>
+<section id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>a : Magnitude of all parallelepiped edges</p>
+<p>alpha : Angle of parallelepiped between all edges</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.RhombohedralBox.a">
+<span class="sig-name descname"><span class="pre">a</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.RhombohedralBox.a" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.RhombohedralBox.alpha">
+<span class="sig-name descname"><span class="pre">alpha</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.RhombohedralBox.alpha" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.RhombohedralBox.return_box_traces">
+<span class="sig-name descname"><span class="pre">return_box_traces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#RhombohedralBox.return_box_traces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.RhombohedralBox.return_box_traces" title="Link to this definition"></a></dt>
+<dd><p>This function returns traces displaying the a b c and alpha beta gamma values via plotly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text_size</strong> – Desired font size in units of pt</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Various traces that are assigned to a plotly figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.RhombohedralBox.update_shape">
+<span class="sig-name descname"><span class="pre">update_shape</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#RhombohedralBox.update_shape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.RhombohedralBox.update_shape" title="Link to this definition"></a></dt>
+<dd><p>Function that simple updated the shape and bounding_graphs based on the updated values</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.TetragonalBox">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.design_spaces.bounding_box.</span></span><span class="sig-name descname"><span class="pre">TetragonalBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#TetragonalBox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.TetragonalBox" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This is a bounding box exhibiting Tetragonal Conditions by default. Here, a and b are held to the same value and c
+defines a height. All angles are held perpendicular</p>
+<section id="id6">
+<h3>Parameters<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>a : Magnitude of parallelepiped aligned in x, y</p>
+<p>c: Magnitude of parallelepiped aligned in z</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.TetragonalBox.a">
+<span class="sig-name descname"><span class="pre">a</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.TetragonalBox.a" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.TetragonalBox.c">
+<span class="sig-name descname"><span class="pre">c</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.TetragonalBox.c" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.TetragonalBox.return_box_traces">
+<span class="sig-name descname"><span class="pre">return_box_traces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#TetragonalBox.return_box_traces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.TetragonalBox.return_box_traces" title="Link to this definition"></a></dt>
+<dd><p>This function returns traces displaying the a b c and alpha beta gamma values via plotly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text_size</strong> – Desired font size in units of pt</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Various traces that are assigned to a plotly figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.TetragonalBox.update_shape">
+<span class="sig-name descname"><span class="pre">update_shape</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#TetragonalBox.update_shape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.TetragonalBox.update_shape" title="Link to this definition"></a></dt>
+<dd><p>Function that simple updated the shape and bounding_graphs based on the updated values</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.TriclinicBox">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.design_spaces.bounding_box.</span></span><span class="sig-name descname"><span class="pre">TriclinicBox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#TriclinicBox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.TriclinicBox" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This is a bounding box exhibiting Triclinic Conditions by default. It is the most “flexible” space as every
+parameter of the parallelepiped can be constrained.</p>
+<section id="id7">
+<h3>Parameters<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<p>a : Magnitude of parallelepiped aligned in x</p>
+<p>b : Magnitude of parallelepiped aligned in y</p>
+<p>c: Magnitude of parallelepiped aligned in z</p>
+<p>alpha : Angle of parallelepiped between b and c</p>
+<p>beta : Angle of parallelepiped between c and a</p>
+<p>gamma: Angle of parallelepiped between b and a</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.TriclinicBox.a">
+<span class="sig-name descname"><span class="pre">a</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.TriclinicBox.a" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.TriclinicBox.alpha">
+<span class="sig-name descname"><span class="pre">alpha</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.TriclinicBox.alpha" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.TriclinicBox.angles_unique">
+<span class="sig-name descname"><span class="pre">angles_unique</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#TriclinicBox.angles_unique"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.TriclinicBox.angles_unique" title="Link to this definition"></a></dt>
+<dd><p>Validates if any one angle is the same value</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.TriclinicBox.b">
+<span class="sig-name descname"><span class="pre">b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.TriclinicBox.b" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.TriclinicBox.beta">
+<span class="sig-name descname"><span class="pre">beta</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.TriclinicBox.beta" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.TriclinicBox.c">
+<span class="sig-name descname"><span class="pre">c</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.TriclinicBox.c" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.TriclinicBox.edges_unique">
+<span class="sig-name descname"><span class="pre">edges_unique</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#TriclinicBox.edges_unique"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.TriclinicBox.edges_unique" title="Link to this definition"></a></dt>
+<dd><p>Validates if any one edge is the same value</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.TriclinicBox.gamma">
+<span class="sig-name descname"><span class="pre">gamma</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.TriclinicBox.gamma" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.TriclinicBox.return_box_traces">
+<span class="sig-name descname"><span class="pre">return_box_traces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#TriclinicBox.return_box_traces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.TriclinicBox.return_box_traces" title="Link to this definition"></a></dt>
+<dd><p>This function returns traces displaying the a b c and alpha beta gamma values via plotly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text_size</strong> – Desired font size in units of pt</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Various traces that are assigned to a plotly figure</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.TriclinicBox.update_shape">
+<span class="sig-name descname"><span class="pre">update_shape</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#TriclinicBox.update_shape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.TriclinicBox.update_shape" title="Link to this definition"></a></dt>
+<dd><p>Function that simple updated the shape and bounding_graphs based on the updated values of a, b, c</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mango.design_spaces.bounding_box.create_parallelepiped">
+<span class="sig-prename descclassname"><span class="pre">mango.design_spaces.bounding_box.</span></span><span class="sig-name descname"><span class="pre">create_parallelepiped</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/design_spaces/bounding_box.html#create_parallelepiped"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.bounding_box.create_parallelepiped" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-mango.design_spaces.polyhedral_design_space">
+<span id="design-spaces"></span><h2>Design Spaces<a class="headerlink" href="#module-mango.design_spaces.polyhedral_design_space" title="Link to this heading"></a></h2>
+<p>A.J. Vetturini</p>
+<p>IDIG and MMBL</p>
+<p>Carnegie Mellon University</p>
+<p>This is the top level class responsible for maintaining the design features / qualities of a given design. This is
+effectively an environment from which we are applying grammars (actions) to.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.design_spaces.polyhedral_design_space.PolyhedralSpace">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.design_spaces.polyhedral_design_space.</span></span><span class="sig-name descname"><span class="pre">PolyhedralSpace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bounding_box</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#mango.design_spaces.bounding_box.TriclinicBox" title="mango.design_spaces.bounding_box.TriclinicBox"><span class="pre">TriclinicBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#mango.design_spaces.bounding_box.MonoclinicBox" title="mango.design_spaces.bounding_box.MonoclinicBox"><span class="pre">MonoclinicBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#mango.design_spaces.bounding_box.OrthorhombicBox" title="mango.design_spaces.bounding_box.OrthorhombicBox"><span class="pre">OrthorhombicBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#mango.design_spaces.bounding_box.TetragonalBox" title="mango.design_spaces.bounding_box.TetragonalBox"><span class="pre">TetragonalBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#mango.design_spaces.bounding_box.RhombohedralBox" title="mango.design_spaces.bounding_box.RhombohedralBox"><span class="pre">RhombohedralBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#mango.design_spaces.bounding_box.HexagonalBox" title="mango.design_spaces.bounding_box.HexagonalBox"><span class="pre">HexagonalBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#mango.design_spaces.bounding_box.CubicBox" title="mango.design_spaces.bounding_box.CubicBox"><span class="pre">CubicBox</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserved</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excluded</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/design_spaces/polyhedral_design_space.html#PolyhedralSpace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This is a design space tasked with monitoring a polyhedral mesh for the export to automated design algorithms such
+as vHelix, DAEDALUS, and TALOS. This design space manages a 3D space via its design_graph</p>
+<section id="id8">
+<h3>Parameters<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<p>bounding_box : BoundingBox data type, created</p>
+<p>preserved : List of PreservedVertex or PreservedEdge objects</p>
+<p>excluded: An optional list of Sphere or RectangularPrism objects</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.polyhedral_design_space.PolyhedralSpace.add_new_node">
+<span class="sig-name descname"><span class="pre">add_new_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">terminal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/polyhedral_design_space.html#PolyhedralSpace.add_new_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.add_new_node" title="Link to this definition"></a></dt>
+<dd><p>This function will create a new node in our design graph</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – X position (nm)</p></li>
+<li><p><strong>y</strong> – Y Position (nm)</p></li>
+<li><p><strong>z</strong> – Z position (nm)</p></li>
+<li><p><strong>terminal</strong> – Is node terminal (i.e., a node that can NOT be removed) or not</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nothing, modifies design_graph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.polyhedral_design_space.PolyhedralSpace.bounding_box">
+<span class="sig-name descname"><span class="pre">bounding_box</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#mango.design_spaces.bounding_box.TriclinicBox" title="mango.design_spaces.bounding_box.TriclinicBox"><span class="pre">TriclinicBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#mango.design_spaces.bounding_box.MonoclinicBox" title="mango.design_spaces.bounding_box.MonoclinicBox"><span class="pre">MonoclinicBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#mango.design_spaces.bounding_box.OrthorhombicBox" title="mango.design_spaces.bounding_box.OrthorhombicBox"><span class="pre">OrthorhombicBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#mango.design_spaces.bounding_box.TetragonalBox" title="mango.design_spaces.bounding_box.TetragonalBox"><span class="pre">TetragonalBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#mango.design_spaces.bounding_box.RhombohedralBox" title="mango.design_spaces.bounding_box.RhombohedralBox"><span class="pre">RhombohedralBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#mango.design_spaces.bounding_box.HexagonalBox" title="mango.design_spaces.bounding_box.HexagonalBox"><span class="pre">HexagonalBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#mango.design_spaces.bounding_box.CubicBox" title="mango.design_spaces.bounding_box.CubicBox"><span class="pre">CubicBox</span></a></em><a class="headerlink" href="#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.bounding_box" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.polyhedral_design_space.PolyhedralSpace.calculate_input_parameters">
+<span class="sig-name descname"><span class="pre">calculate_input_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edge_lengths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">routing_algorithm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/polyhedral_design_space.html#PolyhedralSpace.calculate_input_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.calculate_input_parameters" title="Link to this definition"></a></dt>
+<dd><p>This will return a standardized dictionary that will be used to allow for customized objective functions and
+design constraints, allowing for a more generalizable generative tool</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edge_lengths</strong> – A list of all edge lengths in units of nm</p></li>
+<li><p><strong>routing_algorithm</strong> – Which algorithm is being used, options are currently: DAEDALUS and TALOS</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>dictionary {property : value} where property is the key value</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.polyhedral_design_space.PolyhedralSpace.create_preserved_regions">
+<span class="sig-name descname"><span class="pre">create_preserved_regions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/polyhedral_design_space.html#PolyhedralSpace.create_preserved_regions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.create_preserved_regions" title="Link to this definition"></a></dt>
+<dd><p>This function will use the passed in preserved region spaces and specify these regions in the design_graph</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Nothing just updated the design_graph element</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.polyhedral_design_space.PolyhedralSpace.create_trimesh_mesh">
+<span class="sig-name descname"><span class="pre">create_trimesh_mesh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/polyhedral_design_space.html#PolyhedralSpace.create_trimesh_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.create_trimesh_mesh" title="Link to this definition"></a></dt>
+<dd><p>This function is simply responsible for reconstructing a trimesh mesh file for the purpose of validating the
+mesh file. I deemed this “efficient enough” for the time being, but you could probably write some compiled
+code which does this much faster.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.polyhedral_design_space.PolyhedralSpace.excluded">
+<span class="sig-name descname"><span class="pre">excluded</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.excluded" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.polyhedral_design_space.PolyhedralSpace.find_nonterminal_nodes">
+<span class="sig-name descname"><span class="pre">find_nonterminal_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/polyhedral_design_space.html#PolyhedralSpace.find_nonterminal_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.find_nonterminal_nodes" title="Link to this definition"></a></dt>
+<dd><p>This function will find all of the non-terminal nodes in the design and append to a list that will be used to
+apply a variety of production rules to manipulate geometry.</p>
+<p>Terminal nodes are those which belong to terminal geometries (preserved / excluded spaces). Nonterminal are
+all others</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Nothing, just appends to an ever-changing list of nonterminal nodes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.polyhedral_design_space.PolyhedralSpace.generate_start_shape">
+<span class="sig-name descname"><span class="pre">generate_start_shape</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/polyhedral_design_space.html#PolyhedralSpace.generate_start_shape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.generate_start_shape" title="Link to this definition"></a></dt>
+<dd><p>This function adds all relevant edges on the initialized start_shape to the design_graph:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.polyhedral_design_space.PolyhedralSpace.increment_node_count">
+<span class="sig-name descname"><span class="pre">increment_node_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/polyhedral_design_space.html#PolyhedralSpace.increment_node_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.increment_node_count" title="Link to this definition"></a></dt>
+<dd><p>Increments the node_count value by 1 so we can track the node values
+:return: Nothing, internally stored</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.polyhedral_design_space.PolyhedralSpace.jsonify_design_space">
+<span class="sig-name descname"><span class="pre">jsonify_design_space</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/polyhedral_design_space.html#PolyhedralSpace.jsonify_design_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.jsonify_design_space" title="Link to this definition"></a></dt>
+<dd><p>This function will convert a design graph to a json-ified object such that I can plot it in the kodak
+visualization</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.design_spaces.polyhedral_design_space.PolyhedralSpace.preserved">
+<span class="sig-name descname"><span class="pre">preserved</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.preserved" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.polyhedral_design_space.PolyhedralSpace.renumber_vertices">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">renumber_vertices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">faces</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/polyhedral_design_space.html#PolyhedralSpace.renumber_vertices"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.renumber_vertices" title="Link to this definition"></a></dt>
+<dd><p>This function will take in the list of vertices and faces and re-number the faces to verify the index positions
+This is needed for writing out the .ply file to ensure proper file creation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dictionary containing the mapping of old to new vertices values</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.polyhedral_design_space.PolyhedralSpace.triangulate_input_conditions">
+<span class="sig-name descname"><span class="pre">triangulate_input_conditions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/polyhedral_design_space.html#PolyhedralSpace.triangulate_input_conditions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.triangulate_input_conditions" title="Link to this definition"></a></dt>
+<dd><p>This function uses the alphashape to create a start shape for the generative process based on the input
+conditions defined by the designer. Future work may want to consider different types of triangulations, but the
+alphashape generalizes well to a concave or convex set of input conditions and therefore I use it here.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A tuple of the faces of the triangulation and the related vertices of the mesh</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.design_spaces.polyhedral_design_space.PolyhedralSpace.validate_start_shape">
+<span class="sig-name descname"><span class="pre">validate_start_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Trimesh</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">PolyData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserved_edges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">og_verts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/polyhedral_design_space.html#PolyhedralSpace.validate_start_shape"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.validate_start_shape" title="Link to this definition"></a></dt>
+<dd><p>This function simply validates that the triangulated alphashape is able to be modified as expected by
+the application of various grammars</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>shape</strong> – Mesh element generated by alphashape algorithm</p></li>
+<li><p><strong>preserved_edges</strong> – A list of tuples that contain the nodes of any preserved edges.</p></li>
+<li><p><strong>og_verts</strong> – Original list of vertices from the preserved_regions</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(bool, list) : the bool returns if the shape is valid (true) or not (false) and the list contains
+the list returns a list of tuples defining the graph nodes of the preserved regions</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mango.html" class="btn btn-neutral float-left" title="mango package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mango.grammars.html" class="btn btn-neutral float-right" title="Grammars" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, A.J. Vetturini.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

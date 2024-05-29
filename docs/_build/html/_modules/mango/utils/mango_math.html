@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mango.utils.mango_math &mdash; mango generative design framework b0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=7d16594f"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            mango generative design framework
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">mango</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">mango generative design framework</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mango.utils.mango_math</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mango.utils.mango_math</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A.J. Vetturini \n</span>
+<span class="sd">IDIG and MMBL \n</span>
+<span class="sd">Carnegie Mellon University \n</span>
+
+<span class="sd">These are various functions used throughout the application that range from mathematical functions to graph-based</span>
+<span class="sd">functions which return specific values from a provided graph. There are no custom data types used in any of these</span>
+<span class="sd">functions which is the criteria I used to &quot;separate&quot; out the code.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">combinations</span>
+<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">jit</span>
+
+<div class="viewcode-block" id="xyz_from_graph">
+<a class="viewcode-back" href="../../../mango.utils.html#mango.utils.mango_math.xyz_from_graph">[docs]</a>
+<span class="k">def</span> <span class="nf">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function returns the X Y Z value of a specified node # from the design_graph</span>
+
+<span class="sd">    :param graph: NetworkX undirected graph which is stored as the design_graph object</span>
+<span class="sd">    :param node: Node # to return the X Y Z location of</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s1">&#39;z&#39;</span><span class="p">]])</span>
+    <span class="k">return</span> <span class="n">pt</span></div>
+
+
+
+<div class="viewcode-block" id="node_from_xyz">
+<a class="viewcode-back" href="../../../mango.utils.html#mango.utils.mango_math.node_from_xyz">[docs]</a>
+<span class="k">def</span> <span class="nf">node_from_xyz</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">xyz</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function returns the node number of a specified X Y Z array from the passed in design graph</span>
+
+<span class="sd">    :param graph: NetworkX undirected graph which is stored as the design_graph object</span>
+<span class="sd">    :param xyz: NumPy array in form of [X, Y, Z] to return the node of</span>
+<span class="sd">    :return: Integer of node number represented by xyz</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tolerance</span> <span class="o">=</span> <span class="mf">1e-2</span>  <span class="c1"># I use a little bit larger tolerance since we usually aren&#39;t going to low decimal-wise</span>
+                      <span class="c1"># due to inherent precision limitations</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+        <span class="c1">#if graph.nodes[n][&#39;x&#39;] == xyz[0] and graph.nodes[n][&#39;y&#39;] == xyz[1] and graph.nodes[n][&#39;z&#39;] == xyz[2]:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">xyz</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="n">tolerance</span><span class="p">)</span> <span class="ow">and</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">xyz</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="n">tolerance</span><span class="p">)</span> <span class="ow">and</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="s1">&#39;z&#39;</span><span class="p">],</span> <span class="n">xyz</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="n">tolerance</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">n</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Unable to find node in the design graph!!!&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="nodes_on_same_face">
+<a class="viewcode-back" href="../../../mango.utils.html#mango.utils.mango_math.nodes_on_same_face">[docs]</a>
+<span class="k">def</span> <span class="nf">nodes_on_same_face</span><span class="p">(</span><span class="n">all_faces</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">n1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n2</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function will take in two nodes and return TRUE if they ARE on the same face, and FALSE if not</span>
+
+<span class="sd">    :param all_faces: Dictionary of all faces contained in the design</span>
+<span class="sd">    :param n1: 1st node to check</span>
+<span class="sd">    :param n2: 2nd node to check</span>
+<span class="sd">    :return: True: Nodes on same face; False: Nodes NOT on same face.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">all_faces</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">n1</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="ow">and</span> <span class="n">n2</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+            <span class="c1"># If both nodes are in a tuple that is defining a face, then the edge must exist.</span>
+            <span class="k">return</span> <span class="kc">True</span>
+    <span class="c1"># If both nodes are not in any face, then we have a new edge.</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+
+<div class="viewcode-block" id="all_node_xyz_dict">
+<a class="viewcode-back" href="../../../mango.utils.html#mango.utils.mango_math.all_node_xyz_dict">[docs]</a>
+<span class="k">def</span> <span class="nf">all_node_xyz_dict</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function simply returns all nodes as a dictionary for design constraint checking</span>
+
+<span class="sd">    :param graph: NetworkX undirected graph which is stored as the design_graph object</span>
+<span class="sd">    :param nodes: List of all node index values [1, 2, 3, ...]</span>
+<span class="sd">    :return: Dictionary mapping node index values to the node X Y Z value</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">node_map</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">node_map</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">pos</span>
+    <span class="k">return</span> <span class="n">node_map</span></div>
+
+
+
+<div class="viewcode-block" id="length_and_direction_between_nodes">
+<a class="viewcode-back" href="../../../mango.utils.html#mango.utils.mango_math.length_and_direction_between_nodes">[docs]</a>
+<span class="k">def</span> <span class="nf">length_and_direction_between_nodes</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">node1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">node2</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function calculates the distance between two nodes and returns that distance and the direction of the vector</span>
+<span class="sd">    connected N1 -&gt; N2</span>
+
+<span class="sd">    :param graph: NetworkX undirected graph which is stored as the design_graph object</span>
+<span class="sd">    :param node1: Index of node 1 stored in design_graph</span>
+<span class="sd">    :param node2: Index of node 2 stored in design_graph</span>
+<span class="sd">    :return: Tuple of (Magnitude / Length between nodes, vector [i, j, k] establishing direction</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">P1</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">node1</span><span class="p">)</span>
+    <span class="n">P2</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">node2</span><span class="p">)</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="n">P2</span> <span class="o">-</span> <span class="n">P1</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">direction</span><span class="p">),</span> <span class="n">direction</span></div>
+
+
+
+<div class="viewcode-block" id="calculate_design_edge_lengths">
+<a class="viewcode-back" href="../../../mango.utils.html#mango.utils.mango_math.calculate_design_edge_lengths">[docs]</a>
+<span class="k">def</span> <span class="nf">calculate_design_edge_lengths</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loop that calculate the total edge lengths of all edges in the design in units of nanometers</span>
+
+<span class="sd">    :param graph: NetworkX undirected graph which is stored as the design_graph object</span>
+<span class="sd">    :return: List of length values [23.23, 24.56, ...] in units (nm)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">all_lengths</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+        <span class="n">length</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">length_and_direction_between_nodes</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">node1</span><span class="o">=</span><span class="n">v1</span><span class="p">,</span> <span class="n">node2</span><span class="o">=</span><span class="n">v2</span><span class="p">)</span>
+        <span class="n">all_lengths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">all_lengths</span></div>
+
+
+
+<div class="viewcode-block" id="find_shortest_path">
+<a class="viewcode-back" href="../../../mango.utils.html#mango.utils.mango_math.find_shortest_path">[docs]</a>
+<span class="k">def</span> <span class="nf">find_shortest_path</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">n1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n2</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function returns the shortest path between two nodes on the graph</span>
+
+<span class="sd">    :param graph: NetworkX undirected graph which is stored as the design_graph object</span>
+<span class="sd">    :param n1: Index of node 1 stored in design_graph</span>
+<span class="sd">    :param n2: Index of node 2 stored in design_graph</span>
+<span class="sd">    :return: List of length values [23.23, 24.56, ...] in units (nm)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">shortest_paths</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">all_shortest_paths</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">n1</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">n2</span><span class="p">)</span>
+    <span class="n">tot_dists</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">shortest_path</span> <span class="ow">in</span> <span class="n">shortest_paths</span><span class="p">:</span>
+        <span class="n">tot_dist</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">shortest_path</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">current_node</span> <span class="o">=</span> <span class="n">shortest_path</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">next_node</span> <span class="o">=</span> <span class="n">shortest_path</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">dist</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">length_and_direction_between_nodes</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">node1</span><span class="o">=</span><span class="n">current_node</span><span class="p">,</span> <span class="n">node2</span><span class="o">=</span><span class="n">next_node</span><span class="p">)</span>
+            <span class="n">tot_dist</span> <span class="o">+=</span> <span class="n">dist</span>
+        <span class="n">tot_dists</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tot_dist</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tot_dists</span></div>
+
+
+
+<div class="viewcode-block" id="rotation_matrix_from_vectors">
+<a class="viewcode-back" href="../../../mango.utils.html#mango.utils.mango_math.rotation_matrix_from_vectors">[docs]</a>
+<span class="k">def</span> <span class="nf">rotation_matrix_from_vectors</span><span class="p">(</span><span class="n">vec1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">vec2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the rotation matrix defined by two vectors.</span>
+
+<span class="sd">    If you ever find yourself doing tons of matrix stuff: https://en.wikipedia.org/wiki/Rotation_matrix</span>
+
+<span class="sd">    :param vec1: Vector one defined by [X Y Z]</span>
+<span class="sd">    :param vec2: Vector two defined by [X Y Z]</span>
+<span class="sd">    :return: 2D NumPy array of the rotation_matrix found</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="n">vec1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vec1</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="n">vec2</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">vec2</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cross</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">s</span> <span class="o">&lt;</span> <span class="mf">1e-5</span><span class="p">:</span>
+        <span class="c1"># When vectors are almost parallel, align the cylinder with the direction vector</span>
+        <span class="n">rotation_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Calculate the rotation matrix</span>
+        <span class="n">kmat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="p">[</span><span class="o">-</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">]])</span>
+        <span class="n">rotation_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">+</span> <span class="n">kmat</span> <span class="o">+</span> <span class="n">kmat</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">kmat</span><span class="p">)</span> <span class="o">*</span> <span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">s</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">rotation_matrix</span></div>
+
+
+
+<div class="viewcode-block" id="find_smaller_z_value">
+<a class="viewcode-back" href="../../../mango.utils.html#mango.utils.mango_math.find_smaller_z_value">[docs]</a>
+<span class="k">def</span> <span class="nf">find_smaller_z_value</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">node1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">node2</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function simply finds which of two nodes has a smaller Z value which is used in a fringe case of plotting.</span>
+
+<span class="sd">    :param graph: NetworkX undirected graph which is stored as the design_graph object</span>
+<span class="sd">    :param node1: 1st node to check</span>
+<span class="sd">    :param node2: 2nd node to check</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n1</span><span class="p">,</span> <span class="n">n2</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node1</span><span class="p">],</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node2</span><span class="p">]</span>
+    <span class="n">P1z</span><span class="p">,</span> <span class="n">P2z</span> <span class="o">=</span> <span class="n">n1</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">],</span> <span class="n">n2</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">P1z</span> <span class="o">&gt;</span> <span class="n">P2z</span><span class="p">:</span>
+        <span class="c1"># If P1 has a larger z value then we actually return n2 as the &quot;bottom&quot; point for the cylinder plot</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">n2</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">n2</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">n2</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">n1</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">n1</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">n1</span><span class="p">[</span><span class="s1">&#39;z&#39;</span><span class="p">]])</span></div>
+
+
+
+<div class="viewcode-block" id="get_all_verts_in_graph">
+<a class="viewcode-back" href="../../../mango.utils.html#mango.utils.mango_math.get_all_verts_in_graph">[docs]</a>
+<span class="k">def</span> <span class="nf">get_all_verts_in_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">vertex_mapping</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function just returns all vertices found within a graph as a 2D NumPy array</span>
+
+<span class="sd">    :param graph: NetworkX undirected graph which is stored as the design_graph object</span>
+<span class="sd">    :param vertex_mapping: Dictionary of what vertex goes to which position in the graph.</span>
+<span class="sd">    :return: NumPy array of vertices</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">all_verts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span>  <span class="c1"># Create the array to store data</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">():</span>
+        <span class="n">pt</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">node</span><span class="p">)</span>
+        <span class="n">all_verts</span><span class="p">[</span><span class="n">vertex_mapping</span><span class="p">[</span><span class="n">node</span><span class="p">]]</span> <span class="o">=</span> <span class="n">pt</span>  <span class="c1"># Breaking because this isn&#39;t technically correct logic. Node numbers always go up!</span>
+    <span class="k">return</span> <span class="n">all_verts</span></div>
+
+
+
+<div class="viewcode-block" id="get_all_edges_in_graph">
+<a class="viewcode-back" href="../../../mango.utils.html#mango.utils.mango_math.get_all_edges_in_graph">[docs]</a>
+<span class="k">def</span> <span class="nf">get_all_edges_in_graph</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function just returns all edges found within a graph as a 2D NumPy array</span>
+
+<span class="sd">    :param graph: NetworkX undirected graph which is stored as the design_graph object</span>
+<span class="sd">    :return: NumPy array of all edges defined by the XYZ points [[[X1, Y1, Z1], [X2, Y2, Z2]], ...]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">all_edges</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">():</span>
+        <span class="n">node1</span><span class="p">,</span> <span class="n">node2</span> <span class="o">=</span> <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">pt1</span><span class="p">,</span> <span class="n">pt2</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">node1</span><span class="p">),</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">node2</span><span class="p">)</span>
+        <span class="n">all_edges</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">pt1</span><span class="p">,</span> <span class="n">pt2</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_edges</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="unit_vector">
+<a class="viewcode-back" href="../../../mango.utils.html#mango.utils.mango_math.unit_vector">[docs]</a>
+<span class="k">def</span> <span class="nf">unit_vector</span><span class="p">(</span><span class="n">P1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">P2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; Calculate the unit vector betewen two points &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">P1</span> <span class="o">-</span> <span class="n">P2</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">((</span><span class="n">P1</span> <span class="o">-</span> <span class="n">P2</span><span class="p">))</span></div>
+
+
+
+<div class="viewcode-block" id="update_nodal_position">
+<a class="viewcode-back" href="../../../mango.utils.html#mango.utils.mango_math.update_nodal_position">[docs]</a>
+<span class="k">def</span> <span class="nf">update_nodal_position</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">new_xyz</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">numDecimals</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function will take a node and it&#39;s new XYZ positions and update the NetworkX graph to represent this.</span>
+<span class="sd">    NOTE: This does NOT update the values in the triangular faces, another function controls this.</span>
+
+<span class="sd">    :param graph: design_graph graph we are updating</span>
+<span class="sd">    :param node: Node index #</span>
+<span class="sd">    :param new_xyz: New XYZ Positions [0:X, 1:Y, 2:Z]</span>
+<span class="sd">    :param numDecimals: Number of decimals to round values to</span>
+<span class="sd">    :return: Nothing, just updates the design graph:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">new_xyz</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">numDecimals</span><span class="p">)</span>
+    <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">new_xyz</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">numDecimals</span><span class="p">)</span>
+    <span class="n">graph</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="s1">&#39;z&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">new_xyz</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">numDecimals</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="update_vertex_in_all_faces">
+<a class="viewcode-back" href="../../../mango.utils.html#mango.utils.mango_math.update_vertex_in_all_faces">[docs]</a>
+<span class="k">def</span> <span class="nf">update_vertex_in_all_faces</span><span class="p">(</span><span class="n">all_faces</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">new_xyz</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; This function updates the attribute values in stored MeshFace objects &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">verts</span><span class="p">,</span> <span class="n">face</span> <span class="ow">in</span> <span class="n">all_faces</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">node</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">verts</span><span class="p">):</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">verts</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">access</span> <span class="o">=</span> <span class="s1">&#39;v1&#39;</span>
+            <span class="k">elif</span> <span class="n">idx</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">access</span> <span class="o">=</span> <span class="s1">&#39;v2&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">access</span> <span class="o">=</span> <span class="s1">&#39;v3&#39;</span>
+            <span class="c1"># If the node we are changing is in a face, we update the correct v1 / v2 / v3:</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">face</span><span class="p">,</span> <span class="n">access</span><span class="p">,</span> <span class="n">new_xyz</span><span class="p">)</span></div>
+
+
+
+
+<div class="viewcode-block" id="are_points_non_collinear">
+<a class="viewcode-back" href="../../../mango.utils.html#mango.utils.mango_math.are_points_non_collinear">[docs]</a>
+<span class="nd">@jit</span><span class="p">(</span><span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">are_points_non_collinear</span><span class="p">(</span><span class="n">p1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">p2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">p3</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    JIT compiled function that determines if 3 points are all collinear</span>
+
+<span class="sd">    :param p1: [X Y Z] value of a point in 3D space</span>
+<span class="sd">    :param p2: [X Y Z] value of a point in 3D space</span>
+<span class="sd">    :param p3: [X Y Z] value of a point in 3D space</span>
+<span class="sd">    :return: True if points are collinear, False if not</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">det</span> <span class="o">=</span> <span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">p3</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">p3</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">p2</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">-</span> <span class="n">p2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">p3</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">p3</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">p1</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="n">p3</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> \
+          <span class="p">(</span><span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">p2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">p1</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="k">return</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">det</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="find_non_collinear_nodes">
+<a class="viewcode-back" href="../../../mango.utils.html#mango.utils.mango_math.find_non_collinear_nodes">[docs]</a>
+<span class="k">def</span> <span class="nf">find_non_collinear_nodes</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">node</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">potential_nodes</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function considers a graph, a node, and a list of potential nodes and determines which combination of the node</span>
+<span class="sd">    and any two of the potential nodes results in a non-collinear set of three nodes. Otherwise, it return -1 -1 -1</span>
+
+<span class="sd">    :param graph: design_graph graph we are updating</span>
+<span class="sd">    :param node: Node index #</span>
+<span class="sd">    :param potential_nodes: List of potential node indices to check to find a non-collinear set of three</span>
+<span class="sd">    :return: Tuple of either 3 node indexes or (-1 -1 -1) signalling &quot;no set found&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">combo</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="n">potential_nodes</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="n">n1</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">node</span><span class="p">)</span>
+        <span class="n">n2</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">combo</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">n3</span> <span class="o">=</span> <span class="n">xyz_from_graph</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="n">combo</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">are_points_non_collinear</span><span class="p">(</span><span class="n">n1</span><span class="p">,</span> <span class="n">n2</span><span class="p">,</span> <span class="n">n3</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">node</span><span class="p">,</span> <span class="n">combo</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">combo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c1"># Otherwise we can not create a plane:</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span></div>
+
+
+
+<div class="viewcode-block" id="intersecting_edge_calc">
+<a class="viewcode-back" href="../../../mango.utils.html#mango.utils.mango_math.intersecting_edge_calc">[docs]</a>
+<span class="nd">@jit</span><span class="p">(</span><span class="n">nopython</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">intersecting_edge_calc</span><span class="p">(</span><span class="n">P1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">P2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">P3</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">P4</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    JIT compiled function that determines the distance between a set of points generated along the axes defined by</span>
+<span class="sd">    P1 -&gt; P2 and P3 -&gt; P4. The goal of this function is to find the nearest distance between two lines in 3D space</span>
+<span class="sd">    to determine if there is an intersection or not.</span>
+
+<span class="sd">    :param P1: [X Y Z] value of a point in 3D space (used to defined axis P1 P2)</span>
+<span class="sd">    :param P2: [X Y Z] value of a point in 3D space (used to defined axis P1 P2)</span>
+<span class="sd">    :param P3: [X Y Z] value of a point in 3D space (used to defined axis P3 P4)</span>
+<span class="sd">    :param P4: [X Y Z] value of a point in 3D space (used to defined axis P3 P4)</span>
+<span class="sd">    :return: Numpy array of all distances calculated</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">axis1</span> <span class="o">=</span> <span class="n">P2</span> <span class="o">-</span> <span class="n">P1</span>
+    <span class="n">axis2</span> <span class="o">=</span> <span class="n">P4</span> <span class="o">-</span> <span class="n">P3</span>
+
+    <span class="c1"># Calculate the step size for distributing points along the axis</span>
+    <span class="n">num_points</span> <span class="o">=</span> <span class="mi">15</span>
+    <span class="n">t_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_points</span><span class="p">)</span>
+    <span class="c1"># Calculate the points along axis1 and axis2:</span>
+    <span class="n">points_on_axis1</span> <span class="o">=</span> <span class="n">P1</span> <span class="o">+</span> <span class="n">t_values</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">*</span> <span class="n">axis1</span>
+    <span class="n">points_on_axis2</span> <span class="o">=</span> <span class="n">P3</span> <span class="o">+</span> <span class="n">t_values</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">*</span> <span class="n">axis2</span>
+
+    <span class="c1"># Calculate distances from all points on axis1 to all points on axis 2 to create a 10x10 array for</span>
+    <span class="c1"># collision box detection</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">points_on_axis1</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">points_on_axis2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">distances</span></div>
+
+
+
+<div class="viewcode-block" id="positive_value">
+<a class="viewcode-back" href="../../../mango.utils.html#mango.utils.mango_math.positive_value">[docs]</a>
+<span class="k">def</span> <span class="nf">positive_value</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span>  <span class="c1"># Validate values across all dataclasses for all length (a, b, c) values</span></div>
+
+
+
+<div class="viewcode-block" id="sign">
+<a class="viewcode-back" href="../../../mango.utils.html#mango.utils.mango_math.sign">[docs]</a>
+<span class="k">def</span> <span class="nf">sign</span><span class="p">(</span><span class="n">num</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">num</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">num</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span></div>
+
+
+
+<span class="c1">#@jit(nopython=True)</span>
+<div class="viewcode-block" id="parallelepiped_volume">
+<a class="viewcode-back" href="../../../mango.utils.html#mango.utils.mango_math.parallelepiped_volume">[docs]</a>
+<span class="k">def</span> <span class="nf">parallelepiped_volume</span><span class="p">(</span><span class="n">cell_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">beta</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">gamma</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function simply calculates the volume of a parallelepiped but changes depending on the cell_type attribute as</span>
+<span class="sd">    the volume can be more readily calculated through the equations below.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">cell_type</span> <span class="o">==</span> <span class="s1">&#39;triclinic&#39;</span><span class="p">:</span>
+        <span class="n">magnitude</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span> <span class="o">*</span> <span class="n">c</span>
+        <span class="n">angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">gamma</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">gamma</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">volume</span> <span class="o">=</span> <span class="n">magnitude</span> <span class="o">*</span> <span class="n">angles</span>
+    <span class="k">elif</span> <span class="n">cell_type</span> <span class="o">==</span> <span class="s1">&#39;monoclinic&#39;</span><span class="p">:</span>
+        <span class="n">volume</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span> <span class="o">*</span> <span class="n">c</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">beta</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">cell_type</span> <span class="o">==</span> <span class="s1">&#39;orthorhombic&#39;</span><span class="p">:</span>
+        <span class="n">volume</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">b</span><span class="o">*</span><span class="n">c</span>
+    <span class="k">elif</span> <span class="n">cell_type</span> <span class="o">==</span> <span class="s1">&#39;tetragonal&#39;</span><span class="p">:</span>
+        <span class="n">volume</span> <span class="o">=</span> <span class="n">a</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">c</span>
+    <span class="k">elif</span> <span class="n">cell_type</span> <span class="o">==</span> <span class="s1">&#39;rhombohedral&#39;</span> <span class="ow">or</span> <span class="n">cell_type</span> <span class="o">==</span> <span class="s1">&#39;trigonal&#39;</span><span class="p">:</span>
+        <span class="n">volume</span> <span class="o">=</span> <span class="n">a</span><span class="o">**</span><span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">cell_type</span> <span class="o">==</span> <span class="s1">&#39;hexagonal&#39;</span><span class="p">:</span>
+        <span class="n">volume</span> <span class="o">=</span> <span class="n">a</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">c</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">cell_type</span> <span class="o">==</span> <span class="s1">&#39;isometric&#39;</span> <span class="ow">or</span> <span class="n">cell_type</span> <span class="o">==</span> <span class="s1">&#39;cubic&#39;</span><span class="p">:</span>
+        <span class="n">volume</span> <span class="o">=</span> <span class="n">a</span><span class="o">**</span><span class="mi">3</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid parallelepiped volume calculation&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">volume</span></div>
+
+
+
+<div class="viewcode-block" id="find_graph_differences">
+<a class="viewcode-back" href="../../../mango.utils.html#mango.utils.mango_math.find_graph_differences">[docs]</a>
+<span class="k">def</span> <span class="nf">find_graph_differences</span><span class="p">(</span><span class="n">graph1</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">,</span> <span class="n">graph2</span><span class="p">:</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function that determines any changes in the graph nodes / edges as well as any of the attributes between the nodes</span>
+<span class="sd">    of the passed in graphs.</span>
+
+<span class="sd">    :param graph1: design_graph before any design change was made</span>
+<span class="sd">    :param graph2: design_graph after a grammar was applied to graph1</span>
+<span class="sd">    :return: Set of differences in nodes, edges, and attributes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Identify new nodes</span>
+    <span class="n">new_nodes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">graph1</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">graph2</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+
+    <span class="c1"># Identify new edges</span>
+    <span class="n">new_edges</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">graph1</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">graph2</span><span class="o">.</span><span class="n">edges</span><span class="p">)</span>
+
+    <span class="c1"># Identify changes in node attributes</span>
+    <span class="n">node_attribute_changes</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph1</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">graph2</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">graph1</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span> <span class="o">!=</span> <span class="n">graph2</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">attr</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">node</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node_attribute_changes</span><span class="p">:</span>
+                        <span class="n">node_attribute_changes</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="n">node_attribute_changes</span><span class="p">[</span><span class="n">node</span><span class="p">][</span><span class="n">attr</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">graph1</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">attr</span><span class="p">),</span> <span class="n">graph2</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">attr</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">new_nodes</span><span class="p">,</span> <span class="n">new_edges</span><span class="p">,</span> <span class="n">node_attribute_changes</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, A.J. Vetturini.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

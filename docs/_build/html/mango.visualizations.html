@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Visualization Options &mdash; mango generative design framework b0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=7d16594f"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tutorials" href="tutorials.html" />
+    <link rel="prev" title="Utilities" href="mango.utils.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            mango generative design framework
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">mango</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="mango.html">mango package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="mango.html#package-components">Package Components</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html">Establishing design space</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html">Grammars</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html">Input design features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html">Optimization problem definition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html">Optimizers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.utils.html">Utilities</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Visualization Options</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mango generative design framework</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">mango</a></li>
+          <li class="breadcrumb-item"><a href="mango.html">mango package</a></li>
+      <li class="breadcrumb-item active">Visualization Options</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/mango.visualizations.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="visualization-options">
+<h1>Visualization Options<a class="headerlink" href="#visualization-options" title="Link to this heading"></a></h1>
+<section id="module-mango.visualizations.display_mesh_design">
+<span id="display-designs"></span><h2>Display Designs<a class="headerlink" href="#module-mango.visualizations.display_mesh_design" title="Link to this heading"></a></h2>
+<p>A.J. Vetturini</p>
+<p>IDIG and MMBL</p>
+<p>Carnegie Mellon University</p>
+<p>This is a visualization function that will utilize plotly to show a design as a mesh file both as a cylindrical
+representation and as a standard mesh file</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.visualizations.display_mesh_design.</span></span><span class="sig-name descname"><span class="pre">CylindricalRepresentation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounding_box</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TriclinicBox" title="mango.design_spaces.bounding_box.TriclinicBox"><span class="pre">TriclinicBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.MonoclinicBox" title="mango.design_spaces.bounding_box.MonoclinicBox"><span class="pre">MonoclinicBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.OrthorhombicBox" title="mango.design_spaces.bounding_box.OrthorhombicBox"><span class="pre">OrthorhombicBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TetragonalBox" title="mango.design_spaces.bounding_box.TetragonalBox"><span class="pre">TetragonalBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.RhombohedralBox" title="mango.design_spaces.bounding_box.RhombohedralBox"><span class="pre">RhombohedralBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.HexagonalBox" title="mango.design_spaces.bounding_box.HexagonalBox"><span class="pre">HexagonalBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.CubicBox" title="mango.design_spaces.bounding_box.CubicBox"><span class="pre">CubicBox</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_bounding_box</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_box_bounds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_excluded_regions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_background</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_axes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cylinder_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'darkgray'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excluded_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'red'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_font</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">18</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis_title_font</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">22</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_background_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera_position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cylinder_diameter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opaque_excluded_region</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/visualizations/display_mesh_design.html#CylindricalRepresentation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Other than a mesh representation, this cylindrical representation is a bit more meaningful for DNA origami
+representations, since realistically the edge in the mesh dictates where material is at in the generated design.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
+<p>design : Design we are visualizing of the PolyhedralSpace data object (see design_spaces.polyhedral_design_space).</p>
+<p>bounding_box : The bounding box defined, can be accessed by the design.bounding_box</p>
+<p>BOOLEAN options that turn on / off various visualizations:</p>
+<p>show_bounding_box : Determines if bounding box is shown, used for debugging (default: TRUE)</p>
+<p>show_excluded_regions : Determines if the excluded regions are shown or not (default: TRUE)</p>
+<p>opaque_excluded_region : Determines if excluded regions are opaque or not (default: FALSE / not opaque)</p>
+<p>display_background : Determines if a background color is to be used (default: False / blank background)</p>
+<p>display_axes : Determines if the axes and ticker labels are shown (default: True)</p>
+<p>show_box_bounds : Determines if custom annotations are displayed showing bounding box dimensions (default: FALSE)</p>
+<p>DISPLAY options that control colors / font sizes:</p>
+<p>cylinder_color : String color of the cylinders mapped by either plotly color or ‘rgb(R, G, B)’ (default: darkgray)</p>
+<p>cylinder_diameter : Floating point value of the cylinder diameter to use (default : 2.25) (BDNA diameter)</p>
+<p>tick_font : Integer point-size of ticker font (default: 14)</p>
+<p>axis_title_font : Integer point-size of axis titles</p>
+<p>camera_position : Camera dictionary (see plotly) for holding the camera angle constant</p>
+<p>excluded_color : String color of excluded regions by either plotly color or ‘rgb(R, G, B)’ (default: red)</p>
+<p>plot_background_color : String color of background defined by either plotly color or ‘rgb(R, G, B)’ (default: None)</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation.axis_title_font">
+<span class="sig-name descname"><span class="pre">axis_title_font</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">22</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation.axis_title_font" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation.bounding_box">
+<span class="sig-name descname"><span class="pre">bounding_box</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TriclinicBox" title="mango.design_spaces.bounding_box.TriclinicBox"><span class="pre">TriclinicBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.MonoclinicBox" title="mango.design_spaces.bounding_box.MonoclinicBox"><span class="pre">MonoclinicBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.OrthorhombicBox" title="mango.design_spaces.bounding_box.OrthorhombicBox"><span class="pre">OrthorhombicBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TetragonalBox" title="mango.design_spaces.bounding_box.TetragonalBox"><span class="pre">TetragonalBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.RhombohedralBox" title="mango.design_spaces.bounding_box.RhombohedralBox"><span class="pre">RhombohedralBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.HexagonalBox" title="mango.design_spaces.bounding_box.HexagonalBox"><span class="pre">HexagonalBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.CubicBox" title="mango.design_spaces.bounding_box.CubicBox"><span class="pre">CubicBox</span></a></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation.bounding_box" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation.camera_position">
+<span class="sig-name descname"><span class="pre">camera_position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation.camera_position" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation.create_plot">
+<span class="sig-name descname"><span class="pre">create_plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/visualizations/display_mesh_design.html#CylindricalRepresentation.create_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation.create_plot" title="Link to this definition"></a></dt>
+<dd><p>This method is initialized by post_init and calls the above methods. Creates the plot.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation.cylinder_color">
+<span class="sig-name descname"><span class="pre">cylinder_color</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'darkgray'</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation.cylinder_color" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation.cylinder_diameter">
+<span class="sig-name descname"><span class="pre">cylinder_diameter</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2.25</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation.cylinder_diameter" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation.design">
+<span class="sig-name descname"><span class="pre">design</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation.design" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation.display_axes">
+<span class="sig-name descname"><span class="pre">display_axes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation.display_axes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation.display_background">
+<span class="sig-name descname"><span class="pre">display_background</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation.display_background" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation.excluded_color">
+<span class="sig-name descname"><span class="pre">excluded_color</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'red'</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation.excluded_color" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation.opaque_excluded_region">
+<span class="sig-name descname"><span class="pre">opaque_excluded_region</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation.opaque_excluded_region" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation.plot_background_color">
+<span class="sig-name descname"><span class="pre">plot_background_color</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation.plot_background_color" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation.plot_bounding_box">
+<span class="sig-name descname"><span class="pre">plot_bounding_box</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/mango/visualizations/display_mesh_design.html#CylindricalRepresentation.plot_bounding_box"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation.plot_bounding_box" title="Link to this definition"></a></dt>
+<dd><p>This method plots all bounding box edges</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation.plot_edges_as_surfaces">
+<span class="sig-name descname"><span class="pre">plot_edges_as_surfaces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/mango/visualizations/display_mesh_design.html#CylindricalRepresentation.plot_edges_as_surfaces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation.plot_edges_as_surfaces" title="Link to this definition"></a></dt>
+<dd><p>This method plots all edges using a cylindrical approximation</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation.plot_excluded_regions">
+<span class="sig-name descname"><span class="pre">plot_excluded_regions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/mango/visualizations/display_mesh_design.html#CylindricalRepresentation.plot_excluded_regions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation.plot_excluded_regions" title="Link to this definition"></a></dt>
+<dd><p>This method plots the excluded regions</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation.return_figure">
+<span class="sig-name descname"><span class="pre">return_figure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/visualizations/display_mesh_design.html#CylindricalRepresentation.return_figure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation.return_figure" title="Link to this definition"></a></dt>
+<dd><p>Method allowing user to use / manipulate the plotly figure of a design</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation.show_bounding_box">
+<span class="sig-name descname"><span class="pre">show_bounding_box</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation.show_bounding_box" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation.show_box_bounds">
+<span class="sig-name descname"><span class="pre">show_box_bounds</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation.show_box_bounds" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation.show_excluded_regions">
+<span class="sig-name descname"><span class="pre">show_excluded_regions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation.show_excluded_regions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation.show_figure">
+<span class="sig-name descname"><span class="pre">show_figure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/visualizations/display_mesh_design.html#CylindricalRepresentation.show_figure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation.show_figure" title="Link to this definition"></a></dt>
+<dd><p>Function that shows the figure in the web browser</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation.tick_font">
+<span class="sig-name descname"><span class="pre">tick_font</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">18</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation.tick_font" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.visualizations.display_mesh_design.</span></span><span class="sig-name descname"><span class="pre">MeshRepresentation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounding_box</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TriclinicBox" title="mango.design_spaces.bounding_box.TriclinicBox"><span class="pre">TriclinicBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.MonoclinicBox" title="mango.design_spaces.bounding_box.MonoclinicBox"><span class="pre">MonoclinicBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.OrthorhombicBox" title="mango.design_spaces.bounding_box.OrthorhombicBox"><span class="pre">OrthorhombicBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TetragonalBox" title="mango.design_spaces.bounding_box.TetragonalBox"><span class="pre">TetragonalBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.RhombohedralBox" title="mango.design_spaces.bounding_box.RhombohedralBox"><span class="pre">RhombohedralBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.HexagonalBox" title="mango.design_spaces.bounding_box.HexagonalBox"><span class="pre">HexagonalBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.CubicBox" title="mango.design_spaces.bounding_box.CubicBox"><span class="pre">CubicBox</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_node_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_bounding_box</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_mesh_nodes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_excluded_regions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_background</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_axes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">face_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constant_edge_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_font</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">14</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis_title_font</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_background_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera_position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'green'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">symbol</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'square'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excluded_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'red'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opaque_excluded_region</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/visualizations/display_mesh_design.html#MeshRepresentation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class lets a user visualize the resultant structure using plotly traces. This function is also called by the
+plots / output file creator, but it has many options that can be adjusted as discussed in the below parameters. This
+visualization is built using plotly and the figures will all show in a web browser.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>design : Design we are visualizing of the PolyhedralSpace data object (see design_spaces.polyhedral_design_space).</p>
+<p>bounding_box : The bounding box defined, can be accessed by the design.bounding_box</p>
+<p>BOOLEAN options that turn on / off various visualizations:</p>
+<p>display_node_names : Determines if node names are shown, used for debugging (default: FALSE)</p>
+<p>show_bounding_box : Determines if bounding box is shown, used for debugging (default: TRUE)</p>
+<p>show_mesh_nodes : Determines if nodes are shown as scatter points or not (default: TRUE)</p>
+<p>show_excluded_regions : Determines if the excluded regions are shown or not (default: TRUE)</p>
+<p>opaque_excluded_region : Determines if excluded regions are opaque or not (default: FALSE / not opaque)</p>
+<p>display_background : Determines if a background color is to be used (default: False / blank background)</p>
+<p>display_axes : Determines if the axes and ticker labels are shown (default: True)</p>
+<p>DISPLAY options that control colors / font sizes:</p>
+<p>face_color : String color of mesh faces defined by either plotly color or ‘rgb(R, G, B)’ (default: darkgray)</p>
+<p>constant_edge_color : String color of edges shown by either plotly color or ‘rgb(R, G, B)’ (default: None / black)</p>
+<p>symbol_size : Integer size of mesh nodes (default: 6)</p>
+<p>line_width : Integer width of edges shown (default: 4)</p>
+<p>tick_font : Integer point-size of ticker font (default: 14)</p>
+<p>axis_title_font : Integer point-size of axis titles</p>
+<p>camera_position : Camera dictionary (see plotly) for holding the camera angle constant</p>
+<p>node_color :  String color of nodes defined by either plotly color or ‘rgb(R, G, B)’ (default: green)</p>
+<p>symbol : String symbol of nodes defined by plotly (default: square)</p>
+<p>excluded_color : String color of excluded regions by either plotly color or ‘rgb(R, G, B)’ (default: red)</p>
+<p>plot_background_color : String color of background defined by either plotly color or ‘rgb(R, G, B)’ (default: None)</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.axis_title_font">
+<span class="sig-name descname"><span class="pre">axis_title_font</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">16</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.axis_title_font" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.bounding_box">
+<span class="sig-name descname"><span class="pre">bounding_box</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TriclinicBox" title="mango.design_spaces.bounding_box.TriclinicBox"><span class="pre">TriclinicBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.MonoclinicBox" title="mango.design_spaces.bounding_box.MonoclinicBox"><span class="pre">MonoclinicBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.OrthorhombicBox" title="mango.design_spaces.bounding_box.OrthorhombicBox"><span class="pre">OrthorhombicBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TetragonalBox" title="mango.design_spaces.bounding_box.TetragonalBox"><span class="pre">TetragonalBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.RhombohedralBox" title="mango.design_spaces.bounding_box.RhombohedralBox"><span class="pre">RhombohedralBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.HexagonalBox" title="mango.design_spaces.bounding_box.HexagonalBox"><span class="pre">HexagonalBox</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.CubicBox" title="mango.design_spaces.bounding_box.CubicBox"><span class="pre">CubicBox</span></a></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.bounding_box" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.camera_position">
+<span class="sig-name descname"><span class="pre">camera_position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.camera_position" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.constant_edge_color">
+<span class="sig-name descname"><span class="pre">constant_edge_color</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.constant_edge_color" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.create_plot">
+<span class="sig-name descname"><span class="pre">create_plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/visualizations/display_mesh_design.html#MeshRepresentation.create_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.create_plot" title="Link to this definition"></a></dt>
+<dd><p>This method is initialized by post_init and calls the above methods. Creates the plot.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.design">
+<span class="sig-name descname"><span class="pre">design</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.design" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.display_axes">
+<span class="sig-name descname"><span class="pre">display_axes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.display_axes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.display_background">
+<span class="sig-name descname"><span class="pre">display_background</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.display_background" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.display_node_names">
+<span class="sig-name descname"><span class="pre">display_node_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.display_node_names" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.excluded_color">
+<span class="sig-name descname"><span class="pre">excluded_color</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'red'</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.excluded_color" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.face_color">
+<span class="sig-name descname"><span class="pre">face_color</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.face_color" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.line_width">
+<span class="sig-name descname"><span class="pre">line_width</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.line_width" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.node_color">
+<span class="sig-name descname"><span class="pre">node_color</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'green'</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.node_color" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.opaque_excluded_region">
+<span class="sig-name descname"><span class="pre">opaque_excluded_region</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.opaque_excluded_region" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.plot_background_color">
+<span class="sig-name descname"><span class="pre">plot_background_color</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.plot_background_color" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.plot_bounding_box">
+<span class="sig-name descname"><span class="pre">plot_bounding_box</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/mango/visualizations/display_mesh_design.html#MeshRepresentation.plot_bounding_box"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.plot_bounding_box" title="Link to this definition"></a></dt>
+<dd><p>This method plots all bounding box edges</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.plot_edges_and_nodes">
+<span class="sig-name descname"><span class="pre">plot_edges_and_nodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/mango/visualizations/display_mesh_design.html#MeshRepresentation.plot_edges_and_nodes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.plot_edges_and_nodes" title="Link to this definition"></a></dt>
+<dd><p>This method creates all traces containing the edges and nodes of the design</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.plot_excluded_regions">
+<span class="sig-name descname"><span class="pre">plot_excluded_regions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/mango/visualizations/display_mesh_design.html#MeshRepresentation.plot_excluded_regions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.plot_excluded_regions" title="Link to this definition"></a></dt>
+<dd><p>This method plots the excluded regions</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.plot_mesh_faces">
+<span class="sig-name descname"><span class="pre">plot_mesh_faces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/mango/visualizations/display_mesh_design.html#MeshRepresentation.plot_mesh_faces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.plot_mesh_faces" title="Link to this definition"></a></dt>
+<dd><p>This method creates all plotly traces for the mesh</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.return_figure">
+<span class="sig-name descname"><span class="pre">return_figure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/visualizations/display_mesh_design.html#MeshRepresentation.return_figure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.return_figure" title="Link to this definition"></a></dt>
+<dd><p>Method allowing user to use / manipulate the plotly figure of a design</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.show_bounding_box">
+<span class="sig-name descname"><span class="pre">show_bounding_box</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.show_bounding_box" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.show_excluded_regions">
+<span class="sig-name descname"><span class="pre">show_excluded_regions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.show_excluded_regions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.show_figure">
+<span class="sig-name descname"><span class="pre">show_figure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/visualizations/display_mesh_design.html#MeshRepresentation.show_figure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.show_figure" title="Link to this definition"></a></dt>
+<dd><p>Function that shows the figure in the web browser</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.show_mesh_nodes">
+<span class="sig-name descname"><span class="pre">show_mesh_nodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.show_mesh_nodes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.symbol">
+<span class="sig-name descname"><span class="pre">symbol</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'square'</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.symbol" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.symbol_size">
+<span class="sig-name descname"><span class="pre">symbol_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.symbol_size" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.tick_font">
+<span class="sig-name descname"><span class="pre">tick_font</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">14</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.tick_font" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-mango.visualizations.mango_output_visualization">
+<span id="create-output"></span><h2>Create Output<a class="headerlink" href="#module-mango.visualizations.mango_output_visualization" title="Link to this heading"></a></h2>
+<p>A.J. Vetturini</p>
+<p>IDIG and MMBL</p>
+<p>Carnegie Mellon University</p>
+<p>This script will support creating an output file that can be used within the kodak visualization tool. This scripts
+purpose is to create a simple binary file that can then be read-in by the visualization tool to create the validated</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.visualizations.mango_output_visualization.Obj">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.visualizations.mango_output_visualization.</span></span><span class="sig-name descname"><span class="pre">Obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/visualizations/mango_output_visualization.html#Obj"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.mango_output_visualization.Obj" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class is not end-user facing, it is used to format an object for input</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.mango_output_visualization.Obj.objs">
+<span class="sig-name descname"><span class="pre">objs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#mango.visualizations.mango_output_visualization.Obj.objs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.visualizations.mango_output_visualization.VisualizationObject">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.visualizations.mango_output_visualization.</span></span><span class="sig-name descname"><span class="pre">VisualizationObject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aj1_filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_filename_no_extension</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_number_of_windows</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/visualizations/mango_output_visualization.html#VisualizationObject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.mango_output_visualization.VisualizationObject" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class quickly creates visualization files which can be visualized using the custom kodak viewer found at
+<a class="reference external" href="https://ajvetturini.github.io/kodak/">https://ajvetturini.github.io/kodak/</a>. A user can create much more powerful custom scripts, but these defaults
+create a simple, minimal example output that one might be most interested in.</p>
+<section id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>aj1_filepath : String filepath location to the .aj1 results file output from the optimizer</p>
+<p>output_filepath : Where to store the plots file (as only a folderpath)</p>
+<p>output_filename_no_extension : String name of the file to output</p>
+<dl class="simple">
+<dt>max_number_of_windows<span class="classifier">Integer number of windows that the kodak viewer will let you have open. Just here to prevent</span></dt><dd><p>someone from accidentally opening too many windows, likely don’t change the value.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.mango_output_visualization.VisualizationObject.aj1_filepath">
+<span class="sig-name descname"><span class="pre">aj1_filepath</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#mango.visualizations.mango_output_visualization.VisualizationObject.aj1_filepath" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.mango_output_visualization.VisualizationObject.create_pareto_animation_figure">
+<span class="sig-name descname"><span class="pre">create_pareto_animation_figure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/mango/visualizations/mango_output_visualization.html#VisualizationObject.create_pareto_animation_figure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.mango_output_visualization.VisualizationObject.create_pareto_animation_figure" title="Link to this definition"></a></dt>
+<dd><p>Simple function used to create the relevant animation figure for the output file</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.mango_output_visualization.VisualizationObject.create_standard_output_multi_objective">
+<span class="sig-name descname"><span class="pre">create_standard_output_multi_objective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_or_cylinder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cylinder'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/visualizations/mango_output_visualization.html#VisualizationObject.create_standard_output_multi_objective"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.mango_output_visualization.VisualizationObject.create_standard_output_multi_objective" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>This function will create a standard output for a multiobjective optimization process</dt><dd><ul class="simple">
+<li><p>The found Pareto front which is interactable and allows a user to explore design variation</p></li>
+<li><p>An animation of the pareto growth</p></li>
+<li><p>A window describing all constraints of the problem</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mesh_or_cylinder</strong> – Values are either “mesh” or “cylinder” and change the visual appearance of the
+generated design</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.mango_output_visualization.VisualizationObject.create_standard_output_single_objective">
+<span class="sig-name descname"><span class="pre">create_standard_output_single_objective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mesh_or_cylinder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'cylinder'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/visualizations/mango_output_visualization.html#VisualizationObject.create_standard_output_single_objective"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.mango_output_visualization.VisualizationObject.create_standard_output_single_objective" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>This function will create the standard output windows for a single objective optimization process consisting of:</dt><dd><ul class="simple">
+<li><p>The objective function valuation over the number of epochs which is interactive and a user can select
+from this list</p></li>
+<li><p>A window describing all constraints of the problem</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mesh_or_cylinder</strong> – Values are either “mesh” or “cylinder” and change the visual appearance of the
+generated design</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.mango_output_visualization.VisualizationObject.max_number_of_windows">
+<span class="sig-name descname"><span class="pre">max_number_of_windows</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#mango.visualizations.mango_output_visualization.VisualizationObject.max_number_of_windows" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.mango_output_visualization.VisualizationObject.output_filename_no_extension">
+<span class="sig-name descname"><span class="pre">output_filename_no_extension</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#mango.visualizations.mango_output_visualization.VisualizationObject.output_filename_no_extension" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.mango_output_visualization.VisualizationObject.output_filepath">
+<span class="sig-name descname"><span class="pre">output_filepath</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#mango.visualizations.mango_output_visualization.VisualizationObject.output_filepath" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.mango_output_visualization.VisualizationObject.read_in_file">
+<span class="sig-name descname"><span class="pre">read_in_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal" title="mango.optimizers.single_objective_shape_annealing.ShapeAnneal"><span class="pre">ShapeAnneal</span></a></span></span><a class="reference internal" href="_modules/mango/visualizations/mango_output_visualization.html#VisualizationObject.read_in_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.mango_output_visualization.VisualizationObject.read_in_file" title="Link to this definition"></a></dt>
+<dd><p>Simple function reading in the passed in file and loading the data in via dill</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mango.visualizations.mango_output_visualization.select_evenly_spaced_tuples">
+<span class="sig-prename descclassname"><span class="pre">mango.visualizations.mango_output_visualization.</span></span><span class="sig-name descname"><span class="pre">select_evenly_spaced_tuples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tuples_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">33</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="_modules/mango/visualizations/mango_output_visualization.html#select_evenly_spaced_tuples"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.mango_output_visualization.select_evenly_spaced_tuples" title="Link to this definition"></a></dt>
+<dd><p>This function finds 33 evenly space points amongst a list of 2D tuples [(1, 2), (3, 4), …] and uses these points
+as the default exported designs which a user can interact with in the UI window.</p>
+<p>Why 33 as the default? The plots files I create with this value were a reasonable enough size.</p>
+</dd></dl>
+
+</section>
+<section id="module-mango.visualizations.optimizer_analysis">
+<span id="analyze-optimizer-performance"></span><h2>Analyze optimizer performance<a class="headerlink" href="#module-mango.visualizations.optimizer_analysis" title="Link to this heading"></a></h2>
+<p>A.J. Vetturini</p>
+<p>IDIG and MMBL</p>
+<p>Carnegie Mellon University</p>
+<p>This script is responsible for the creation of plots that a user may be interested in creating for their results file.
+While many results are created with this script, you may want to create your own plotting functions after the fact once
+you know what type of data you want to specifically analyze!</p>
+<dl class="simple">
+<dt>NOTE:</dt><dd><p>Some of the code here is HORRIBLE. I intially wrote these internally for a completely different use-case that I
+later scrapped. The practices used here do not make sense for this application, and I really need to update them
+when I find time (will I find the time?).</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.visualizations.optimizer_analysis.</span></span><span class="sig-name descname"><span class="pre">MOSA_Analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_font_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis_title_font_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">18</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotation_font_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">14</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_plot_title_font_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">14</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_title_font_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">18</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_font</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">14</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">animation_epoch_step_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#MOSA_Analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class creates some simple analysis of the optimizer performance such that a user can readily assess how “well”
+the generative process went.</p>
+<section id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>results_path : Filepath to .aj1 file that conducted a MOSA optimization</p>
+<p>DISPLAY options that control colors / font sizes:</p>
+<p>tick_font_size : Integer point-size of ticker font (default: 16)</p>
+<p>axis_title_font_size : Integer point-size of axis titles (default: 18)</p>
+<p>annotation_font_size : Integer point-size of annotation / text boxes (default: 14)</p>
+<p>sub_plot_title_font_size : Integer point-size of subplot titles (default: 18)</p>
+<p>plot_title_font_size : Integer point-size of figure title (default: 18)</p>
+<p>legend_font : Integer point-size of legend titles (default: 14)</p>
+<p>animation_epoch_step_size : Essentially the result-save frequency (default: 1)</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.animation_epoch_step_size">
+<span class="sig-name descname"><span class="pre">animation_epoch_step_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.animation_epoch_step_size" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.annotation_font_size">
+<span class="sig-name descname"><span class="pre">annotation_font_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">14</span></em><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.annotation_font_size" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.axis_title_font_size">
+<span class="sig-name descname"><span class="pre">axis_title_font_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">18</span></em><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.axis_title_font_size" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.calculate_pareto_front">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate_pareto_front</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">DataFrame</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#MOSA_Analysis.calculate_pareto_front"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.calculate_pareto_front" title="Link to this definition"></a></dt>
+<dd><p>This function calculated the actual pareto front found in the dataframe passed. This is because when 3 or more
+objectives are used, then the points in the archive are not always pareto-optimal points for the current plot!</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> – Pandas dataframe containing the obj values of the current archive</p></li>
+<li><p><strong>field1</strong> – First objective function name (“Y” axis of the Pareto)</p></li>
+<li><p><strong>field2</strong> – Second objective function name (“X” axis of the Pareto)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Pandas dataframe of non-dominating points</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.create_pareto_animation_figure">
+<span class="sig-name descname"><span class="pre">create_pareto_animation_figure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#MOSA_Analysis.create_pareto_animation_figure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.create_pareto_animation_figure" title="Link to this definition"></a></dt>
+<dd><p>This function initializes + creates the pareto animation figures to see how the Pareto grew over time</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.create_pareto_data">
+<span class="sig-name descname"><span class="pre">create_pareto_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_rows</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_cols</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epoch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#MOSA_Analysis.create_pareto_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.create_pareto_data" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.create_subplot_grid">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_subplot_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">length</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#MOSA_Analysis.create_subplot_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.create_subplot_grid" title="Link to this definition"></a></dt>
+<dd><p>This function determines the number of subplots to use for a given multiobjective optimization result.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>length</strong> – String name of the objective function being plotted</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of rows and columns to use in the subplot</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.legend_font">
+<span class="sig-name descname"><span class="pre">legend_font</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">14</span></em><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.legend_font" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.objective_function_trace">
+<span class="sig-name descname"><span class="pre">objective_function_trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objective_function_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Scatter</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#MOSA_Analysis.objective_function_trace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.objective_function_trace" title="Link to this definition"></a></dt>
+<dd><p>This function will use plotly to plot an objective function over the number of iterations the process ran for.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>objective_function_name</strong> – String name of the objective function being plotted</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A plotly trace of objective function value vs iteration #</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.pareto_2D_section">
+<span class="sig-name descname"><span class="pre">pareto_2D_section</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opac</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">showleg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Scatter</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#MOSA_Analysis.pareto_2D_section"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.pareto_2D_section" title="Link to this definition"></a></dt>
+<dd><p>This function will create a 2D Pareto trace provided the 2 field names for each function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pts</strong> – List of all points that might be in the Pareto</p></li>
+<li><p><strong>field1</strong> – String of first objective function name (“Y” axis of the Pareto)</p></li>
+<li><p><strong>field2</strong> – String of second objective function name (“X” axis of the Pareto)</p></li>
+<li><p><strong>color</strong> – String plotly color or ‘rgb(R, G, B)’ of the trace to use</p></li>
+<li><p><strong>opac</strong> – Floating point opacity to use for the scatter trace</p></li>
+<li><p><strong>showleg</strong> – Boolean determining if the trace should be shown in the legend (default TRUE)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Plotly scatter trace of 2D pareto section to plot</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_acceptance_probabilities">
+<span class="sig-name descname"><span class="pre">plot_acceptance_probabilities</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#MOSA_Analysis.plot_acceptance_probabilities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_acceptance_probabilities" title="Link to this definition"></a></dt>
+<dd><p>This function will use plotly to plot (and save) the acceptance probabilty during MOSA to verify that we are
+attempting to only accept the objectively good solutions</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_all_objective_func_values">
+<span class="sig-name descname"><span class="pre">plot_all_objective_func_values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#MOSA_Analysis.plot_all_objective_func_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_all_objective_func_values" title="Link to this definition"></a></dt>
+<dd><p>This function is called to plot all objective function vs iteration #’s for all N objective functions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_final_2D_paretos">
+<span class="sig-name descname"><span class="pre">plot_final_2D_paretos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#MOSA_Analysis.plot_final_2D_paretos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_final_2D_paretos" title="Link to this definition"></a></dt>
+<dd><p>This function is used to plot the final pareto plot(s). If there was only 2 specified functions, then 1 figure
+is returned. If 3 functions are used, then 3 plots are created and so on. More functions will return more 2D
+cross sections, be warned! We only recommend MOSA for 2 or 3 objectives in its current implementation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_final_3D_pareto">
+<span class="sig-name descname"><span class="pre">plot_final_3D_pareto</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#MOSA_Analysis.plot_final_3D_pareto"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_final_3D_pareto" title="Link to this definition"></a></dt>
+<dd><p>This function is only used when 3 objectives are used. It will show the surface plot of the random walk pareto
+compared to the final pareto found</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_temperatures_over_time">
+<span class="sig-name descname"><span class="pre">plot_temperatures_over_time</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#MOSA_Analysis.plot_temperatures_over_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_temperatures_over_time" title="Link to this definition"></a></dt>
+<dd><p>This function is called to plot all objective function temperature’s vs epoch #’s.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_title_font_size">
+<span class="sig-name descname"><span class="pre">plot_title_font_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">18</span></em><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_title_font_size" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.results_path">
+<span class="sig-name descname"><span class="pre">results_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.results_path" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.return_figure">
+<span class="sig-name descname"><span class="pre">return_figure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#MOSA_Analysis.return_figure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.return_figure" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.show_figure">
+<span class="sig-name descname"><span class="pre">show_figure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#MOSA_Analysis.show_figure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.show_figure" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.sub_plot_title_font_size">
+<span class="sig-name descname"><span class="pre">sub_plot_title_font_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">14</span></em><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.sub_plot_title_font_size" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.temperature_trace">
+<span class="sig-name descname"><span class="pre">temperature_trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objective_function_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Scatter</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#MOSA_Analysis.temperature_trace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.temperature_trace" title="Link to this definition"></a></dt>
+<dd><p>This function will use plotly to plot the temperature of an objective function vs iteration #</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>objective_function_name</strong> – ObjectiveFunction name attribute (as a string)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Plotly trace of temperature vs epoch #</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.tick_font_size">
+<span class="sig-name descname"><span class="pre">tick_font_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">16</span></em><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.tick_font_size" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.visualizations.optimizer_analysis.</span></span><span class="sig-name descname"><span class="pre">ShapeAnneal_Analysis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tick_font_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis_title_font_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">18</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotation_font_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">14</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_plot_title_font_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">14</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_title_font_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">18</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_font</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">14</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#ShapeAnneal_Analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class creates some simple analysis of the optimizer performance such that a user can readily assess how “well”
+the generative process went.</p>
+<section id="id4">
+<h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>results_path : Filepath to .aj1 file that conducted a shape annealing optimization</p>
+<p>DISPLAY options that control colors / font sizes:</p>
+<p>tick_font_size : Integer point-size of ticker font (default: 16)</p>
+<p>axis_title_font_size : Integer point-size of axis titles (default: 18)</p>
+<p>annotation_font_size : Integer point-size of annotation / text boxes (default: 14)</p>
+<p>sub_plot_title_font_size : Integer point-size of subplot titles (default: 18)</p>
+<p>plot_title_font_size : Integer point-size of figure title (default: 18)</p>
+<p>legend_font : Integer point-size of legend titles (default: 14)</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.annotation_font_size">
+<span class="sig-name descname"><span class="pre">annotation_font_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">14</span></em><a class="headerlink" href="#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.annotation_font_size" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.axis_title_font_size">
+<span class="sig-name descname"><span class="pre">axis_title_font_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">18</span></em><a class="headerlink" href="#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.axis_title_font_size" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.legend_font">
+<span class="sig-name descname"><span class="pre">legend_font</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">14</span></em><a class="headerlink" href="#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.legend_font" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.plot_objective_trace">
+<span class="sig-name descname"><span class="pre">plot_objective_trace</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#ShapeAnneal_Analysis.plot_objective_trace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.plot_objective_trace" title="Link to this definition"></a></dt>
+<dd><p>This function will use plotly to plot (and save) the objective function value during the optimization process.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.plot_temperature_trace">
+<span class="sig-name descname"><span class="pre">plot_temperature_trace</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#ShapeAnneal_Analysis.plot_temperature_trace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.plot_temperature_trace" title="Link to this definition"></a></dt>
+<dd><p>This function will use plotly to plot (and save) the temperature during the optimization process.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.plot_title_font_size">
+<span class="sig-name descname"><span class="pre">plot_title_font_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">18</span></em><a class="headerlink" href="#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.plot_title_font_size" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.results_path">
+<span class="sig-name descname"><span class="pre">results_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.results_path" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.return_figure">
+<span class="sig-name descname"><span class="pre">return_figure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#ShapeAnneal_Analysis.return_figure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.return_figure" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.show_figure">
+<span class="sig-name descname"><span class="pre">show_figure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#ShapeAnneal_Analysis.show_figure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.show_figure" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.sub_plot_title_font_size">
+<span class="sig-name descname"><span class="pre">sub_plot_title_font_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">14</span></em><a class="headerlink" href="#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.sub_plot_title_font_size" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.tick_font_size">
+<span class="sig-name descname"><span class="pre">tick_font_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">16</span></em><a class="headerlink" href="#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.tick_font_size" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mango.utils.html" class="btn btn-neutral float-left" title="Utilities" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tutorials.html" class="btn btn-neutral float-right" title="Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, A.J. Vetturini.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

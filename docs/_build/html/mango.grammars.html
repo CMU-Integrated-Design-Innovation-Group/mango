@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grammars &mdash; mango generative design framework b0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=7d16594f"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Input design features" href="mango.mango_features.html" />
+    <link rel="prev" title="Establishing design space" href="mango.design_spaces.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            mango generative design framework
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">mango</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="mango.html">mango package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="mango.html#package-components">Package Components</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html">Establishing design space</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Grammars</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html">Input design features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html">Optimization problem definition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html">Optimizers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.utils.html">Utilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html">Visualization Options</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mango generative design framework</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">mango</a></li>
+          <li class="breadcrumb-item"><a href="mango.html">mango package</a></li>
+      <li class="breadcrumb-item active">Grammars</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/mango.grammars.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="grammars">
+<h1>Grammars<a class="headerlink" href="#grammars" title="Link to this heading"></a></h1>
+<section id="module-mango.grammars.origami_grammars">
+<span id="design-grammars"></span><h2>Design Grammars<a class="headerlink" href="#module-mango.grammars.origami_grammars" title="Link to this heading"></a></h2>
+<p>A.J. Vetturini
+IDIG and MMBL
+Carnegie Mellon University</p>
+<p>This script contains the dataclasses used in the grammar sets for the initial mango design framework. Further grammars
+can be added here as long as the top level “GrammarSet” object is used in the dataclass.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.CustomGrammarSet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.grammars.origami_grammars.</span></span><span class="sig-name descname"><span class="pre">CustomGrammarSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numDecimals:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grammar_sets:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#CustomGrammarSet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.CustomGrammarSet" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mango.grammars.origami_grammars.GrammarSet" title="mango.grammars.origami_grammars.GrammarSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">GrammarSet</span></code></a></p>
+<p>This class is not used directly by the user, but rather it is created if the user specifies more than 1 GrammarSets</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.CustomGrammarSet.call_grammar_function">
+<span class="sig-name descname"><span class="pre">call_grammar_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grammar_selected</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#CustomGrammarSet.call_grammar_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.CustomGrammarSet.call_grammar_function" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.CustomGrammarSet.grammar_sets">
+<span class="sig-name descname"><span class="pre">grammar_sets</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#mango.grammars.origami_grammars.CustomGrammarSet.grammar_sets" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.CustomGrammarSet.pick_random_grammar">
+<span class="sig-name descname"><span class="pre">pick_random_grammar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#CustomGrammarSet.pick_random_grammar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.CustomGrammarSet.pick_random_grammar" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.CustomGrammarSet.set_seed">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set_seed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#CustomGrammarSet.set_seed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.CustomGrammarSet.set_seed" title="Link to this definition"></a></dt>
+<dd><p>Simply seeds the random number for grammar selections
+:param seed_number: User specified seed number</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.GrammarSet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.grammars.origami_grammars.</span></span><span class="sig-name descname"><span class="pre">GrammarSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numDecimals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#GrammarSet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.GrammarSet" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This is a top level class that simply defines the number of decimals to use when rounding &amp; control the random
+seed number of the selection</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
+<p>numDecimals: Integer</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.GrammarSet.numDecimals">
+<span class="sig-name descname"><span class="pre">numDecimals</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#mango.grammars.origami_grammars.GrammarSet.numDecimals" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.GrammarSet.set_seed">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set_seed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#GrammarSet.set_seed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.GrammarSet.set_seed" title="Link to this definition"></a></dt>
+<dd><p>Simply seeds the random number for grammar selections
+:param seed_number: User specified seed number</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.LocalPlane">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.grammars.origami_grammars.</span></span><span class="sig-name descname"><span class="pre">LocalPlane</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">og_point</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">divide_edge_rule_used</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#LocalPlane"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.LocalPlane" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class is not used directly by the user, it is used to check geometry of a generated design</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.LocalPlane.divide_edge_rule_used">
+<span class="sig-name descname"><span class="pre">divide_edge_rule_used</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#mango.grammars.origami_grammars.LocalPlane.divide_edge_rule_used" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.LocalPlane.og_point">
+<span class="sig-name descname"><span class="pre">og_point</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">array</span></em><a class="headerlink" href="#mango.grammars.origami_grammars.LocalPlane.og_point" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.LocalPlane.verts">
+<span class="sig-name descname"><span class="pre">verts</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">array</span></em><a class="headerlink" href="#mango.grammars.origami_grammars.LocalPlane.verts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.ParallelepipedGrammars">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.grammars.origami_grammars.</span></span><span class="sig-name descname"><span class="pre">ParallelepipedGrammars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numDecimals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cell_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'none'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#ParallelepipedGrammars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.ParallelepipedGrammars" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mango.grammars.origami_grammars.GrammarSet" title="mango.grammars.origami_grammars.GrammarSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">GrammarSet</span></code></a></p>
+<p>This class controls the grammars used in the generative process that modify the bounding box conditions.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>cell_type: string name of a desired cell_type if input (e.g., triclinic, monoclinic, etc.).</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.ParallelepipedGrammars.call_grammar_function">
+<span class="sig-name descname"><span class="pre">call_grammar_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grammar_selected</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#ParallelepipedGrammars.call_grammar_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.ParallelepipedGrammars.call_grammar_function" title="Link to this definition"></a></dt>
+<dd><p>This function calls the proper grammar to apply to the active design_space which is passed in</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>extension_value</strong> – How far to extend the grammar selected by</p></li>
+<li><p><strong>grammar_selected</strong> – String of whatever grammar was selected to be applied</p></li>
+<li><p><strong>design_space</strong> – The PolyhedralDesign space that is being manipulated</p></li>
+<li><p><strong>rotation_value</strong> – How much to rotate an angle of the bounding box by</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.ParallelepipedGrammars.cell_type">
+<span class="sig-name descname"><span class="pre">cell_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'none'</span></em><a class="headerlink" href="#mango.grammars.origami_grammars.ParallelepipedGrammars.cell_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.ParallelepipedGrammars.extend_or_shorten_edge">
+<span class="sig-name descname"><span class="pre">extend_or_shorten_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#ParallelepipedGrammars.extend_or_shorten_edge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.ParallelepipedGrammars.extend_or_shorten_edge" title="Link to this definition"></a></dt>
+<dd><p>This function calls to extend (or shorten using a negative extension_value) one of the bounding box parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>extension_value</strong> – How far to extend the grammar selected by</p></li>
+<li><p><strong>param</strong> – Which bounding box value to change (a, b, c)</p></li>
+<li><p><strong>design_space</strong> – The PolyhedralDesign space that is being manipulated</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Bool dictating if function ran properly</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.ParallelepipedGrammars.pick_random_grammar">
+<span class="sig-name descname"><span class="pre">pick_random_grammar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#ParallelepipedGrammars.pick_random_grammar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.ParallelepipedGrammars.pick_random_grammar" title="Link to this definition"></a></dt>
+<dd><p>Randomly selects a grammar with equal probabilty</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.ParallelepipedGrammars.rotate_edge">
+<span class="sig-name descname"><span class="pre">rotate_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#ParallelepipedGrammars.rotate_edge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.ParallelepipedGrammars.rotate_edge" title="Link to this definition"></a></dt>
+<dd><p>This function calls to rotate one of the bounding box parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rotation_value</strong> – How far to rotate the selected bounding box parameter</p></li>
+<li><p><strong>param</strong> – Which bounding box value to change (alpha, beta, gamma)</p></li>
+<li><p><strong>design_space</strong> – The PolyhedralDesign space that is being manipulated</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Bool dictating if function ran properly</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.ParallelepipedGrammars.set_seed">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set_seed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#ParallelepipedGrammars.set_seed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.ParallelepipedGrammars.set_seed" title="Link to this definition"></a></dt>
+<dd><p>Sets the random seed</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.ParallelepipedGrammars.update_design_space">
+<span class="sig-name descname"><span class="pre">update_design_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_bounding_box</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#ParallelepipedGrammars.update_design_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.ParallelepipedGrammars.update_design_space" title="Link to this definition"></a></dt>
+<dd><p>This function actually updated the bounding box hyperparmeters so that the volume / other values can be
+properly updated
+:param new_bounding_box: New boudning box to be used in the design iteration
+:param design_space: The PolyhedralDesign space that is being manipulated
+:return: Bool dictating if function ran properly</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.TriangulationGrammars">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.grammars.origami_grammars.</span></span><span class="sig-name descname"><span class="pre">TriangulationGrammars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numDecimals:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grammars_to_not_use:</span> <span class="pre">list</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#TriangulationGrammars"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.TriangulationGrammars" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#mango.grammars.origami_grammars.GrammarSet" title="mango.grammars.origami_grammars.GrammarSet"><code class="xref py py-class docutils literal notranslate"><span class="pre">GrammarSet</span></code></a></p>
+<p>This class controls the grammars used in the generative process. The methods of this class modify the design graph
+of the current design iteration.</p>
+<section id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>grammars_to_not_use: list of grammars to not use if desired. Must match names in grammar_names</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.TriangulationGrammars.call_grammar_function">
+<span class="sig-name descname"><span class="pre">call_grammar_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grammar_selected</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">override</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#TriangulationGrammars.call_grammar_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.TriangulationGrammars.call_grammar_function" title="Link to this definition"></a></dt>
+<dd><p>This function calls the proper grammar to apply to the active design_space which is passed in</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>extension_value</strong> – If an edge extension is being used we pass in the extension_value</p></li>
+<li><p><strong>grammar_selected</strong> – Whichever grammar was selected to be applied</p></li>
+<li><p><strong>design_space</strong> – The PolyhedralDesign space that is being manipulated</p></li>
+<li><p><strong>override</strong> – Used for testing / image creation… manually apply rules to specific faces</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.TriangulationGrammars.divide_face">
+<span class="sig-name descname"><span class="pre">divide_face</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">override</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#TriangulationGrammars.divide_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.TriangulationGrammars.divide_face" title="Link to this definition"></a></dt>
+<dd><p>This grammar selects a random face and divides it into two.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>design_space</strong> – design space that is currently being generated / optimized</p></li>
+<li><p><strong>override</strong> – A tuple of indices to override the random selection</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.TriangulationGrammars.edge_rotation">
+<span class="sig-name descname"><span class="pre">edge_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#TriangulationGrammars.edge_rotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.TriangulationGrammars.edge_rotation" title="Link to this definition"></a></dt>
+<dd><p>This grammar randomly selects an edge containing a nonterminal node and rotates it along any face by which
+the edge exists. The face is randomly selected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>design_space</strong> – design space that is currently being generated / optimized</p></li>
+<li><p><strong>rotation_value</strong> – A value to rotate the edge along the face by (degrees)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.TriangulationGrammars.extend_vertex">
+<span class="sig-name descname"><span class="pre">extend_vertex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#TriangulationGrammars.extend_vertex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.TriangulationGrammars.extend_vertex" title="Link to this definition"></a></dt>
+<dd><p>This grammar randomly selects a vertex that is non-terminal and moves it along an edge by the passed in
+extension_value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>design_space</strong> – design space that is currently being generated / optimized</p></li>
+<li><p><strong>extension_value</strong> – A value to move the selected node along the edge by (in nm)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.TriangulationGrammars.get_children_nodes_to_merge">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_children_nodes_to_merge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">graph</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_node</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#TriangulationGrammars.get_children_nodes_to_merge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.TriangulationGrammars.get_children_nodes_to_merge" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.TriangulationGrammars.grammars_to_not_use">
+<span class="sig-name descname"><span class="pre">grammars_to_not_use</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span></em><a class="headerlink" href="#mango.grammars.origami_grammars.TriangulationGrammars.grammars_to_not_use" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.TriangulationGrammars.is_f_in_keys">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_f_in_keys</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">merge_label_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fa</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#TriangulationGrammars.is_f_in_keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.TriangulationGrammars.is_f_in_keys" title="Link to this definition"></a></dt>
+<dd><p>This function isn’t really math but it searches a dictionary to find if a face is found within the dictionary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>merge_label_dict</strong> – Dictionary containing merge labels</p></li>
+<li><p><strong>fa</strong> – Face we are looking for</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.TriangulationGrammars.label_retri_or_divide_for_backout_rule">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">label_retri_or_divide_for_backout_rule</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_faces</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_face</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#TriangulationGrammars.label_retri_or_divide_for_backout_rule"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.TriangulationGrammars.label_retri_or_divide_for_backout_rule" title="Link to this definition"></a></dt>
+<dd><p>This function is called whenever the retriangulation or division rule is applied such that we can
+back out of these geometries</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.TriangulationGrammars.merge_face">
+<span class="sig-name descname"><span class="pre">merge_face</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">override</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#TriangulationGrammars.merge_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.TriangulationGrammars.merge_face" title="Link to this definition"></a></dt>
+<dd><p>This rule allows us to “back out” of edge divisions as well as face re-triangulations by checking the labelled
+dictionary and randomly selecting a face to back out of.
+NOTE: This rule currently can lead to very significant design changes as the merge face will merge ALL faces</p>
+<blockquote>
+<div><p>to back out. It does NOT require vertices to be coplanar and it will remove a significant amount of
+points and edges depending on which face is randomly selected to be merged back.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>design_space</strong> – design space that is currently being generated / optimized</p></li>
+<li><p><strong>override</strong> – A tuple of indices to override the random selection</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.TriangulationGrammars.pick_random_grammar">
+<span class="sig-name descname"><span class="pre">pick_random_grammar</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#TriangulationGrammars.pick_random_grammar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.TriangulationGrammars.pick_random_grammar" title="Link to this definition"></a></dt>
+<dd><p>Randomly selects any grammar with equal probability</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.TriangulationGrammars.remove_faces">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">remove_faces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">face_verts</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#TriangulationGrammars.remove_faces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.TriangulationGrammars.remove_faces" title="Link to this definition"></a></dt>
+<dd><p>This function removes a face from the self.all_faces and self.plotting_faces[‘other’]
+:param design_space: Design space being modified
+:param face_verts: Tuple of vertices to search for
+:return: Nothing, just updates values</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.TriangulationGrammars.retriangulate_face">
+<span class="sig-name descname"><span class="pre">retriangulate_face</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">override</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#TriangulationGrammars.retriangulate_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.TriangulationGrammars.retriangulate_face" title="Link to this definition"></a></dt>
+<dd><p>This grammar randomly selects a face and divides it into 3 triangles by placing a new node at the centroid
+and connecting that new node to all 3 edges of the selected triangle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>design_space</strong> – design space that is currently being generated / optimized</p></li>
+<li><p><strong>override</strong> – A tuple of 3 face index values to override the random selection</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.TriangulationGrammars.set_seed">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set_seed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seed_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#TriangulationGrammars.set_seed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.TriangulationGrammars.set_seed" title="Link to this definition"></a></dt>
+<dd><p>Seeds the random seed</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.grammars.origami_grammars.TriangulationGrammars.update_face_values">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">update_face_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_xyz</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_xyz</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/grammars/origami_grammars.html#TriangulationGrammars.update_face_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.grammars.origami_grammars.TriangulationGrammars.update_face_values" title="Link to this definition"></a></dt>
+<dd><p>This function will update all of the face values in the current mesh with the new nodal values
+:param design_space: Design space we are updating
+:param node: Node number to update
+:param old_xyz: Old XYZ Position
+:param new_xyz: New XYZ Position
+:return: Nothing, just updates values</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mango.design_spaces.html" class="btn btn-neutral float-left" title="Establishing design space" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mango.mango_features.html" class="btn btn-neutral float-right" title="Input design features" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, A.J. Vetturini.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

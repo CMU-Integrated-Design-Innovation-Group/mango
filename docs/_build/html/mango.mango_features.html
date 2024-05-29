@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Input design features &mdash; mango generative design framework b0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=7d16594f"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Optimization problem definition" href="mango.optimization_features.html" />
+    <link rel="prev" title="Grammars" href="mango.grammars.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            mango generative design framework
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">mango</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="mango.html">mango package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="mango.html#package-components">Package Components</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html">Establishing design space</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html">Grammars</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Input design features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html">Optimization problem definition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html">Optimizers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.utils.html">Utilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html">Visualization Options</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mango generative design framework</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">mango</a></li>
+          <li class="breadcrumb-item"><a href="mango.html">mango package</a></li>
+      <li class="breadcrumb-item active">Input design features</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/mango.mango_features.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="input-design-features">
+<h1>Input design features<a class="headerlink" href="#input-design-features" title="Link to this heading"></a></h1>
+<section id="module-mango.mango_features.preserved_regions">
+<span id="preserved-regions"></span><h2>Preserved Regions<a class="headerlink" href="#module-mango.mango_features.preserved_regions" title="Link to this heading"></a></h2>
+<p>A.J. Vetturini</p>
+<p>IDIG and MMBL</p>
+<p>Carnegie Mellon University</p>
+<p>This modules defines preserved region areas that will be used in defining the polyhedral_design_space to ensure DNA
+is located in specific places in the design space. A user can specify either an edge of DNA or a vertex which represents
+DNA bundles “meeting” at a specific point in the wireframe shape.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.mango_features.preserved_regions.PreservedEdge">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.mango_features.preserved_regions.</span></span><span class="sig-name descname"><span class="pre">PreservedEdge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/mango_features/preserved_regions.html#PreservedEdge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.preserved_regions.PreservedEdge" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The preserved edge will guarantee a bundle of DNA is located connecting two vertices in 3D space. Note that the
+input conditions defining the Preserved Regions MUST be able to be triangulated via the alphashape algorithm.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
+<p>v1 : Numpy array defining where the 1st vertex is located in 3D space</p>
+<p>v3 : Numpy array defining where the 2nd vertex is located in 3D space</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.mango_features.preserved_regions.PreservedEdge.v1">
+<span class="sig-name descname"><span class="pre">v1</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">array</span></em><a class="headerlink" href="#mango.mango_features.preserved_regions.PreservedEdge.v1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.mango_features.preserved_regions.PreservedEdge.v2">
+<span class="sig-name descname"><span class="pre">v2</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">array</span></em><a class="headerlink" href="#mango.mango_features.preserved_regions.PreservedEdge.v2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.mango_features.preserved_regions.PreservedVertex">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.mango_features.preserved_regions.</span></span><span class="sig-name descname"><span class="pre">PreservedVertex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/mango_features/preserved_regions.html#PreservedVertex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.preserved_regions.PreservedVertex" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The preserved vertex will guarantee a specific point in space is held constantly at that location during the
+generative process. Note that the input conditions defining the Preserved Regions MUST be able to be triangulated
+via the alphashape algorithm.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>v1 : Numpy array defining where the vertex is located in 3D space</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.mango_features.preserved_regions.PreservedVertex.v1">
+<span class="sig-name descname"><span class="pre">v1</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">array</span></em><a class="headerlink" href="#mango.mango_features.preserved_regions.PreservedVertex.v1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-mango.mango_features.excluded_regions">
+<span id="excluded-regions"></span><h2>Excluded Regions<a class="headerlink" href="#module-mango.mango_features.excluded_regions" title="Link to this heading"></a></h2>
+<p>A.J. Vetturini</p>
+<p>IDIG and MMBL</p>
+<p>Carnegie Mellon University</p>
+<p>This modules defines excluded region areas that will be used in defining the polyhedral_design_space to prevent material
+from being added into these spaces. These regions are specifically useful if a designer has a pre-allocated space to be
+occupied by a nanoparticle, and this conceptually prevents DNA from being added to these locations.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.mango_features.excluded_regions.RectangularPrism">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.mango_features.excluded_regions.</span></span><span class="sig-name descname"><span class="pre">RectangularPrism</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numDecimals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/mango_features/excluded_regions.html#RectangularPrism"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.excluded_regions.RectangularPrism" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This is an excluded region representing a simple box. This is more computationally “efficient” than the sphere as there are fewer
+geometrical faces to check, although it takes up more space that you may want want.</p>
+<section id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>c1 : Corner 1 defined by a numpy array in [X Y Z] (nm). Note C1 &lt; C2 for all dimensions.</p>
+<p>c2 : Corner 2 defined by a numpy array in [X Y Z] (nm)</p>
+<p>numDecimals: Number of decimals to round positional values to</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.mango_features.excluded_regions.RectangularPrism.c1">
+<span class="sig-name descname"><span class="pre">c1</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">array</span></em><a class="headerlink" href="#mango.mango_features.excluded_regions.RectangularPrism.c1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.mango_features.excluded_regions.RectangularPrism.c2">
+<span class="sig-name descname"><span class="pre">c2</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">array</span></em><a class="headerlink" href="#mango.mango_features.excluded_regions.RectangularPrism.c2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.mango_features.excluded_regions.RectangularPrism.edge_intersecting_face">
+<span class="sig-name descname"><span class="pre">edge_intersecting_face</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/mango/mango_features/excluded_regions.html#RectangularPrism.edge_intersecting_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.excluded_regions.RectangularPrism.edge_intersecting_face" title="Link to this definition"></a></dt>
+<dd><p>This function will determine if a passed in line segment intersects a face of an excluded Region.
+:param p1: Point 1 of a line segment definition
+:param p2: Point 2 of a line segment definition
+:return: True: Edge intersects the excluded space; False: edge does not intersect</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.mango_features.excluded_regions.RectangularPrism.numDecimals">
+<span class="sig-name descname"><span class="pre">numDecimals</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#mango.mango_features.excluded_regions.RectangularPrism.numDecimals" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.mango_features.excluded_regions.RectangularPrism.point_inside_space">
+<span class="sig-name descname"><span class="pre">point_inside_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/mango/mango_features/excluded_regions.html#RectangularPrism.point_inside_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.excluded_regions.RectangularPrism.point_inside_space" title="Link to this definition"></a></dt>
+<dd><p>This function will determine if a passed in point is located inside this space, and is therefore an invalid
+design
+:param pt: XYZ of a point we are checking
+:return: True: Point inside of the excluded region; False: point not inside</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.mango_features.excluded_regions.RectangularPrism.verify_corners_opposing">
+<span class="sig-name descname"><span class="pre">verify_corners_opposing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/mango_features/excluded_regions.html#RectangularPrism.verify_corners_opposing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.excluded_regions.RectangularPrism.verify_corners_opposing" title="Link to this definition"></a></dt>
+<dd><p>This function verifies that the corners passed in ARE in fact opposing corners
+:return: Nothing, raises an exception if they are invalid.</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.mango_features.excluded_regions.Sphere">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.mango_features.excluded_regions.</span></span><span class="sig-name descname"><span class="pre">Sphere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">diameter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numDecimals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/mango_features/excluded_regions.html#Sphere"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.excluded_regions.Sphere" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This is an excluded region representing a simple box. This is more “efficient” than the sphere as there are fewer
+geometrical faces to check, although it takes up more space that you may not want.</p>
+<section id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>center : Center of sphere defined by a numpy array in [X Y Z] (nm).</p>
+<p>diameter : floating point of the sphere (nm)</p>
+<p>numDecimals: Number of decimals to round positional values to</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.mango_features.excluded_regions.Sphere.center">
+<span class="sig-name descname"><span class="pre">center</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">array</span></em><a class="headerlink" href="#mango.mango_features.excluded_regions.Sphere.center" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.mango_features.excluded_regions.Sphere.diameter">
+<span class="sig-name descname"><span class="pre">diameter</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.mango_features.excluded_regions.Sphere.diameter" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.mango_features.excluded_regions.Sphere.edge_intersecting_face">
+<span class="sig-name descname"><span class="pre">edge_intersecting_face</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/mango/mango_features/excluded_regions.html#Sphere.edge_intersecting_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.excluded_regions.Sphere.edge_intersecting_face" title="Link to this definition"></a></dt>
+<dd><p>This function will determine if a passed in line segment intersects a face of an excluded Region.
+:param p1: Point 1 of a line segment definition
+:param p2: Point 2 of a line segment definition
+:return: True: Edge intersects the excluded space; False: edge does not intersect</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.mango_features.excluded_regions.Sphere.numDecimals">
+<span class="sig-name descname"><span class="pre">numDecimals</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#mango.mango_features.excluded_regions.Sphere.numDecimals" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.mango_features.excluded_regions.Sphere.point_inside_space">
+<span class="sig-name descname"><span class="pre">point_inside_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/mango/mango_features/excluded_regions.html#Sphere.point_inside_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.excluded_regions.Sphere.point_inside_space" title="Link to this definition"></a></dt>
+<dd><p>This function will determine if a passed in point is located inside this space, and is therefore an invalid
+design
+:param pt: XYZ of a point we are checking
+:return: True: Point inside of the excluded region; False: point not inside</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.mango_features.excluded_regions.Sphere.recenter_mesh">
+<span class="sig-name descname"><span class="pre">recenter_mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/mango_features/excluded_regions.html#Sphere.recenter_mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.excluded_regions.Sphere.recenter_mesh" title="Link to this definition"></a></dt>
+<dd><p>This function simply translates the mesh to a defined center point as needed due to trimesh requirements
+:param new_center: Numpy array defining the center point of the spherical excluded region</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.mango_features.excluded_regions.Sphere.update_icosa_faces">
+<span class="sig-name descname"><span class="pre">update_icosa_faces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/mango_features/excluded_regions.html#Sphere.update_icosa_faces"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.excluded_regions.Sphere.update_icosa_faces" title="Link to this definition"></a></dt>
+<dd><p>This function simply creates a list of MeshFace elements for use in constraint checking</p>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-mango.mango_features.grammar_ramp">
+<span id="ramp-element"></span><h2>Ramp Element<a class="headerlink" href="#module-mango.mango_features.grammar_ramp" title="Link to this heading"></a></h2>
+<p>A.J. Vetturini</p>
+<p>IDIG and MMBL</p>
+<p>Carnegie Mellon University</p>
+<p>This script contains the ability to create ramp elements for both the edge rotation and the length extension rules.
+These ramps are specifically used for the length extension or edge rotation rules, future research may seek to optimize
+these ramps automatically based on the scale of the input.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.mango_features.grammar_ramp.Ramp">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.mango_features.grammar_ramp.</span></span><span class="sig-name descname"><span class="pre">Ramp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unique_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_number_epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_steps_at_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">precision</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/mango_features/grammar_ramp.html#Ramp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.grammar_ramp.Ramp" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This Ramp class is capable of manipulating the extension / rotation value of the grammars during the generative
+process. Generally, earlier in the search we make larger design modifications and over time we switch over to a
+more refined search by making smaller design modifications down to a minmal value.</p>
+<section id="id4">
+<h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>unique_id : Center of sphere defined by a numpy array in [X Y Z] (nm).</p>
+<p>max_value : floating point of the sphere (nm)</p>
+<p>min_value : Number of decimals to round positional values to</p>
+<p>max_number_epochs : Integer number defining how many epochs a study might run for to allocate step sizes</p>
+<p>min_steps_at_min : Integer number of a minimal # of steps to use the min_value for the ramp element</p>
+<p>precision : integer that is automatically specified to 2. You can lower the precision if desired but consider DNA!</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.mango_features.grammar_ramp.Ramp.create_ramp">
+<span class="sig-name descname"><span class="pre">create_ramp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/mango/mango_features/grammar_ramp.html#Ramp.create_ramp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.grammar_ramp.Ramp.create_ramp" title="Link to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Note: This is an area of interest for the future, here I use a simple ramp that worked via design iteration.</dt><dd><p>Future studies can observe the effects of different ramps (and maybe influence repeatability and depth
+of search given the stochastic nature of the optimizers).</p>
+</dd>
+</dl>
+<p>This class creates the actual ramp array which can be referenced by the optimizer to determine the extension
+or rotation value during that design iteration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.mango_features.grammar_ramp.Ramp.current_ramp_value">
+<span class="sig-name descname"><span class="pre">current_ramp_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="_modules/mango/mango_features/grammar_ramp.html#Ramp.current_ramp_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.grammar_ramp.Ramp.current_ramp_value" title="Link to this definition"></a></dt>
+<dd><p>This function returns the ramp value to use based on the current epoch #</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>epoch</strong> – Whatever epoch # we are at</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The ramp value to use in the optimizer</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.mango_features.grammar_ramp.Ramp.distribute">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">distribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ct</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="_modules/mango/mango_features/grammar_ramp.html#Ramp.distribute"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.grammar_ramp.Ramp.distribute" title="Link to this definition"></a></dt>
+<dd><p>This static method simply distributes the ramp elements given the parameters defined at class level</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.mango_features.grammar_ramp.Ramp.max_number_epochs">
+<span class="sig-name descname"><span class="pre">max_number_epochs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#mango.mango_features.grammar_ramp.Ramp.max_number_epochs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.mango_features.grammar_ramp.Ramp.max_value">
+<span class="sig-name descname"><span class="pre">max_value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.mango_features.grammar_ramp.Ramp.max_value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.mango_features.grammar_ramp.Ramp.min_steps_at_min">
+<span class="sig-name descname"><span class="pre">min_steps_at_min</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#mango.mango_features.grammar_ramp.Ramp.min_steps_at_min" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.mango_features.grammar_ramp.Ramp.min_value">
+<span class="sig-name descname"><span class="pre">min_value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.mango_features.grammar_ramp.Ramp.min_value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.mango_features.grammar_ramp.Ramp.precision">
+<span class="sig-name descname"><span class="pre">precision</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#mango.mango_features.grammar_ramp.Ramp.precision" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.mango_features.grammar_ramp.Ramp.unique_id">
+<span class="sig-name descname"><span class="pre">unique_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#mango.mango_features.grammar_ramp.Ramp.unique_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+<section id="module-mango.mango_features.mesh_face">
+<span id="mesh-face-not-intended-as-user-facing"></span><h2>Mesh Face (Not intended as user-facing)<a class="headerlink" href="#module-mango.mango_features.mesh_face" title="Link to this heading"></a></h2>
+<p>A.J. Vetturini</p>
+<p>IDIG and MMBL</p>
+<p>Carnegie Mellon University</p>
+<p>This script contains a MeshFace which is simple a triangulated face. I offer the ability to use a square face but
+I do not specifically use this functionality as it increases computational complexity slights (need more checks to
+validate the face orientation).</p>
+<p>This is generally not a user-facing class, it is really just used by internal functions.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="mango.mango_features.mesh_face.MeshFace">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.mango_features.mesh_face.</span></span><span class="sig-name descname"><span class="pre">MeshFace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v3</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v4</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">face_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'triangle'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numDecimals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/mango_features/mesh_face.html#MeshFace"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.mesh_face.MeshFace" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The mesh face is a collection of vertices and edges. This class has some simple methods to plot / check various
+computational geometry attributes during the generative process.</p>
+<section id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>v1 : Numpy array of X Y Z of a vertex defining a mesh face</p>
+<p>v2 : Numpy array of X Y Z of a second vertex defining a mesh face</p>
+<p>v3 : Numpy array of X Y Z of a third vertex defining a mesh face</p>
+<p>v4 : (OPTIONAL) Numpy array of X Y Z of a fourth vertex defining a mesh face</p>
+<p>face_type : String defining if the face is a triangle or a rectangle, not recommended to change</p>
+<p>numDecimals : integer that is automatically specified to 2. You can lower the precision if desired but consider DNA!</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.mango_features.mesh_face.MeshFace.calculate_face_centroid">
+<span class="sig-name descname"><span class="pre">calculate_face_centroid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="_modules/mango/mango_features/mesh_face.html#MeshFace.calculate_face_centroid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.mesh_face.MeshFace.calculate_face_centroid" title="Link to this definition"></a></dt>
+<dd><p>This function calculates and returns the centroid of the face to use specifically with the re-triangulate
+grammar
+:return: XYZ Coordinates of face centroid</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.mango_features.mesh_face.MeshFace.divide_triangular_face">
+<span class="sig-name descname"><span class="pre">divide_triangular_face</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/mango_features/mesh_face.html#MeshFace.divide_triangular_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.mesh_face.MeshFace.divide_triangular_face" title="Link to this definition"></a></dt>
+<dd><p>Divide face functionality for computational cost efficiency</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.mango_features.mesh_face.MeshFace.equation_of_face">
+<span class="sig-name descname"><span class="pre">equation_of_face</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/mango/mango_features/mesh_face.html#MeshFace.equation_of_face"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.mesh_face.MeshFace.equation_of_face" title="Link to this definition"></a></dt>
+<dd><p>This function will calculate the equation of the triangular face and store it as the plane values of a b c d</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Values of a, b, c, and d to define a plane</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.mango_features.mesh_face.MeshFace.face_type">
+<span class="sig-name descname"><span class="pre">face_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'triangle'</span></em><a class="headerlink" href="#mango.mango_features.mesh_face.MeshFace.face_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.mango_features.mesh_face.MeshFace.get_face_plot">
+<span class="sig-name descname"><span class="pre">get_face_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">override_opacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">override_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Mesh3d</span></span></span><a class="reference internal" href="_modules/mango/mango_features/mesh_face.html#MeshFace.get_face_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.mesh_face.MeshFace.get_face_plot" title="Link to this definition"></a></dt>
+<dd><p>This function will be used to plot the mesh face simply via Plotly</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>override_color</strong> – Used to color a face a specific color</p></li>
+<li><p><strong>override_opacity</strong> – Determines opacity of face plot</p></li>
+<li><p><strong>color_type</strong> – Dictates which color to use in the plot via the plotting dictionary</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Mesh3D value that will be used to plot</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.mango_features.mesh_face.MeshFace.numDecimals">
+<span class="sig-name descname"><span class="pre">numDecimals</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#mango.mango_features.mesh_face.MeshFace.numDecimals" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mango.mango_features.mesh_face.MeshFace.update_vertex_values">
+<span class="sig-name descname"><span class="pre">update_vertex_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old_xyz</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_xyz</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/mango_features/mesh_face.html#MeshFace.update_vertex_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.mesh_face.MeshFace.update_vertex_values" title="Link to this definition"></a></dt>
+<dd><p>This function is called whenever the vertices of a face change values. This function will also update teh abcd
+values.
+:param old_xyz: Old position to search for to change the correct vertex XYZ
+:param new_xyz: New position to update with
+:return: Nothing, just changing values of object</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.mango_features.mesh_face.MeshFace.v1">
+<span class="sig-name descname"><span class="pre">v1</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">array</span></em><a class="headerlink" href="#mango.mango_features.mesh_face.MeshFace.v1" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.mango_features.mesh_face.MeshFace.v2">
+<span class="sig-name descname"><span class="pre">v2</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">array</span></em><a class="headerlink" href="#mango.mango_features.mesh_face.MeshFace.v2" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.mango_features.mesh_face.MeshFace.v3">
+<span class="sig-name descname"><span class="pre">v3</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">array</span></em><a class="headerlink" href="#mango.mango_features.mesh_face.MeshFace.v3" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mango.mango_features.mesh_face.MeshFace.v4">
+<span class="sig-name descname"><span class="pre">v4</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">array</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#mango.mango_features.mesh_face.MeshFace.v4" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mango.grammars.html" class="btn btn-neutral float-left" title="Grammars" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mango.optimization_features.html" class="btn btn-neutral float-right" title="Optimization problem definition" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, A.J. Vetturini.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

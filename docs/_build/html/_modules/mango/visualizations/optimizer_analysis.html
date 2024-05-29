@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mango.visualizations.optimizer_analysis &mdash; mango generative design framework b0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=7d16594f"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            mango generative design framework
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">mango</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">mango generative design framework</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">mango.visualizations.optimizer_analysis</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mango.visualizations.optimizer_analysis</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">A.J. Vetturini \n</span>
+<span class="sd">IDIG and MMBL \n</span>
+<span class="sd">Carnegie Mellon University \n</span>
+
+<span class="sd">This script is responsible for the creation of plots that a user may be interested in creating for their results file.</span>
+<span class="sd">While many results are created with this script, you may want to create your own plotting functions after the fact once</span>
+<span class="sd">you know what type of data you want to specifically analyze!</span>
+
+<span class="sd">NOTE:</span>
+<span class="sd">    Some of the code here is HORRIBLE. I intially wrote these internally for a completely different use-case that I</span>
+<span class="sd">    later scrapped. The practices used here do not make sense for this application, and I really need to update them</span>
+<span class="sd">    when I find time (will I find the time?). \n</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># Import modules</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
+<span class="kn">from</span> <span class="nn">plotly.subplots</span> <span class="kn">import</span> <span class="n">make_subplots</span>
+<span class="kn">import</span> <span class="nn">dill</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">combinations</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<div class="viewcode-block" id="MOSA_Analysis">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">MOSA_Analysis</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class creates some simple analysis of the optimizer performance such that a user can readily assess how &quot;well&quot;</span>
+<span class="sd">    the generative process went. \n</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ------------</span>
+<span class="sd">    results_path : Filepath to .aj1 file that conducted a MOSA optimization \n \n</span>
+
+<span class="sd">    DISPLAY options that control colors / font sizes: \n</span>
+<span class="sd">    tick_font_size : Integer point-size of ticker font (default: 16) \n</span>
+<span class="sd">    axis_title_font_size : Integer point-size of axis titles (default: 18) \n</span>
+<span class="sd">    annotation_font_size : Integer point-size of annotation / text boxes (default: 14) \n</span>
+<span class="sd">    sub_plot_title_font_size : Integer point-size of subplot titles (default: 18) \n</span>
+<span class="sd">    plot_title_font_size : Integer point-size of figure title (default: 18) \n</span>
+<span class="sd">    legend_font : Integer point-size of legend titles (default: 14) \n</span>
+<span class="sd">    animation_epoch_step_size : Essentially the result-save frequency (default: 1) \n</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">results_path</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># This is the path to read in a file</span>
+    <span class="n">tick_font_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="n">axis_title_font_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">18</span>
+    <span class="n">annotation_font_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">14</span>
+    <span class="n">sub_plot_title_font_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">14</span>
+    <span class="n">plot_title_font_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">18</span>
+    <span class="n">legend_font</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">14</span>
+    <span class="n">animation_epoch_step_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_name_function_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">obj_name_ct_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ct_obj_name_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">results_data</span> <span class="o">=</span> <span class="n">dill</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="c1"># After reading in the data, create a dictionary of objective_function_names</span>
+        <span class="k">for</span> <span class="n">ct</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">objective_functions</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">obj_name_function_map</span><span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">objective_functions</span><span class="p">[</span><span class="n">ct</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">obj_name_ct_map</span><span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">ct</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ct_obj_name_map</span><span class="p">[</span><span class="n">ct</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">master_layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
+            <span class="n">autosize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">xaxis</span><span class="o">=</span><span class="n">go</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">XAxis</span><span class="p">(</span><span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;rgba(0, 0, 0, 1)&#39;</span><span class="p">,</span>
+                                  <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                  <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                  <span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                  <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font_size</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                                  <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font_size</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                                  <span class="p">),</span>
+
+            <span class="n">yaxis</span><span class="o">=</span><span class="n">go</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">YAxis</span><span class="p">(</span><span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;rgba(0, 0, 0, 1)&#39;</span><span class="p">,</span>
+                                  <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                  <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                  <span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                  <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font_size</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                                  <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font_size</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                                  <span class="p">),</span>
+            <span class="n">plot_bgcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">layout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">master_layout</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="MOSA_Analysis.objective_function_trace">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.objective_function_trace">[docs]</a>
+    <span class="k">def</span> <span class="nf">objective_function_trace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective_function_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function will use plotly to plot an objective function over the number of iterations the process ran for.</span>
+
+<span class="sd">        :param objective_function_name: String name of the objective function being plotted</span>
+<span class="sd">        :return: A plotly trace of objective function value vs iteration #</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># We will create side-by-side plots so we can see how the pareto optimal surface came to be during MOSA:</span>
+        <span class="k">if</span> <span class="n">objective_function_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_name_ct_map</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Unable to find the name of this function inside of the mapping. Check to see what the &#39;</span>
+                            <span class="s1">&#39;stored function name is when you ran MOSA.py!&#39;</span><span class="p">)</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_name_ct_map</span><span class="p">[</span><span class="n">objective_function_name</span><span class="p">]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">tracked_objectives_all_temp</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">tracked_objectives_all_temp</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span>
+                           <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">dash</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">),</span>
+                           <span class="n">showlegend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">objective_function_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">trace</span></div>
+
+
+<div class="viewcode-block" id="MOSA_Analysis.create_subplot_grid">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.create_subplot_grid">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_subplot_grid</span><span class="p">(</span><span class="n">length</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function determines the number of subplots to use for a given multiobjective optimization result.</span>
+
+<span class="sd">        :param length: String name of the objective function being plotted</span>
+<span class="sd">        :return: Number of rows and columns to use in the subplot</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Find factors of the length</span>
+        <span class="k">if</span> <span class="n">length</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">num_rows</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">num_cols</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="k">elif</span> <span class="n">length</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">num_rows</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">num_cols</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Otherwise, algorithmically define this (WIP):</span>
+            <span class="n">factors</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">length</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">length</span> <span class="o">%</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># Choose a combination that best fits your requirements</span>
+            <span class="n">num_rows</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">factors</span><span class="p">)</span>
+            <span class="n">num_cols</span> <span class="o">=</span> <span class="n">length</span> <span class="o">//</span> <span class="n">num_rows</span>
+
+        <span class="k">return</span> <span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span></div>
+
+
+<div class="viewcode-block" id="MOSA_Analysis.plot_all_objective_func_values">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_all_objective_func_values">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_all_objective_func_values</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is called to plot all objective function vs iteration #&#39;s for all N objective functions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">num_objectives</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">objective_functions</span><span class="p">)</span>
+        <span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_subplot_grid</span><span class="p">(</span><span class="n">num_objectives</span><span class="p">)</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">make_subplots</span><span class="p">(</span><span class="n">rows</span><span class="o">=</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">num_cols</span><span class="p">,</span> <span class="n">print_grid</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_objectives</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">row_num</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="n">num_cols</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">col_num</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">num_cols</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">obj_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ct_obj_name_map</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">trace</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">objective_function_trace</span><span class="p">(</span><span class="n">objective_function_name</span><span class="o">=</span><span class="n">obj_name</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">trace</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row_num</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col_num</span><span class="p">)</span>
+            <span class="c1"># Update figure axes and things:</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">update_xaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s1">&#39;Iteration #&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row_num</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col_num</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+                             <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font_size</span><span class="p">),</span>
+                             <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font_size</span><span class="p">),</span> <span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gridcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">update_yaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="n">obj_name</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row_num</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col_num</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+                             <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font_size</span><span class="p">),</span>
+                             <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font_size</span><span class="p">),</span> <span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gridcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+
+        <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Recorded objective function values during MOSA for all design iterations&#39;</span><span class="p">,</span>
+                          <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_title_font_size</span><span class="p">),</span> <span class="n">plot_bgcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+            <span class="n">legend_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">legend_font</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span> <span class="o">=</span> <span class="n">fig</span></div>
+
+
+<div class="viewcode-block" id="MOSA_Analysis.plot_acceptance_probabilities">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_acceptance_probabilities">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_acceptance_probabilities</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function will use plotly to plot (and save) the acceptance probabilty during MOSA to verify that we are</span>
+<span class="sd">        attempting to only accept the objectively good solutions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># We will create side-by-side plots so we can see how the pareto optimal surface came to be during MOSA:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">make_subplots</span><span class="p">(</span><span class="n">rows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                            <span class="n">subplot_titles</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Avg. Acceptance Probability per Epoch&quot;</span><span class="p">,</span> <span class="s2">&quot;Actual Probability Iterations&quot;</span><span class="p">),</span>
+                            <span class="n">start_cell</span><span class="o">=</span><span class="s2">&quot;top-left&quot;</span><span class="p">)</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">acceptance_per_epoch</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">p_accept_list</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">acceptance_per_epoch</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span>
+                                 <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">dash</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Total Acceptance Probability&#39;</span><span class="p">,</span>
+                                 <span class="n">showlegend</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x2</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">p_accept_list</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;markers&#39;</span><span class="p">,</span>
+                                 <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkgray&#39;</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+                                 <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x2</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">x2</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">dash</span><span class="o">=</span><span class="s1">&#39;dash&#39;</span><span class="p">),</span>
+                                 <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">plot_bgcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+        <span class="c1"># Update axes:</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">update_xaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s1">&#39;Epoch #&#39;</span><span class="p">,</span> <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font_size</span><span class="p">),</span>
+                         <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font_size</span><span class="p">),</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                         <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">update_yaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s1">&#39;&quot;Worse Move&quot; Acceptance probability at Epoch&#39;</span><span class="p">,</span>
+                         <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font_size</span><span class="p">),</span> <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font_size</span><span class="p">),</span>
+                         <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">fig</span><span class="o">.</span><span class="n">update_xaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s1">&#39;&quot;Worse Move&quot; Iteration #&#39;</span><span class="p">,</span> <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font_size</span><span class="p">),</span>
+                         <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font_size</span><span class="p">),</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">update_yaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s1">&#39;Actual Probability Calculation&#39;</span><span class="p">,</span> <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font_size</span><span class="p">),</span>
+                         <span class="nb">range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">],</span> <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font_size</span><span class="p">),</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                         <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">update_annotations</span><span class="p">(</span><span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_title_font_size</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span> <span class="o">=</span> <span class="n">fig</span></div>
+
+
+<div class="viewcode-block" id="MOSA_Analysis.temperature_trace">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.temperature_trace">[docs]</a>
+    <span class="k">def</span> <span class="nf">temperature_trace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objective_function_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function will use plotly to plot the temperature of an objective function vs iteration #</span>
+
+<span class="sd">        :param objective_function_name: ObjectiveFunction name attribute (as a string)</span>
+<span class="sd">        :return: Plotly trace of temperature vs epoch #</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># We will create side-by-side plots so we can see how the pareto optimal surface came to be during MOSA:</span>
+        <span class="k">if</span> <span class="n">objective_function_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_name_ct_map</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Unable to find the name of this function inside of the mapping. Check to see what the &#39;</span>
+                            <span class="s1">&#39;stored function name is when you ran MOSA.py!&#39;</span><span class="p">)</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_name_ct_map</span><span class="p">[</span><span class="n">objective_function_name</span><span class="p">]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">temp_tracker</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">temp_tracker</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span>
+                           <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">dash</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">),</span>
+                           <span class="n">showlegend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">objective_function_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">trace</span></div>
+
+
+<div class="viewcode-block" id="MOSA_Analysis.plot_temperatures_over_time">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_temperatures_over_time">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_temperatures_over_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is called to plot all objective function temperature&#39;s vs epoch #&#39;s.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">num_objectives</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">objective_functions</span><span class="p">)</span>
+        <span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_subplot_grid</span><span class="p">(</span><span class="n">num_objectives</span><span class="p">)</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">make_subplots</span><span class="p">(</span><span class="n">rows</span><span class="o">=</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">num_cols</span><span class="p">,</span> <span class="n">print_grid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">subplot_titles</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">obj_name_ct_map</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_objectives</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">row_num</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="n">num_cols</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">col_num</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">num_cols</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">obj_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ct_obj_name_map</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">trace</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temperature_trace</span><span class="p">(</span><span class="n">objective_function_name</span><span class="o">=</span><span class="n">obj_name</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">trace</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row_num</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col_num</span><span class="p">)</span>
+            <span class="c1"># Update figure axes and things:</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">update_xaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s1">&#39;Epoch #&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row_num</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col_num</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+                             <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font_size</span><span class="p">),</span>
+                             <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font_size</span><span class="p">),</span> <span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gridcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">update_yaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s2">&quot;Temperature&quot;</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row_num</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col_num</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+                             <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font_size</span><span class="p">),</span>
+                             <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font_size</span><span class="p">),</span> <span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gridcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+
+        <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Recorded temperature values during MOSA&#39;</span><span class="p">,</span>
+                          <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_title_font_size</span><span class="p">),</span> <span class="n">plot_bgcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+            <span class="n">legend_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">legend_font</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">update_annotations</span><span class="p">(</span><span class="n">font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">sub_plot_title_font_size</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span> <span class="o">=</span> <span class="n">fig</span></div>
+
+
+
+<div class="viewcode-block" id="MOSA_Analysis.calculate_pareto_front">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.calculate_pareto_front">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">calculate_pareto_front</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">field1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">field2</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function calculated the actual pareto front found in the dataframe passed. This is because when 3 or more</span>
+<span class="sd">        objectives are used, then the points in the archive are not always pareto-optimal points for the current plot!</span>
+
+<span class="sd">        :param df: Pandas dataframe containing the obj values of the current archive</span>
+<span class="sd">        :param field1: First objective function name (&quot;Y&quot; axis of the Pareto)</span>
+<span class="sd">        :param field2: Second objective function name (&quot;X&quot; axis of the Pareto)</span>
+<span class="sd">        :return: Pandas dataframe of non-dominating points</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialize a boolean mask to identify non-dominated points</span>
+        <span class="n">is_non_dominated</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">is_non_dominated</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                <span class="c1"># Check if there is any other point that dominates the current point</span>
+                <span class="n">dominates</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">field1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">&lt;=</span> <span class="n">row</span><span class="p">[</span><span class="n">field1</span><span class="p">])</span> <span class="o">&amp;</span>
+                        <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">field2</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">&lt;=</span> <span class="n">row</span><span class="p">[</span><span class="n">field2</span><span class="p">])</span> <span class="o">&amp;</span>
+                        <span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="n">field1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">&lt;</span> <span class="n">row</span><span class="p">[</span><span class="n">field1</span><span class="p">])</span> <span class="o">|</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">field2</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">&lt;</span> <span class="n">row</span><span class="p">[</span><span class="n">field2</span><span class="p">]))</span>
+                <span class="p">)</span>
+                <span class="n">dominates</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Don&#39;t compare point to self</span>
+                <span class="n">is_non_dominated</span><span class="p">[</span><span class="n">dominates</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># Mark dominated points</span>
+
+        <span class="c1"># Use the mask to filter the dataframe for non-dominated points</span>
+        <span class="n">non_dominated_df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">is_non_dominated</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">non_dominated_df</span></div>
+
+
+
+<div class="viewcode-block" id="MOSA_Analysis.pareto_2D_section">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.pareto_2D_section">[docs]</a>
+    <span class="k">def</span> <span class="nf">pareto_2D_section</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pts</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">field1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">field2</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">opac</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">showleg</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function will create a 2D Pareto trace provided the 2 field names for each function</span>
+
+<span class="sd">        :param pts: List of all points that might be in the Pareto</span>
+<span class="sd">        :param field1: String of first objective function name (&quot;Y&quot; axis of the Pareto)</span>
+<span class="sd">        :param field2: String of second objective function name (&quot;X&quot; axis of the Pareto)</span>
+<span class="sd">        :param color: String plotly color or &#39;rgb(R, G, B)&#39; of the trace to use</span>
+<span class="sd">        :param opac: Floating point opacity to use for the scatter trace</span>
+<span class="sd">        :param showleg: Boolean determining if the trace should be shown in the legend (default TRUE)</span>
+<span class="sd">        :return: Plotly scatter trace of 2D pareto section to plot</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">f1_idx</span><span class="p">,</span> <span class="n">f2_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_name_ct_map</span><span class="p">[</span><span class="n">field1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj_name_ct_map</span><span class="p">[</span><span class="n">field2</span><span class="p">]</span>
+        <span class="n">new_pts</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="p">[</span><span class="n">f1_idx</span><span class="p">,</span> <span class="n">f2_idx</span><span class="p">])</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">pts</span><span class="p">]</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">new_pts</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="n">field1</span><span class="p">,</span> <span class="n">field2</span><span class="p">])</span>
+        <span class="n">pareto_df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculate_pareto_front</span><span class="p">(</span><span class="n">df</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">field1</span><span class="o">=</span><span class="n">field1</span><span class="p">,</span> <span class="n">field2</span><span class="o">=</span><span class="n">field2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">opac</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Final Pareto Front Found&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Initial Pareto Front from Random Walk&#39;</span>
+        <span class="n">pareto_df</span> <span class="o">=</span> <span class="n">pareto_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="n">field1</span><span class="p">)</span>  <span class="c1"># Sort points for a &quot;clean&quot; line</span>
+        <span class="n">pareto_pts</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">pareto_df</span><span class="p">[</span><span class="n">field1</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">pareto_df</span><span class="p">[</span><span class="n">field2</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;markers+lines&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+                                <span class="n">legendgroup</span><span class="o">=</span><span class="s1">&#39;animation&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">6</span><span class="p">),</span>
+                                <span class="n">opacity</span><span class="o">=</span><span class="n">opac</span><span class="p">,</span> <span class="n">showlegend</span><span class="o">=</span><span class="n">showleg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pareto_pts</span></div>
+
+
+
+<div class="viewcode-block" id="MOSA_Analysis.plot_final_2D_paretos">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_final_2D_paretos">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_final_2D_paretos</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is used to plot the final pareto plot(s). If there was only 2 specified functions, then 1 figure</span>
+<span class="sd">        is returned. If 3 functions are used, then 3 plots are created and so on. More functions will return more 2D</span>
+<span class="sd">        cross sections, be warned! We only recommend MOSA for 2 or 3 objectives in its current implementation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">num_objectives</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">objective_functions</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">num_objectives</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">()</span>
+            <span class="n">f1</span><span class="p">,</span> <span class="n">f2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">objective_functions</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">objective_functions</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">random_walk_pareto</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">archive_post_temperature_initialization</span>
+            <span class="n">final_pareto_idx</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">pareto_animation</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="n">final_pareto_found</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">pareto_animation</span><span class="p">[</span><span class="n">final_pareto_idx</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="n">pareto_initial_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pareto_2D_section</span><span class="p">(</span><span class="n">pts</span><span class="o">=</span><span class="n">random_walk_pareto</span><span class="p">,</span> <span class="n">field1</span><span class="o">=</span><span class="n">f1</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                                           <span class="n">field2</span><span class="o">=</span><span class="n">f2</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">opac</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+            <span class="n">pareto_final_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pareto_2D_section</span><span class="p">(</span><span class="n">pts</span><span class="o">=</span><span class="n">final_pareto_found</span><span class="p">,</span> <span class="n">field1</span><span class="o">=</span><span class="n">f1</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                                                         <span class="n">field2</span><span class="o">=</span><span class="n">f2</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;forestgreen&#39;</span><span class="p">,</span> <span class="n">opac</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">add_traces</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">pareto_initial_points</span><span class="p">,</span> <span class="n">pareto_final_points</span><span class="p">])</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">update_xaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="n">f1</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+                             <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font_size</span><span class="p">),</span>
+                             <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font_size</span><span class="p">),</span> <span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gridcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">update_yaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="n">f2</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span>
+                             <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font_size</span><span class="p">),</span>
+                             <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font_size</span><span class="p">),</span> <span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gridcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+
+
+        <span class="k">elif</span> <span class="n">num_objectives</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_subplot_grid</span><span class="p">(</span><span class="n">num_objectives</span><span class="p">)</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">make_subplots</span><span class="p">(</span><span class="n">rows</span><span class="o">=</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">num_cols</span><span class="p">,</span> <span class="n">print_grid</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">showleg</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">for</span> <span class="n">f1</span><span class="p">,</span> <span class="n">f2</span> <span class="ow">in</span> <span class="n">combinations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">objective_functions</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+                <span class="n">row_num</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="n">num_cols</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">col_num</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">num_cols</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">random_walk_pareto</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">archive_post_temperature_initialization</span>
+                <span class="n">final_pareto_idx</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">pareto_animation</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+                <span class="n">final_pareto_found</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">pareto_animation</span><span class="p">[</span><span class="n">final_pareto_idx</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="n">pareto_initial_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pareto_2D_section</span><span class="p">(</span><span class="n">pts</span><span class="o">=</span><span class="n">random_walk_pareto</span><span class="p">,</span> <span class="n">field1</span><span class="o">=</span><span class="n">f1</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">showleg</span><span class="o">=</span><span class="n">showleg</span><span class="p">,</span>
+                                                               <span class="n">field2</span><span class="o">=</span><span class="n">f2</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">opac</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+                <span class="n">pareto_final_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pareto_2D_section</span><span class="p">(</span><span class="n">pts</span><span class="o">=</span><span class="n">final_pareto_found</span><span class="p">,</span> <span class="n">field1</span><span class="o">=</span><span class="n">f1</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">showleg</span><span class="o">=</span><span class="n">showleg</span><span class="p">,</span>
+                                                             <span class="n">field2</span><span class="o">=</span><span class="n">f2</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;forestgreen&#39;</span><span class="p">,</span> <span class="n">opac</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="c1"># Now we add these ponints to the proper row n column:</span>
+                <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">pareto_initial_points</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row_num</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col_num</span><span class="p">)</span>
+                <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">pareto_final_points</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row_num</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col_num</span><span class="p">)</span>
+                <span class="n">fig</span><span class="o">.</span><span class="n">update_xaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="n">f1</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row_num</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col_num</span><span class="p">,</span>
+                                 <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font_size</span><span class="p">),</span>
+                                 <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font_size</span><span class="p">),</span> <span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gridcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+                <span class="n">fig</span><span class="o">.</span><span class="n">update_yaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="n">f2</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row_num</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col_num</span><span class="p">,</span>
+                                 <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font_size</span><span class="p">),</span>
+                                 <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font_size</span><span class="p">),</span> <span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">gridcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+                <span class="n">showleg</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;We only recommend MOSA for 2 or 3 objectives. If you want plots for higher dimensionality,&#39;</span>
+                            <span class="s1">&#39; we recommend you create your own plotting figures as there will be too many 2D plots to&#39;</span>
+                            <span class="s1">&#39; analyze the results efficiently!&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Depending on &quot;return_or_show&quot; we may return the figure:</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Pareto optimal front found compared to the random walk pareto&#39;</span><span class="p">,</span>
+                          <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_title_font_size</span><span class="p">),</span> <span class="n">plot_bgcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
+                          <span class="n">legend_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">legend_font</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span> <span class="o">=</span> <span class="n">fig</span></div>
+
+
+
+<div class="viewcode-block" id="MOSA_Analysis.plot_final_3D_pareto">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_final_3D_pareto">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_final_3D_pareto</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function is only used when 3 objectives are used. It will show the surface plot of the random walk pareto</span>
+<span class="sd">        compared to the final pareto found</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">objective_functions</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;This function is only valid for 3 objective functions in the pareto. &#39;</span><span class="p">)</span>
+        <span class="n">final_archive</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">MOSA_archive</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">initial_archive</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">archive_post_temperature_initialization</span>
+        <span class="n">xf</span><span class="p">,</span> <span class="n">yf</span><span class="p">,</span> <span class="n">zf</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">final_archive</span><span class="p">)</span>
+        <span class="n">xi</span><span class="p">,</span> <span class="n">yi</span><span class="p">,</span> <span class="n">zi</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">initial_archive</span><span class="p">)</span>
+        <span class="c1">## SORTING:</span>
+        <span class="n">sorted_final</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">xf</span><span class="p">)</span>
+        <span class="n">sorted_initial</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">xi</span><span class="p">)</span>
+        <span class="n">xf</span><span class="p">,</span> <span class="n">yf</span><span class="p">,</span> <span class="n">zf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xf</span><span class="p">)[</span><span class="n">sorted_final</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">yf</span><span class="p">)[</span><span class="n">sorted_final</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">zf</span><span class="p">)[</span><span class="n">sorted_final</span><span class="p">]</span>
+        <span class="n">xi</span><span class="p">,</span> <span class="n">yi</span><span class="p">,</span> <span class="n">zi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xi</span><span class="p">)[</span><span class="n">sorted_initial</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">yi</span><span class="p">)[</span><span class="n">sorted_initial</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">zi</span><span class="p">)[</span><span class="n">sorted_initial</span><span class="p">]</span>
+        <span class="n">t1</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter3d</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xi</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">yi</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">zi</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;markers+lines&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;square&#39;</span><span class="p">),</span>
+                          <span class="n">opacity</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">showlegend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">legendgroup</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Initial Pareto Front from Random Walk&#39;</span><span class="p">)</span>
+        <span class="n">t2</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter3d</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xf</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">yf</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">zf</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;markers+lines&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;forestgreen&#39;</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;square&#39;</span><span class="p">),</span>
+                          <span class="n">opacity</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">showlegend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">legendgroup</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Final Pareto Front Found&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Update layout and things:</span>
+        <span class="n">f1</span><span class="p">,</span> <span class="n">f2</span><span class="p">,</span> <span class="n">f3</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">objective_functions</span><span class="p">)</span>
+        <span class="n">layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
+            <span class="n">scene</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">title</span><span class="o">=</span><span class="n">f1</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                    <span class="n">titlefont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font_size</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>  <span class="c1"># Customize title font</span>
+                    <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font_size</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>  <span class="c1"># Customize tick font</span>
+                <span class="p">),</span>
+                <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">title</span><span class="o">=</span><span class="n">f2</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                    <span class="n">titlefont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font_size</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>  <span class="c1"># Customize title font</span>
+                    <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font_size</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>  <span class="c1"># Customize tick font</span>
+                <span class="p">),</span>
+                <span class="n">zaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                    <span class="n">title</span><span class="o">=</span><span class="n">f3</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                    <span class="n">titlefont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font_size</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>  <span class="c1"># Customize title font</span>
+                    <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font_size</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>  <span class="c1"># Customize tick font</span>
+                <span class="p">),</span>
+            <span class="p">),</span>
+            <span class="n">plot_bgcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span>
+        <span class="p">)</span>
+        <span class="c1"># Create a 3D surface plot</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">t1</span><span class="p">,</span> <span class="n">t2</span><span class="p">],</span> <span class="n">layout</span><span class="o">=</span><span class="n">layout</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Final 3D Pareto Front Found&#39;</span><span class="p">,</span>
+                          <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_title_font_size</span><span class="p">),</span> <span class="n">plot_bgcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
+                          <span class="n">legend_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">legend_font</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span> <span class="o">=</span> <span class="n">fig</span></div>
+
+
+
+<div class="viewcode-block" id="MOSA_Analysis.create_pareto_data">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.create_pareto_data">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_pareto_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pts</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">epoch</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">last</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="c1"># Create &quot;initial&quot; frame by population individual plots:</span>
+        <span class="n">plot_map</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)}</span>
+        <span class="c1"># Starting data in figure:</span>
+        <span class="n">return_trace</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_rows</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_cols</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">row</span> <span class="o">==</span> <span class="p">(</span><span class="n">num_rows</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="n">col</span> <span class="o">==</span> <span class="p">(</span><span class="n">num_cols</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="c1"># If we are in the final cell, we update the Annotation block</span>
+                    <span class="k">if</span> <span class="n">epoch</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">text_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Epoch: </span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s1"> (START)&#39;</span>
+                    <span class="k">elif</span> <span class="ow">not</span> <span class="n">last</span><span class="p">:</span>
+                        <span class="n">text_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Epoch: </span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s1">&#39;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">text_string</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Epoch: </span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s1"> (END)&#39;</span>
+                    <span class="n">return_trace</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">text</span><span class="o">=</span><span class="p">[</span><span class="n">text_string</span><span class="p">],</span>
+                                                    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                                    <span class="n">textfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">plot_title_font_size</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)),</span> <span class="p">(</span><span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">col</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Otherwise we plot</span>
+                    <span class="n">func_to_plot</span> <span class="o">=</span> <span class="n">plot_map</span><span class="p">[(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)]</span>
+                    <span class="n">f1</span><span class="p">,</span> <span class="n">f2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ct_obj_name_map</span><span class="p">[</span><span class="n">func_to_plot</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="bp">self</span><span class="o">.</span><span class="n">ct_obj_name_map</span><span class="p">[</span><span class="n">func_to_plot</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+                    <span class="n">scatter_trace</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pareto_2D_section</span><span class="p">(</span><span class="n">pts</span><span class="o">=</span><span class="n">pts</span><span class="p">,</span> <span class="n">field1</span><span class="o">=</span><span class="n">f1</span><span class="p">,</span> <span class="n">field2</span><span class="o">=</span><span class="n">f2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
+                                                           <span class="n">opac</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">showleg</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                    <span class="c1"># Add to the plot:</span>
+                    <span class="n">return_trace</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">scatter_trace</span><span class="p">,</span> <span class="p">(</span><span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">col</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">return_trace</span></div>
+
+
+
+<div class="viewcode-block" id="MOSA_Analysis.create_pareto_animation_figure">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.create_pareto_animation_figure">[docs]</a>
+    <span class="k">def</span> <span class="nf">create_pareto_animation_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function initializes + creates the pareto animation figures to see how the Pareto grew over time</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">num_objectives</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">objective_functions</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">num_objectives</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+        <span class="k">elif</span> <span class="n">num_objectives</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;The animation figure can only be created using 2 or 3 objective functions&#39;</span><span class="p">)</span>
+
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">make_subplots</span><span class="p">(</span><span class="n">rows</span><span class="o">=</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">cols</span><span class="o">=</span><span class="n">num_cols</span><span class="p">,</span> <span class="n">print_grid</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">update_xaxes</span><span class="p">(</span><span class="n">visible</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">num_cols</span><span class="p">)</span>  <span class="c1"># hide the axis and things</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">update_yaxes</span><span class="p">(</span><span class="n">visible</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">num_cols</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">plot_bgcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+        <span class="n">plot_map</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)}</span>
+        <span class="c1"># Initialize figure layout options:</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_rows</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">row</span> <span class="o">==</span> <span class="n">num_rows</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">mc</span> <span class="o">=</span> <span class="n">num_cols</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mc</span> <span class="o">=</span> <span class="n">num_cols</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">mc</span><span class="p">):</span>
+                <span class="n">func_to_plot</span> <span class="o">=</span> <span class="n">plot_map</span><span class="p">[(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)]</span>
+                <span class="n">f1</span><span class="p">,</span> <span class="n">f2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ct_obj_name_map</span><span class="p">[</span><span class="n">func_to_plot</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="bp">self</span><span class="o">.</span><span class="n">ct_obj_name_map</span><span class="p">[</span><span class="n">func_to_plot</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="n">max_f1</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">tracked_objectives_all_temp</span><span class="p">[</span><span class="n">func_to_plot</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+                <span class="n">min_f1</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">tracked_objectives_all_temp</span><span class="p">[</span><span class="n">func_to_plot</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+                <span class="n">max_f2</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">tracked_objectives_all_temp</span><span class="p">[</span><span class="n">func_to_plot</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+                <span class="n">min_f2</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">tracked_objectives_all_temp</span><span class="p">[</span><span class="n">func_to_plot</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+                <span class="n">padding</span> <span class="o">=</span> <span class="p">(</span><span class="n">max_f1</span> <span class="o">-</span> <span class="n">min_f1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">5</span> <span class="o">/</span> <span class="mf">100.0</span><span class="p">)</span>
+
+                <span class="n">fig</span><span class="o">.</span><span class="n">update_xaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">f1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                 <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font_size</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                                 <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font_size</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span> <span class="nb">range</span><span class="o">=</span><span class="p">[</span><span class="n">min_f1</span> <span class="o">-</span> <span class="n">padding</span><span class="p">,</span>
+                                                                                 <span class="n">max_f1</span> <span class="o">+</span> <span class="n">padding</span><span class="p">])</span>
+
+                <span class="n">fig</span><span class="o">.</span><span class="n">update_yaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">f2</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                 <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font_size</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                                 <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font_size</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Helvetica&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                                 <span class="nb">range</span><span class="o">=</span><span class="p">[</span><span class="n">min_f2</span> <span class="o">-</span> <span class="n">padding</span><span class="p">,</span> <span class="n">max_f2</span> <span class="o">+</span> <span class="n">padding</span><span class="p">])</span>
+        <span class="n">random_walk_pareto</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">archive_post_temperature_initialization</span>
+        <span class="n">initial_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_pareto_data</span><span class="p">(</span><span class="n">pts</span><span class="o">=</span><span class="n">random_walk_pareto</span><span class="p">,</span> <span class="n">num_rows</span><span class="o">=</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span><span class="o">=</span><span class="n">num_cols</span><span class="p">,</span> <span class="n">epoch</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">data</span><span class="p">,</span> <span class="n">row_col</span> <span class="ow">in</span> <span class="n">initial_data</span><span class="p">:</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row_col</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">col</span><span class="o">=</span><span class="n">row_col</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+
+        <span class="c1"># Loop over all epochs using the step variable:</span>
+        <span class="n">all_frames</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">last</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">pareto_animation</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">animation_epoch_step_size</span><span class="p">):</span>
+            <span class="c1"># With each epoch, we create a new dataframe:</span>
+            <span class="n">frame</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">epoch</span><span class="p">)}</span>
+            <span class="n">data_to_plot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">pareto_animation</span><span class="p">[</span><span class="n">epoch</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">epoch</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">pareto_animation</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="n">last</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_pareto_data</span><span class="p">(</span><span class="n">pts</span><span class="o">=</span><span class="n">data_to_plot</span><span class="p">,</span> <span class="n">num_rows</span><span class="o">=</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span><span class="o">=</span><span class="n">num_cols</span><span class="p">,</span> <span class="n">epoch</span><span class="o">=</span><span class="n">epoch</span><span class="p">,</span> <span class="n">last</span><span class="o">=</span><span class="n">last</span><span class="p">)</span>
+            <span class="n">data_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1"># Add data to frame:</span>
+            <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">n</span><span class="p">:</span>
+                <span class="n">data_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+            <span class="n">frame</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_list</span>
+            <span class="n">all_frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+
+        <span class="c1"># Ensure last element is processed to the animation:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">pareto_animation</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">animation_epoch_step_size</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">epoch</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">pareto_animation</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># Grab last index</span>
+            <span class="n">frame</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">epoch</span><span class="p">)}</span>
+            <span class="n">data_to_plot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">pareto_animation</span><span class="p">[</span><span class="n">epoch</span><span class="p">]</span>
+            <span class="n">new_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_pareto_data</span><span class="p">(</span><span class="n">pts</span><span class="o">=</span><span class="n">data_to_plot</span><span class="p">,</span> <span class="n">num_rows</span><span class="o">=</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span><span class="o">=</span><span class="n">num_cols</span><span class="p">,</span> <span class="n">epoch</span><span class="o">=</span><span class="n">epoch</span><span class="p">,</span>
+                                               <span class="n">last</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">data_list</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1"># Add data to frame:</span>
+            <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">new_data</span><span class="p">:</span>
+                <span class="n">data_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+            <span class="n">frame</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_list</span>
+            <span class="n">all_frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+
+        <span class="c1"># Finally add frames and slider:</span>
+        <span class="n">fig</span><span class="p">[</span><span class="s2">&quot;frames&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">all_frames</span>
+        <span class="n">fig</span><span class="p">[</span><span class="s2">&quot;layout&quot;</span><span class="p">][</span><span class="s2">&quot;updatemenus&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;buttons&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;frame&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mi">500</span><span class="p">,</span> <span class="s2">&quot;redraw&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+                                        <span class="s2">&quot;fromcurrent&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;transition&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span>
+                                                                            <span class="s2">&quot;easing&quot;</span><span class="p">:</span> <span class="s2">&quot;quadratic-in-out&quot;</span><span class="p">}}],</span>
+                        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Play&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;animate&quot;</span>
+                    <span class="p">},</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="kc">None</span><span class="p">],</span> <span class="p">{</span><span class="s2">&quot;frame&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;redraw&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+                                          <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;immediate&quot;</span><span class="p">,</span>
+                                          <span class="s2">&quot;transition&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}}],</span>
+                        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Pause&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;animate&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">],</span>
+                <span class="s2">&quot;direction&quot;</span><span class="p">:</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;pad&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">&quot;t&quot;</span><span class="p">:</span> <span class="mi">87</span><span class="p">},</span>
+                <span class="s2">&quot;showactive&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;buttons&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+                <span class="s2">&quot;xanchor&quot;</span><span class="p">:</span> <span class="s2">&quot;right&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">&quot;yanchor&quot;</span><span class="p">:</span> <span class="s2">&quot;top&quot;</span>
+            <span class="p">}</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Depending on &quot;return_or_show&quot; we may return the figure:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span> <span class="o">=</span> <span class="n">fig</span></div>
+
+
+<div class="viewcode-block" id="MOSA_Analysis.show_figure">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.show_figure">[docs]</a>
+    <span class="k">def</span> <span class="nf">show_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="MOSA_Analysis.return_figure">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.return_figure">[docs]</a>
+    <span class="k">def</span> <span class="nf">return_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ShapeAnneal_Analysis">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ShapeAnneal_Analysis</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class creates some simple analysis of the optimizer performance such that a user can readily assess how &quot;well&quot;</span>
+<span class="sd">    the generative process went. \n</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ------------</span>
+<span class="sd">    results_path : Filepath to .aj1 file that conducted a shape annealing optimization \n \n</span>
+
+<span class="sd">    DISPLAY options that control colors / font sizes: \n</span>
+<span class="sd">    tick_font_size : Integer point-size of ticker font (default: 16) \n</span>
+<span class="sd">    axis_title_font_size : Integer point-size of axis titles (default: 18) \n</span>
+<span class="sd">    annotation_font_size : Integer point-size of annotation / text boxes (default: 14) \n</span>
+<span class="sd">    sub_plot_title_font_size : Integer point-size of subplot titles (default: 18) \n</span>
+<span class="sd">    plot_title_font_size : Integer point-size of figure title (default: 18) \n</span>
+<span class="sd">    legend_font : Integer point-size of legend titles (default: 14) \n</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">results_path</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># This is the path to read in a file</span>
+    <span class="n">tick_font_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="n">axis_title_font_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">18</span>
+    <span class="n">annotation_font_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">14</span>
+    <span class="n">sub_plot_title_font_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">14</span>
+    <span class="n">plot_title_font_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">18</span>
+    <span class="n">legend_font</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">14</span>
+
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">results_data</span> <span class="o">=</span> <span class="n">dill</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">master_layout</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span>
+            <span class="n">autosize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">xaxis</span><span class="o">=</span><span class="n">go</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">XAxis</span><span class="p">(</span><span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;rgba(0, 0, 0, 1)&#39;</span><span class="p">,</span>
+                                  <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                  <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                  <span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                  <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font_size</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                                  <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font_size</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                                  <span class="p">),</span>
+
+            <span class="n">yaxis</span><span class="o">=</span><span class="n">go</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">YAxis</span><span class="p">(</span><span class="n">linecolor</span><span class="o">=</span><span class="s1">&#39;rgba(0, 0, 0, 1)&#39;</span><span class="p">,</span>
+                                  <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                  <span class="n">mirror</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                  <span class="n">showgrid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                  <span class="n">title_font</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">axis_title_font_size</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                                  <span class="n">tickfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_font_size</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="s1">&#39;Arial&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">),</span>
+                                  <span class="p">),</span>
+            <span class="n">plot_bgcolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">layout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">master_layout</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ShapeAnneal_Analysis.plot_objective_trace">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.plot_objective_trace">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_objective_trace</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function will use plotly to plot (and save) the objective function value during the optimization process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># We will create side-by-side plots so we can see how the pareto optimal surface came to be during MOSA:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">objectives_during_annealing</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">objectives_during_annealing</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span>
+                           <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">dash</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">),</span>
+                           <span class="n">showlegend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">objective_function</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">trace</span><span class="p">],</span> <span class="n">layout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">master_layout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span><span class="o">.</span><span class="n">update_xaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s1">&#39;Iteration #&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span><span class="o">.</span><span class="n">update_yaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s1">&#39;Objective Function Value&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ShapeAnneal_Analysis.plot_temperature_trace">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.plot_temperature_trace">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot_temperature_trace</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function will use plotly to plot (and save) the temperature during the optimization process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">temperature_values</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">temperature_values</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span>
+                           <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">dash</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">),</span>
+                           <span class="n">showlegend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">results_data</span><span class="o">.</span><span class="n">objective_function</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">trace</span><span class="p">],</span> <span class="n">layout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">master_layout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span><span class="o">.</span><span class="n">update_xaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s1">&#39;Epoch #&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span><span class="o">.</span><span class="n">update_yaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s1">&#39;Temperature&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ShapeAnneal_Analysis.show_figure">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.show_figure">[docs]</a>
+    <span class="k">def</span> <span class="nf">show_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ShapeAnneal_Analysis.return_figure">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.return_figure">[docs]</a>
+    <span class="k">def</span> <span class="nf">return_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span></div>
+</div>
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, A.J. Vetturini.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

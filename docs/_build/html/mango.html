@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mango package &mdash; mango generative design framework b0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=7d16594f"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Establishing design space" href="mango.design_spaces.html" />
+    <link rel="prev" title="mango" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            mango generative design framework
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">mango</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">mango package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#package-components">Package Components</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html">Establishing design space</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html">Grammars</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html">Input design features</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html">Optimization problem definition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html">Optimizers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.utils.html">Utilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html">Visualization Options</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mango generative design framework</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">mango</a></li>
+      <li class="breadcrumb-item active">mango package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/mango.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="mango-package">
+<h1>mango package<a class="headerlink" href="#mango-package" title="Link to this heading"></a></h1>
+<section id="package-components">
+<h2>Package Components<a class="headerlink" href="#package-components" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="mango.design_spaces.html">Establishing design space</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mango.design_spaces.html#module-mango.design_spaces.bounding_box">Bounding Boxes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.CubicBox"><code class="docutils literal notranslate"><span class="pre">CubicBox</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.CubicBox.a"><code class="docutils literal notranslate"><span class="pre">CubicBox.a</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.CubicBox.return_box_traces"><code class="docutils literal notranslate"><span class="pre">CubicBox.return_box_traces()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.CubicBox.update_shape"><code class="docutils literal notranslate"><span class="pre">CubicBox.update_shape()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.HexagonalBox"><code class="docutils literal notranslate"><span class="pre">HexagonalBox</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.HexagonalBox.a"><code class="docutils literal notranslate"><span class="pre">HexagonalBox.a</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.HexagonalBox.c"><code class="docutils literal notranslate"><span class="pre">HexagonalBox.c</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.HexagonalBox.return_box_traces"><code class="docutils literal notranslate"><span class="pre">HexagonalBox.return_box_traces()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.HexagonalBox.update_shape"><code class="docutils literal notranslate"><span class="pre">HexagonalBox.update_shape()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.MonoclinicBox"><code class="docutils literal notranslate"><span class="pre">MonoclinicBox</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.MonoclinicBox.a"><code class="docutils literal notranslate"><span class="pre">MonoclinicBox.a</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.MonoclinicBox.b"><code class="docutils literal notranslate"><span class="pre">MonoclinicBox.b</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.MonoclinicBox.beta"><code class="docutils literal notranslate"><span class="pre">MonoclinicBox.beta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.MonoclinicBox.c"><code class="docutils literal notranslate"><span class="pre">MonoclinicBox.c</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.MonoclinicBox.edges_unique"><code class="docutils literal notranslate"><span class="pre">MonoclinicBox.edges_unique()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.MonoclinicBox.return_box_traces"><code class="docutils literal notranslate"><span class="pre">MonoclinicBox.return_box_traces()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.MonoclinicBox.update_shape"><code class="docutils literal notranslate"><span class="pre">MonoclinicBox.update_shape()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.OrthorhombicBox"><code class="docutils literal notranslate"><span class="pre">OrthorhombicBox</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.OrthorhombicBox.a"><code class="docutils literal notranslate"><span class="pre">OrthorhombicBox.a</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.OrthorhombicBox.b"><code class="docutils literal notranslate"><span class="pre">OrthorhombicBox.b</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.OrthorhombicBox.c"><code class="docutils literal notranslate"><span class="pre">OrthorhombicBox.c</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.OrthorhombicBox.edges_unique"><code class="docutils literal notranslate"><span class="pre">OrthorhombicBox.edges_unique()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.OrthorhombicBox.return_box_traces"><code class="docutils literal notranslate"><span class="pre">OrthorhombicBox.return_box_traces()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.OrthorhombicBox.update_shape"><code class="docutils literal notranslate"><span class="pre">OrthorhombicBox.update_shape()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.Parallelepiped"><code class="docutils literal notranslate"><span class="pre">Parallelepiped</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.Parallelepiped.a"><code class="docutils literal notranslate"><span class="pre">Parallelepiped.a</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.Parallelepiped.alpha"><code class="docutils literal notranslate"><span class="pre">Parallelepiped.alpha</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.Parallelepiped.angles_in_degrees"><code class="docutils literal notranslate"><span class="pre">Parallelepiped.angles_in_degrees</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.Parallelepiped.b"><code class="docutils literal notranslate"><span class="pre">Parallelepiped.b</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.Parallelepiped.beta"><code class="docutils literal notranslate"><span class="pre">Parallelepiped.beta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.Parallelepiped.c"><code class="docutils literal notranslate"><span class="pre">Parallelepiped.c</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.Parallelepiped.calculate_vertices_and_edges"><code class="docutils literal notranslate"><span class="pre">Parallelepiped.calculate_vertices_and_edges()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.Parallelepiped.cell_type"><code class="docutils literal notranslate"><span class="pre">Parallelepiped.cell_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.Parallelepiped.edge_intersecting_box"><code class="docutils literal notranslate"><span class="pre">Parallelepiped.edge_intersecting_box()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.Parallelepiped.gamma"><code class="docutils literal notranslate"><span class="pre">Parallelepiped.gamma</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.Parallelepiped.get_midpoint_of_each_face"><code class="docutils literal notranslate"><span class="pre">Parallelepiped.get_midpoint_of_each_face()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.Parallelepiped.intersection_point"><code class="docutils literal notranslate"><span class="pre">Parallelepiped.intersection_point()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.Parallelepiped.update_face_equations"><code class="docutils literal notranslate"><span class="pre">Parallelepiped.update_face_equations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.Parallelepiped.update_volume"><code class="docutils literal notranslate"><span class="pre">Parallelepiped.update_volume()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.RhombohedralBox"><code class="docutils literal notranslate"><span class="pre">RhombohedralBox</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.RhombohedralBox.a"><code class="docutils literal notranslate"><span class="pre">RhombohedralBox.a</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.RhombohedralBox.alpha"><code class="docutils literal notranslate"><span class="pre">RhombohedralBox.alpha</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.RhombohedralBox.return_box_traces"><code class="docutils literal notranslate"><span class="pre">RhombohedralBox.return_box_traces()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.RhombohedralBox.update_shape"><code class="docutils literal notranslate"><span class="pre">RhombohedralBox.update_shape()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TetragonalBox"><code class="docutils literal notranslate"><span class="pre">TetragonalBox</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TetragonalBox.a"><code class="docutils literal notranslate"><span class="pre">TetragonalBox.a</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TetragonalBox.c"><code class="docutils literal notranslate"><span class="pre">TetragonalBox.c</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TetragonalBox.return_box_traces"><code class="docutils literal notranslate"><span class="pre">TetragonalBox.return_box_traces()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TetragonalBox.update_shape"><code class="docutils literal notranslate"><span class="pre">TetragonalBox.update_shape()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TriclinicBox"><code class="docutils literal notranslate"><span class="pre">TriclinicBox</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TriclinicBox.a"><code class="docutils literal notranslate"><span class="pre">TriclinicBox.a</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TriclinicBox.alpha"><code class="docutils literal notranslate"><span class="pre">TriclinicBox.alpha</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TriclinicBox.angles_unique"><code class="docutils literal notranslate"><span class="pre">TriclinicBox.angles_unique()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TriclinicBox.b"><code class="docutils literal notranslate"><span class="pre">TriclinicBox.b</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TriclinicBox.beta"><code class="docutils literal notranslate"><span class="pre">TriclinicBox.beta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TriclinicBox.c"><code class="docutils literal notranslate"><span class="pre">TriclinicBox.c</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TriclinicBox.edges_unique"><code class="docutils literal notranslate"><span class="pre">TriclinicBox.edges_unique()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TriclinicBox.gamma"><code class="docutils literal notranslate"><span class="pre">TriclinicBox.gamma</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TriclinicBox.return_box_traces"><code class="docutils literal notranslate"><span class="pre">TriclinicBox.return_box_traces()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.TriclinicBox.update_shape"><code class="docutils literal notranslate"><span class="pre">TriclinicBox.update_shape()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.bounding_box.create_parallelepiped"><code class="docutils literal notranslate"><span class="pre">create_parallelepiped()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mango.design_spaces.html#module-mango.design_spaces.polyhedral_design_space">Design Spaces</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><code class="docutils literal notranslate"><span class="pre">PolyhedralSpace</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.add_new_node"><code class="docutils literal notranslate"><span class="pre">PolyhedralSpace.add_new_node()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.bounding_box"><code class="docutils literal notranslate"><span class="pre">PolyhedralSpace.bounding_box</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.calculate_input_parameters"><code class="docutils literal notranslate"><span class="pre">PolyhedralSpace.calculate_input_parameters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.create_preserved_regions"><code class="docutils literal notranslate"><span class="pre">PolyhedralSpace.create_preserved_regions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.create_trimesh_mesh"><code class="docutils literal notranslate"><span class="pre">PolyhedralSpace.create_trimesh_mesh()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.excluded"><code class="docutils literal notranslate"><span class="pre">PolyhedralSpace.excluded</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.find_nonterminal_nodes"><code class="docutils literal notranslate"><span class="pre">PolyhedralSpace.find_nonterminal_nodes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.generate_start_shape"><code class="docutils literal notranslate"><span class="pre">PolyhedralSpace.generate_start_shape()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.increment_node_count"><code class="docutils literal notranslate"><span class="pre">PolyhedralSpace.increment_node_count()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.jsonify_design_space"><code class="docutils literal notranslate"><span class="pre">PolyhedralSpace.jsonify_design_space()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.preserved"><code class="docutils literal notranslate"><span class="pre">PolyhedralSpace.preserved</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.renumber_vertices"><code class="docutils literal notranslate"><span class="pre">PolyhedralSpace.renumber_vertices()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.triangulate_input_conditions"><code class="docutils literal notranslate"><span class="pre">PolyhedralSpace.triangulate_input_conditions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.validate_start_shape"><code class="docutils literal notranslate"><span class="pre">PolyhedralSpace.validate_start_shape()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mango.grammars.html">Grammars</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mango.grammars.html#module-mango.grammars.origami_grammars">Design Grammars</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.CustomGrammarSet"><code class="docutils literal notranslate"><span class="pre">CustomGrammarSet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.CustomGrammarSet.call_grammar_function"><code class="docutils literal notranslate"><span class="pre">CustomGrammarSet.call_grammar_function()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.CustomGrammarSet.grammar_sets"><code class="docutils literal notranslate"><span class="pre">CustomGrammarSet.grammar_sets</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.CustomGrammarSet.pick_random_grammar"><code class="docutils literal notranslate"><span class="pre">CustomGrammarSet.pick_random_grammar()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.CustomGrammarSet.set_seed"><code class="docutils literal notranslate"><span class="pre">CustomGrammarSet.set_seed()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.GrammarSet"><code class="docutils literal notranslate"><span class="pre">GrammarSet</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.GrammarSet.numDecimals"><code class="docutils literal notranslate"><span class="pre">GrammarSet.numDecimals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.GrammarSet.set_seed"><code class="docutils literal notranslate"><span class="pre">GrammarSet.set_seed()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.LocalPlane"><code class="docutils literal notranslate"><span class="pre">LocalPlane</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.LocalPlane.divide_edge_rule_used"><code class="docutils literal notranslate"><span class="pre">LocalPlane.divide_edge_rule_used</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.LocalPlane.og_point"><code class="docutils literal notranslate"><span class="pre">LocalPlane.og_point</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.LocalPlane.verts"><code class="docutils literal notranslate"><span class="pre">LocalPlane.verts</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.ParallelepipedGrammars"><code class="docutils literal notranslate"><span class="pre">ParallelepipedGrammars</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.ParallelepipedGrammars.call_grammar_function"><code class="docutils literal notranslate"><span class="pre">ParallelepipedGrammars.call_grammar_function()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.ParallelepipedGrammars.cell_type"><code class="docutils literal notranslate"><span class="pre">ParallelepipedGrammars.cell_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.ParallelepipedGrammars.extend_or_shorten_edge"><code class="docutils literal notranslate"><span class="pre">ParallelepipedGrammars.extend_or_shorten_edge()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.ParallelepipedGrammars.pick_random_grammar"><code class="docutils literal notranslate"><span class="pre">ParallelepipedGrammars.pick_random_grammar()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.ParallelepipedGrammars.rotate_edge"><code class="docutils literal notranslate"><span class="pre">ParallelepipedGrammars.rotate_edge()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.ParallelepipedGrammars.set_seed"><code class="docutils literal notranslate"><span class="pre">ParallelepipedGrammars.set_seed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.ParallelepipedGrammars.update_design_space"><code class="docutils literal notranslate"><span class="pre">ParallelepipedGrammars.update_design_space()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars"><code class="docutils literal notranslate"><span class="pre">TriangulationGrammars</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.call_grammar_function"><code class="docutils literal notranslate"><span class="pre">TriangulationGrammars.call_grammar_function()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.divide_face"><code class="docutils literal notranslate"><span class="pre">TriangulationGrammars.divide_face()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.edge_rotation"><code class="docutils literal notranslate"><span class="pre">TriangulationGrammars.edge_rotation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.extend_vertex"><code class="docutils literal notranslate"><span class="pre">TriangulationGrammars.extend_vertex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.get_children_nodes_to_merge"><code class="docutils literal notranslate"><span class="pre">TriangulationGrammars.get_children_nodes_to_merge()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.grammars_to_not_use"><code class="docutils literal notranslate"><span class="pre">TriangulationGrammars.grammars_to_not_use</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.is_f_in_keys"><code class="docutils literal notranslate"><span class="pre">TriangulationGrammars.is_f_in_keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.label_retri_or_divide_for_backout_rule"><code class="docutils literal notranslate"><span class="pre">TriangulationGrammars.label_retri_or_divide_for_backout_rule()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.merge_face"><code class="docutils literal notranslate"><span class="pre">TriangulationGrammars.merge_face()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.pick_random_grammar"><code class="docutils literal notranslate"><span class="pre">TriangulationGrammars.pick_random_grammar()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.remove_faces"><code class="docutils literal notranslate"><span class="pre">TriangulationGrammars.remove_faces()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.retriangulate_face"><code class="docutils literal notranslate"><span class="pre">TriangulationGrammars.retriangulate_face()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.set_seed"><code class="docutils literal notranslate"><span class="pre">TriangulationGrammars.set_seed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.grammars.html#mango.grammars.origami_grammars.TriangulationGrammars.update_face_values"><code class="docutils literal notranslate"><span class="pre">TriangulationGrammars.update_face_values()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mango.mango_features.html">Input design features</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mango.mango_features.html#module-mango.mango_features.preserved_regions">Preserved Regions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.preserved_regions.PreservedEdge"><code class="docutils literal notranslate"><span class="pre">PreservedEdge</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.preserved_regions.PreservedEdge.v1"><code class="docutils literal notranslate"><span class="pre">PreservedEdge.v1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.preserved_regions.PreservedEdge.v2"><code class="docutils literal notranslate"><span class="pre">PreservedEdge.v2</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.preserved_regions.PreservedVertex"><code class="docutils literal notranslate"><span class="pre">PreservedVertex</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.preserved_regions.PreservedVertex.v1"><code class="docutils literal notranslate"><span class="pre">PreservedVertex.v1</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mango.mango_features.html#module-mango.mango_features.excluded_regions">Excluded Regions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.excluded_regions.RectangularPrism"><code class="docutils literal notranslate"><span class="pre">RectangularPrism</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.excluded_regions.RectangularPrism.c1"><code class="docutils literal notranslate"><span class="pre">RectangularPrism.c1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.excluded_regions.RectangularPrism.c2"><code class="docutils literal notranslate"><span class="pre">RectangularPrism.c2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.excluded_regions.RectangularPrism.edge_intersecting_face"><code class="docutils literal notranslate"><span class="pre">RectangularPrism.edge_intersecting_face()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.excluded_regions.RectangularPrism.numDecimals"><code class="docutils literal notranslate"><span class="pre">RectangularPrism.numDecimals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.excluded_regions.RectangularPrism.point_inside_space"><code class="docutils literal notranslate"><span class="pre">RectangularPrism.point_inside_space()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.excluded_regions.RectangularPrism.verify_corners_opposing"><code class="docutils literal notranslate"><span class="pre">RectangularPrism.verify_corners_opposing()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.excluded_regions.Sphere"><code class="docutils literal notranslate"><span class="pre">Sphere</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.excluded_regions.Sphere.center"><code class="docutils literal notranslate"><span class="pre">Sphere.center</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.excluded_regions.Sphere.diameter"><code class="docutils literal notranslate"><span class="pre">Sphere.diameter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.excluded_regions.Sphere.edge_intersecting_face"><code class="docutils literal notranslate"><span class="pre">Sphere.edge_intersecting_face()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.excluded_regions.Sphere.numDecimals"><code class="docutils literal notranslate"><span class="pre">Sphere.numDecimals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.excluded_regions.Sphere.point_inside_space"><code class="docutils literal notranslate"><span class="pre">Sphere.point_inside_space()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.excluded_regions.Sphere.recenter_mesh"><code class="docutils literal notranslate"><span class="pre">Sphere.recenter_mesh()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.excluded_regions.Sphere.update_icosa_faces"><code class="docutils literal notranslate"><span class="pre">Sphere.update_icosa_faces()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mango.mango_features.html#module-mango.mango_features.grammar_ramp">Ramp Element</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.grammar_ramp.Ramp"><code class="docutils literal notranslate"><span class="pre">Ramp</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.grammar_ramp.Ramp.create_ramp"><code class="docutils literal notranslate"><span class="pre">Ramp.create_ramp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.grammar_ramp.Ramp.current_ramp_value"><code class="docutils literal notranslate"><span class="pre">Ramp.current_ramp_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.grammar_ramp.Ramp.distribute"><code class="docutils literal notranslate"><span class="pre">Ramp.distribute()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.grammar_ramp.Ramp.max_number_epochs"><code class="docutils literal notranslate"><span class="pre">Ramp.max_number_epochs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.grammar_ramp.Ramp.max_value"><code class="docutils literal notranslate"><span class="pre">Ramp.max_value</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.grammar_ramp.Ramp.min_steps_at_min"><code class="docutils literal notranslate"><span class="pre">Ramp.min_steps_at_min</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.grammar_ramp.Ramp.min_value"><code class="docutils literal notranslate"><span class="pre">Ramp.min_value</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.grammar_ramp.Ramp.precision"><code class="docutils literal notranslate"><span class="pre">Ramp.precision</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.grammar_ramp.Ramp.unique_id"><code class="docutils literal notranslate"><span class="pre">Ramp.unique_id</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mango.mango_features.html#module-mango.mango_features.mesh_face">Mesh Face (Not intended as user-facing)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.mesh_face.MeshFace"><code class="docutils literal notranslate"><span class="pre">MeshFace</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.mesh_face.MeshFace.calculate_face_centroid"><code class="docutils literal notranslate"><span class="pre">MeshFace.calculate_face_centroid()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.mesh_face.MeshFace.divide_triangular_face"><code class="docutils literal notranslate"><span class="pre">MeshFace.divide_triangular_face()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.mesh_face.MeshFace.equation_of_face"><code class="docutils literal notranslate"><span class="pre">MeshFace.equation_of_face()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.mesh_face.MeshFace.face_type"><code class="docutils literal notranslate"><span class="pre">MeshFace.face_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.mesh_face.MeshFace.get_face_plot"><code class="docutils literal notranslate"><span class="pre">MeshFace.get_face_plot()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.mesh_face.MeshFace.numDecimals"><code class="docutils literal notranslate"><span class="pre">MeshFace.numDecimals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.mesh_face.MeshFace.update_vertex_values"><code class="docutils literal notranslate"><span class="pre">MeshFace.update_vertex_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.mesh_face.MeshFace.v1"><code class="docutils literal notranslate"><span class="pre">MeshFace.v1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.mesh_face.MeshFace.v2"><code class="docutils literal notranslate"><span class="pre">MeshFace.v2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.mesh_face.MeshFace.v3"><code class="docutils literal notranslate"><span class="pre">MeshFace.v3</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.mango_features.html#mango.mango_features.mesh_face.MeshFace.v4"><code class="docutils literal notranslate"><span class="pre">MeshFace.v4</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mango.optimization_features.html">Optimization problem definition</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mango.optimization_features.html#module-mango.optimization_features.design_constraints">Design Constraints</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.CustomDesignConstraint"><code class="docutils literal notranslate"><span class="pre">CustomDesignConstraint</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.CustomDesignConstraint.design_constraint"><code class="docutils literal notranslate"><span class="pre">CustomDesignConstraint.design_constraint</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.CustomDesignConstraint.evaluate_constraint"><code class="docutils literal notranslate"><span class="pre">CustomDesignConstraint.evaluate_constraint()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.CustomDesignConstraint.extra_params"><code class="docutils literal notranslate"><span class="pre">CustomDesignConstraint.extra_params</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.CustomDesignConstraint.name"><code class="docutils literal notranslate"><span class="pre">CustomDesignConstraint.name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints"><code class="docutils literal notranslate"><span class="pre">PolyhedralDefaultConstraints</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.broken_preserved_edge"><code class="docutils literal notranslate"><span class="pre">PolyhedralDefaultConstraints.broken_preserved_edge()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.call_function_with_params"><code class="docutils literal notranslate"><span class="pre">PolyhedralDefaultConstraints.call_function_with_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.check_constraints"><code class="docutils literal notranslate"><span class="pre">PolyhedralDefaultConstraints.check_constraints()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.check_face_intersections"><code class="docutils literal notranslate"><span class="pre">PolyhedralDefaultConstraints.check_face_intersections()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.create_constraint_dictionary"><code class="docutils literal notranslate"><span class="pre">PolyhedralDefaultConstraints.create_constraint_dictionary()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.edge_in_excluded_region"><code class="docutils literal notranslate"><span class="pre">PolyhedralDefaultConstraints.edge_in_excluded_region()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.extra_constraints"><code class="docutils literal notranslate"><span class="pre">PolyhedralDefaultConstraints.extra_constraints</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.find_intersecting_edges"><code class="docutils literal notranslate"><span class="pre">PolyhedralDefaultConstraints.find_intersecting_edges()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.invalid_edge_lengths"><code class="docutils literal notranslate"><span class="pre">PolyhedralDefaultConstraints.invalid_edge_lengths()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.invalid_face_angles"><code class="docutils literal notranslate"><span class="pre">PolyhedralDefaultConstraints.invalid_face_angles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.max_edge_length"><code class="docutils literal notranslate"><span class="pre">PolyhedralDefaultConstraints.max_edge_length</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.max_number_basepairs_in_scaffold"><code class="docutils literal notranslate"><span class="pre">PolyhedralDefaultConstraints.max_number_basepairs_in_scaffold</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.min_edge_length"><code class="docutils literal notranslate"><span class="pre">PolyhedralDefaultConstraints.min_edge_length</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.min_face_angle"><code class="docutils literal notranslate"><span class="pre">PolyhedralDefaultConstraints.min_face_angle</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.outside_design_space"><code class="docutils literal notranslate"><span class="pre">PolyhedralDefaultConstraints.outside_design_space()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.scaffold_routing_algorithm"><code class="docutils literal notranslate"><span class="pre">PolyhedralDefaultConstraints.scaffold_routing_algorithm</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.update_params"><code class="docutils literal notranslate"><span class="pre">PolyhedralDefaultConstraints.update_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.used_too_much_scaffold"><code class="docutils literal notranslate"><span class="pre">PolyhedralDefaultConstraints.used_too_much_scaffold()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.vert_in_excluded_region"><code class="docutils literal notranslate"><span class="pre">PolyhedralDefaultConstraints.vert_in_excluded_region()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mango.optimization_features.html#module-mango.optimization_features.objective_function">Objective Function</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.objective_function.ObjectiveFunction"><code class="docutils literal notranslate"><span class="pre">ObjectiveFunction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.objective_function.ObjectiveFunction.evaluate_function"><code class="docutils literal notranslate"><span class="pre">ObjectiveFunction.evaluate_function()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.objective_function.ObjectiveFunction.extra_params"><code class="docutils literal notranslate"><span class="pre">ObjectiveFunction.extra_params</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.objective_function.ObjectiveFunction.name"><code class="docutils literal notranslate"><span class="pre">ObjectiveFunction.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.objective_function.ObjectiveFunction.numDecimals"><code class="docutils literal notranslate"><span class="pre">ObjectiveFunction.numDecimals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimization_features.html#mango.optimization_features.objective_function.ObjectiveFunction.objective_equation"><code class="docutils literal notranslate"><span class="pre">ObjectiveFunction.objective_equation</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mango.optimizers.html">Optimizers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mango.optimizers.html#module-mango.optimizers.multiobjective_simulated_annealing">Shape Annealing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA"><code class="docutils literal notranslate"><span class="pre">MOSA</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.NT1"><code class="docutils literal notranslate"><span class="pre">MOSA.NT1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.NT2"><code class="docutils literal notranslate"><span class="pre">MOSA.NT2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.N_Bi"><code class="docutils literal notranslate"><span class="pre">MOSA.N_Bi</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.N_Bi_LowerLimit"><code class="docutils literal notranslate"><span class="pre">MOSA.N_Bi_LowerLimit</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.Na"><code class="docutils literal notranslate"><span class="pre">MOSA.Na</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.SAVE_NAME_NO_EXTENSION"><code class="docutils literal notranslate"><span class="pre">MOSA.SAVE_NAME_NO_EXTENSION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.SAVE_PATH"><code class="docutils literal notranslate"><span class="pre">MOSA.SAVE_PATH</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.T_min"><code class="docutils literal notranslate"><span class="pre">MOSA.T_min</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.acceptance_function"><code class="docutils literal notranslate"><span class="pre">MOSA.acceptance_function</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.archive_datapoint"><code class="docutils literal notranslate"><span class="pre">MOSA.archive_datapoint()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.attempt_to_archive"><code class="docutils literal notranslate"><span class="pre">MOSA.attempt_to_archive()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.begin_MOSA"><code class="docutils literal notranslate"><span class="pre">MOSA.begin_MOSA()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.calculate_and_store_objective_function_values"><code class="docutils literal notranslate"><span class="pre">MOSA.calculate_and_store_objective_function_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.calculate_objective_function_values"><code class="docutils literal notranslate"><span class="pre">MOSA.calculate_objective_function_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.calculate_pareto_isolation"><code class="docutils literal notranslate"><span class="pre">MOSA.calculate_pareto_isolation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.constraint_set"><code class="docutils literal notranslate"><span class="pre">MOSA.constraint_set</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.cooling_rate_geometric"><code class="docutils literal notranslate"><span class="pre">MOSA.cooling_rate_geometric</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.cooling_schedule"><code class="docutils literal notranslate"><span class="pre">MOSA.cooling_schedule</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.delta_T"><code class="docutils literal notranslate"><span class="pre">MOSA.delta_T</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.design_constraints"><code class="docutils literal notranslate"><span class="pre">MOSA.design_constraints</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.design_space"><code class="docutils literal notranslate"><span class="pre">MOSA.design_space</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.extension_ramp"><code class="docutils literal notranslate"><span class="pre">MOSA.extension_ramp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.extension_value_default"><code class="docutils literal notranslate"><span class="pre">MOSA.extension_value_default</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.get_extend_and_rotation_values"><code class="docutils literal notranslate"><span class="pre">MOSA.get_extend_and_rotation_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.grammars"><code class="docutils literal notranslate"><span class="pre">MOSA.grammars</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.initialize_objective_function_lists"><code class="docutils literal notranslate"><span class="pre">MOSA.initialize_objective_function_lists()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.initialize_temperatures"><code class="docutils literal notranslate"><span class="pre">MOSA.initialize_temperatures()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.initialize_time_tracker_dict"><code class="docutils literal notranslate"><span class="pre">MOSA.initialize_time_tracker_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.keep_annealing"><code class="docutils literal notranslate"><span class="pre">MOSA.keep_annealing()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.max_number_of_epochs"><code class="docutils literal notranslate"><span class="pre">MOSA.max_number_of_epochs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.max_time_of_optimization_minutes"><code class="docutils literal notranslate"><span class="pre">MOSA.max_time_of_optimization_minutes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.metropolis"><code class="docutils literal notranslate"><span class="pre">MOSA.metropolis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.minimal_candidate_set_size"><code class="docutils literal notranslate"><span class="pre">MOSA.minimal_candidate_set_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.numDecimals"><code class="docutils literal notranslate"><span class="pre">MOSA.numDecimals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.objective_functions"><code class="docutils literal notranslate"><span class="pre">MOSA.objective_functions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.p_accept"><code class="docutils literal notranslate"><span class="pre">MOSA.p_accept()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.print_progress"><code class="docutils literal notranslate"><span class="pre">MOSA.print_progress</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.probability_acceptance"><code class="docutils literal notranslate"><span class="pre">MOSA.probability_acceptance()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.quench_temperatures"><code class="docutils literal notranslate"><span class="pre">MOSA.quench_temperatures()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.r_b"><code class="docutils literal notranslate"><span class="pre">MOSA.r_b</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.r_i"><code class="docutils literal notranslate"><span class="pre">MOSA.r_i</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.random_seed"><code class="docutils literal notranslate"><span class="pre">MOSA.random_seed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.return_to_base"><code class="docutils literal notranslate"><span class="pre">MOSA.return_to_base()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.rotation_ramp"><code class="docutils literal notranslate"><span class="pre">MOSA.rotation_ramp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.rotation_value_degrees_default"><code class="docutils literal notranslate"><span class="pre">MOSA.rotation_value_degrees_default</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.save_output"><code class="docutils literal notranslate"><span class="pre">MOSA.save_output()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.store_objectives_worse_move"><code class="docutils literal notranslate"><span class="pre">MOSA.store_objectives_worse_move()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.store_pareto_for_animation"><code class="docutils literal notranslate"><span class="pre">MOSA.store_pareto_for_animation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.update_constraint_time_tracker"><code class="docutils literal notranslate"><span class="pre">MOSA.update_constraint_time_tracker()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.update_design_space"><code class="docutils literal notranslate"><span class="pre">MOSA.update_design_space()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.MOSA.verify_input_values"><code class="docutils literal notranslate"><span class="pre">MOSA.verify_input_values()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.multiobjective_simulated_annealing.random"><code class="docutils literal notranslate"><span class="pre">random()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mango.optimizers.html#module-mango.optimizers.single_objective_shape_annealing">Multiobjective Shape Annealing (MOSA)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.SAVE_NAME_NO_EXTENSION"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.SAVE_NAME_NO_EXTENSION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.SAVE_PATH"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.SAVE_PATH</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.T_min"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.T_min</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.begin_annealing"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.begin_annealing()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.calculate_and_store_objective_function_values"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.calculate_and_store_objective_function_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.calculate_objective_function_value"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.calculate_objective_function_value()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.constraint_set"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.constraint_set</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.convergence_threshold"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.convergence_threshold</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.cooling_rate_geometric"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.cooling_rate_geometric</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.cooling_schedule"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.cooling_schedule</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.delta_T"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.delta_T</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.design_constraints"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.design_constraints</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.design_space"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.design_space</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.extension_ramp"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.extension_ramp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.extension_value_default"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.extension_value_default</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.get_extend_and_rotation_values"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.get_extend_and_rotation_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.grammars"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.grammars</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.initialize_temperature"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.initialize_temperature()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.initialize_time_tracker_dict"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.initialize_time_tracker_dict()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.keep_annealing"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.keep_annealing()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.limit"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.limit</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.max_number_of_epochs"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.max_number_of_epochs</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.max_time_of_optimization_minutes"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.max_time_of_optimization_minutes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.metropolis"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.metropolis()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.minimal_convergence_size"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.minimal_convergence_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.n"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.n</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.n_stop"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.n_stop</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.numDecimals"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.numDecimals</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.objective_function"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.objective_function</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.print_progress"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.print_progress</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.quench_temperatures"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.quench_temperatures()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.random_seed"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.random_seed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.random_walk_steps"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.random_walk_steps</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.rotation_ramp"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.rotation_ramp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.rotation_value_degrees_default"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.rotation_value_degrees_default</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.save_output"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.save_output()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.store_design_for_animation"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.store_design_for_animation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.update_design_space"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.update_design_space()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.use_convergence"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.use_convergence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.ShapeAnneal.verify_input_values"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal.verify_input_values()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mango.optimizers.html#mango.optimizers.single_objective_shape_annealing.random"><code class="docutils literal notranslate"><span class="pre">random()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mango.utils.html">Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mango.utils.html#module-mango.utils.DNA_property_constants">DNA Constants</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.DNA_property_constants.BDNA"><code class="docutils literal notranslate"><span class="pre">BDNA</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.utils.html#mango.utils.DNA_property_constants.BDNA.diameter"><code class="docutils literal notranslate"><span class="pre">BDNA.diameter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.utils.html#mango.utils.DNA_property_constants.BDNA.pitch_per_rise"><code class="docutils literal notranslate"><span class="pre">BDNA.pitch_per_rise</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mango.utils.html#module-mango.utils.design_io">Design IO</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.design_io.all_same"><code class="docutils literal notranslate"><span class="pre">all_same()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.design_io.export_DNA_design"><code class="docutils literal notranslate"><span class="pre">export_DNA_design()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.design_io.export_design_to_ply"><code class="docutils literal notranslate"><span class="pre">export_design_to_ply()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.design_io.export_list_of_designs_to_ply"><code class="docutils literal notranslate"><span class="pre">export_list_of_designs_to_ply()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.design_io.mass_design_export"><code class="docutils literal notranslate"><span class="pre">mass_design_export()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mango.utils.html#module-mango.utils.mango_math">Math Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.mango_math.all_node_xyz_dict"><code class="docutils literal notranslate"><span class="pre">all_node_xyz_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.mango_math.are_points_non_collinear"><code class="docutils literal notranslate"><span class="pre">are_points_non_collinear()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.mango_math.calculate_design_edge_lengths"><code class="docutils literal notranslate"><span class="pre">calculate_design_edge_lengths()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.mango_math.find_graph_differences"><code class="docutils literal notranslate"><span class="pre">find_graph_differences()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.mango_math.find_non_collinear_nodes"><code class="docutils literal notranslate"><span class="pre">find_non_collinear_nodes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.mango_math.find_shortest_path"><code class="docutils literal notranslate"><span class="pre">find_shortest_path()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.mango_math.find_smaller_z_value"><code class="docutils literal notranslate"><span class="pre">find_smaller_z_value()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.mango_math.get_all_edges_in_graph"><code class="docutils literal notranslate"><span class="pre">get_all_edges_in_graph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.mango_math.get_all_verts_in_graph"><code class="docutils literal notranslate"><span class="pre">get_all_verts_in_graph()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.mango_math.intersecting_edge_calc"><code class="docutils literal notranslate"><span class="pre">intersecting_edge_calc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.mango_math.length_and_direction_between_nodes"><code class="docutils literal notranslate"><span class="pre">length_and_direction_between_nodes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.mango_math.node_from_xyz"><code class="docutils literal notranslate"><span class="pre">node_from_xyz()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.mango_math.nodes_on_same_face"><code class="docutils literal notranslate"><span class="pre">nodes_on_same_face()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.mango_math.parallelepiped_volume"><code class="docutils literal notranslate"><span class="pre">parallelepiped_volume()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.mango_math.positive_value"><code class="docutils literal notranslate"><span class="pre">positive_value()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.mango_math.rotation_matrix_from_vectors"><code class="docutils literal notranslate"><span class="pre">rotation_matrix_from_vectors()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.mango_math.sign"><code class="docutils literal notranslate"><span class="pre">sign()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.mango_math.unit_vector"><code class="docutils literal notranslate"><span class="pre">unit_vector()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.mango_math.update_nodal_position"><code class="docutils literal notranslate"><span class="pre">update_nodal_position()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.mango_math.update_vertex_in_all_faces"><code class="docutils literal notranslate"><span class="pre">update_vertex_in_all_faces()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="mango.utils.html#mango.utils.mango_math.xyz_from_graph"><code class="docutils literal notranslate"><span class="pre">xyz_from_graph()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mango.visualizations.html">Visualization Options</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mango.visualizations.html#module-mango.visualizations.display_mesh_design">Display Designs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation"><code class="docutils literal notranslate"><span class="pre">CylindricalRepresentation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.axis_title_font"><code class="docutils literal notranslate"><span class="pre">CylindricalRepresentation.axis_title_font</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.bounding_box"><code class="docutils literal notranslate"><span class="pre">CylindricalRepresentation.bounding_box</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.camera_position"><code class="docutils literal notranslate"><span class="pre">CylindricalRepresentation.camera_position</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.create_plot"><code class="docutils literal notranslate"><span class="pre">CylindricalRepresentation.create_plot()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.cylinder_color"><code class="docutils literal notranslate"><span class="pre">CylindricalRepresentation.cylinder_color</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.cylinder_diameter"><code class="docutils literal notranslate"><span class="pre">CylindricalRepresentation.cylinder_diameter</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.design"><code class="docutils literal notranslate"><span class="pre">CylindricalRepresentation.design</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.display_axes"><code class="docutils literal notranslate"><span class="pre">CylindricalRepresentation.display_axes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.display_background"><code class="docutils literal notranslate"><span class="pre">CylindricalRepresentation.display_background</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.excluded_color"><code class="docutils literal notranslate"><span class="pre">CylindricalRepresentation.excluded_color</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.opaque_excluded_region"><code class="docutils literal notranslate"><span class="pre">CylindricalRepresentation.opaque_excluded_region</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.plot_background_color"><code class="docutils literal notranslate"><span class="pre">CylindricalRepresentation.plot_background_color</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.plot_bounding_box"><code class="docutils literal notranslate"><span class="pre">CylindricalRepresentation.plot_bounding_box()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.plot_edges_as_surfaces"><code class="docutils literal notranslate"><span class="pre">CylindricalRepresentation.plot_edges_as_surfaces()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.plot_excluded_regions"><code class="docutils literal notranslate"><span class="pre">CylindricalRepresentation.plot_excluded_regions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.return_figure"><code class="docutils literal notranslate"><span class="pre">CylindricalRepresentation.return_figure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.show_bounding_box"><code class="docutils literal notranslate"><span class="pre">CylindricalRepresentation.show_bounding_box</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.show_box_bounds"><code class="docutils literal notranslate"><span class="pre">CylindricalRepresentation.show_box_bounds</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.show_excluded_regions"><code class="docutils literal notranslate"><span class="pre">CylindricalRepresentation.show_excluded_regions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.show_figure"><code class="docutils literal notranslate"><span class="pre">CylindricalRepresentation.show_figure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.CylindricalRepresentation.tick_font"><code class="docutils literal notranslate"><span class="pre">CylindricalRepresentation.tick_font</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.axis_title_font"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.axis_title_font</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.bounding_box"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.bounding_box</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.camera_position"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.camera_position</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.constant_edge_color"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.constant_edge_color</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.create_plot"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.create_plot()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.design"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.design</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.display_axes"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.display_axes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.display_background"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.display_background</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.display_node_names"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.display_node_names</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.excluded_color"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.excluded_color</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.face_color"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.face_color</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.line_width"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.line_width</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.node_color"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.node_color</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.opaque_excluded_region"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.opaque_excluded_region</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.plot_background_color"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.plot_background_color</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.plot_bounding_box"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.plot_bounding_box()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.plot_edges_and_nodes"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.plot_edges_and_nodes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.plot_excluded_regions"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.plot_excluded_regions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.plot_mesh_faces"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.plot_mesh_faces()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.return_figure"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.return_figure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.show_bounding_box"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.show_bounding_box</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.show_excluded_regions"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.show_excluded_regions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.show_figure"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.show_figure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.show_mesh_nodes"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.show_mesh_nodes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.symbol"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.symbol</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.symbol_size"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.symbol_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.display_mesh_design.MeshRepresentation.tick_font"><code class="docutils literal notranslate"><span class="pre">MeshRepresentation.tick_font</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mango.visualizations.html#module-mango.visualizations.mango_output_visualization">Create Output</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.mango_output_visualization.Obj"><code class="docutils literal notranslate"><span class="pre">Obj</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.mango_output_visualization.Obj.objs"><code class="docutils literal notranslate"><span class="pre">Obj.objs</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.mango_output_visualization.VisualizationObject"><code class="docutils literal notranslate"><span class="pre">VisualizationObject</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.mango_output_visualization.VisualizationObject.aj1_filepath"><code class="docutils literal notranslate"><span class="pre">VisualizationObject.aj1_filepath</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.mango_output_visualization.VisualizationObject.create_pareto_animation_figure"><code class="docutils literal notranslate"><span class="pre">VisualizationObject.create_pareto_animation_figure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.mango_output_visualization.VisualizationObject.create_standard_output_multi_objective"><code class="docutils literal notranslate"><span class="pre">VisualizationObject.create_standard_output_multi_objective()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.mango_output_visualization.VisualizationObject.create_standard_output_single_objective"><code class="docutils literal notranslate"><span class="pre">VisualizationObject.create_standard_output_single_objective()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.mango_output_visualization.VisualizationObject.max_number_of_windows"><code class="docutils literal notranslate"><span class="pre">VisualizationObject.max_number_of_windows</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.mango_output_visualization.VisualizationObject.output_filename_no_extension"><code class="docutils literal notranslate"><span class="pre">VisualizationObject.output_filename_no_extension</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.mango_output_visualization.VisualizationObject.output_filepath"><code class="docutils literal notranslate"><span class="pre">VisualizationObject.output_filepath</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.mango_output_visualization.VisualizationObject.read_in_file"><code class="docutils literal notranslate"><span class="pre">VisualizationObject.read_in_file()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.mango_output_visualization.select_evenly_spaced_tuples"><code class="docutils literal notranslate"><span class="pre">select_evenly_spaced_tuples()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mango.visualizations.html#module-mango.visualizations.optimizer_analysis">Analyze optimizer performance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.animation_epoch_step_size"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis.animation_epoch_step_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.annotation_font_size"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis.annotation_font_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.axis_title_font_size"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis.axis_title_font_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.calculate_pareto_front"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis.calculate_pareto_front()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.create_pareto_animation_figure"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis.create_pareto_animation_figure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.create_pareto_data"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis.create_pareto_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.create_subplot_grid"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis.create_subplot_grid()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.legend_font"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis.legend_font</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.objective_function_trace"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis.objective_function_trace()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.pareto_2D_section"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis.pareto_2D_section()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_acceptance_probabilities"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis.plot_acceptance_probabilities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_all_objective_func_values"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis.plot_all_objective_func_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_final_2D_paretos"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis.plot_final_2D_paretos()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_final_3D_pareto"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis.plot_final_3D_pareto()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_temperatures_over_time"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis.plot_temperatures_over_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.plot_title_font_size"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis.plot_title_font_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.results_path"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis.results_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.return_figure"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis.return_figure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.show_figure"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis.show_figure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.sub_plot_title_font_size"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis.sub_plot_title_font_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.temperature_trace"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis.temperature_trace()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.tick_font_size"><code class="docutils literal notranslate"><span class="pre">MOSA_Analysis.tick_font_size</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal_Analysis</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.annotation_font_size"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal_Analysis.annotation_font_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.axis_title_font_size"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal_Analysis.axis_title_font_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.legend_font"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal_Analysis.legend_font</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.plot_objective_trace"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal_Analysis.plot_objective_trace()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.plot_temperature_trace"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal_Analysis.plot_temperature_trace()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.plot_title_font_size"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal_Analysis.plot_title_font_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.results_path"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal_Analysis.results_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.return_figure"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal_Analysis.return_figure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.show_figure"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal_Analysis.show_figure()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.sub_plot_title_font_size"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal_Analysis.sub_plot_title_font_size</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="mango.visualizations.html#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.tick_font_size"><code class="docutils literal notranslate"><span class="pre">ShapeAnneal_Analysis.tick_font_size</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="mango" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mango.design_spaces.html" class="btn btn-neutral float-right" title="Establishing design space" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, A.J. Vetturini.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
