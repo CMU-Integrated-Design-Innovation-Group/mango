@@ -6,8 +6,9 @@ Also, this package can create standardized outputs that can be created via the [
 This package is in active development and it should be expected for code to change quite frequently. 
 
 # Documentation
-Documentation can be found [here]().
-Tutorials can be found [here]().
+Documentation can be found [here](https://mango-documentation.readthedocs.io/en/latest/mango.html).
+
+Tutorials can be found [here](https://mango-documentation.readthedocs.io/en/latest/tutorials.html).
 
 # How to install
 As this toolkit is still an early build, it is not currently available on PyPi / pip. Therefore, to install (or update) the package, please run the following commands.
