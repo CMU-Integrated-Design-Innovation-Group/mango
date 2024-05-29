@@ -13,8 +13,8 @@ Tutorials can be found [here]().
 Since this toolkit is in an early build, it is not currently available on PyPi / pip. Therefore, to install (or update) the package, please run the following commands.
 1) Create a new virtual environment in anaconda (_recommended_)  
 2) Open the terminal and run the following commands in order (you can just copy and paste the whole line. Please note the period on the 3rd bullet)
-   - git clone https://github.com/ajvetturini/mango.git
-   - cd mango
+   - git clone https://github.com/CMU-Integrated-Design-Innovation-Group/Mango.git
+   - cd Mango
    - pip install -e .
 
 This should install the mango to your environment which you can then import into a Python. Please see readthedocs (or files in the tests folder) for a tutorial on how this framework is intended to be used.
