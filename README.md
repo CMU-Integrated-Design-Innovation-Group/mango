@@ -7,16 +7,9 @@ Also, this package can create standardized outputs that can be created via the [
 This package is in active development and it should be expected for code to change quite frequently.
 
 # Documentation
-<<<<<<< HEAD
-
-Documentation can be found [here]().
-
-Tutorials can be found [here]().
-=======
 Documentation can be found [here](https://mango-documentation.readthedocs.io/en/latest/mango.html).
 
 Tutorials can be found [here](https://mango-documentation.readthedocs.io/en/latest/tutorials.html).
->>>>>>> fddd1534b4f456da68ec8c4cde677136ce6e6380
 
 # How to install
 
