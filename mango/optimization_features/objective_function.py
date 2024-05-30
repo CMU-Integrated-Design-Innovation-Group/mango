@@ -1,8 +1,8 @@
-"""
-A.J. Vetturini
-IDIG and MMBL
-Carnegie Mellon University
+# A.J. Vetturini
+# IDIG and MMBL
+# Carnegie Mellon University
 
+"""
 This script simply contains the dataclass for creating an ObjectiveFunction to use to guide the search process for
 a generative study.
 """

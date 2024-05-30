@@ -15,7 +15,7 @@
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../../../_static/documentation_options.js?v=7d16594f"></script>
-        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -73,19 +73,19 @@
            <div itemprop="articleBody">
              
   <h1>Source code for mango.visualizations.optimizer_analysis</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">A.J. Vetturini \n</span>
-<span class="sd">IDIG and MMBL \n</span>
-<span class="sd">Carnegie Mellon University \n</span>
+<span></span><span class="c1"># A.J. Vetturini</span>
+<span class="c1"># IDIG and MMBL</span>
+<span class="c1"># Carnegie Mellon University</span>
 
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This script is responsible for the creation of plots that a user may be interested in creating for their results file.</span>
 <span class="sd">While many results are created with this script, you may want to create your own plotting functions after the fact once</span>
 <span class="sd">you know what type of data you want to specifically analyze!</span>
 
 <span class="sd">NOTE:</span>
-<span class="sd">    Some of the code here is HORRIBLE. I intially wrote these internally for a completely different use-case that I</span>
+<span class="sd">    Some of the code here need updating. I intially wrote these internally for a completely different use-case that I</span>
 <span class="sd">    later scrapped. The practices used here do not make sense for this application, and I really need to update them</span>
-<span class="sd">    when I find time (will I find the time?). \n</span>
+<span class="sd">    when I find time (will I find the time?).</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># Import modules</span>
 <span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
@@ -102,20 +102,20 @@
 <span class="k">class</span> <span class="nc">MOSA_Analysis</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class creates some simple analysis of the optimizer performance such that a user can readily assess how &quot;well&quot;</span>
-<span class="sd">    the generative process went. \n</span>
+<span class="sd">    the generative process went.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ------------</span>
-<span class="sd">    results_path : Filepath to .aj1 file that conducted a MOSA optimization \n \n</span>
+<span class="sd">    results_path : Filepath to .aj1 file that conducted a MOSA optimization</span>
 
-<span class="sd">    DISPLAY options that control colors / font sizes: \n</span>
-<span class="sd">    tick_font_size : Integer point-size of ticker font (default: 16) \n</span>
-<span class="sd">    axis_title_font_size : Integer point-size of axis titles (default: 18) \n</span>
-<span class="sd">    annotation_font_size : Integer point-size of annotation / text boxes (default: 14) \n</span>
-<span class="sd">    sub_plot_title_font_size : Integer point-size of subplot titles (default: 18) \n</span>
-<span class="sd">    plot_title_font_size : Integer point-size of figure title (default: 18) \n</span>
-<span class="sd">    legend_font : Integer point-size of legend titles (default: 14) \n</span>
-<span class="sd">    animation_epoch_step_size : Essentially the result-save frequency (default: 1) \n</span>
+<span class="sd">    DISPLAY options that control colors / font sizes:</span>
+<span class="sd">    tick_font_size : Integer point-size of ticker font (default: 16)</span>
+<span class="sd">    axis_title_font_size : Integer point-size of axis titles (default: 18)</span>
+<span class="sd">    annotation_font_size : Integer point-size of annotation / text boxes (default: 14)</span>
+<span class="sd">    sub_plot_title_font_size : Integer point-size of subplot titles (default: 18)</span>
+<span class="sd">    plot_title_font_size : Integer point-size of figure title (default: 18)</span>
+<span class="sd">    legend_font : Integer point-size of legend titles (default: 14)</span>
+<span class="sd">    animation_epoch_step_size : Essentially the result-save frequency (default: 1)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">results_path</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># This is the path to read in a file</span>
     <span class="n">tick_font_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span>
@@ -672,15 +672,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span> <span class="o">=</span> <span class="n">fig</span></div>
 
 
-<div class="viewcode-block" id="MOSA_Analysis.show_figure">
-<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.show_figure">[docs]</a>
-    <span class="k">def</span> <span class="nf">show_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="MOSA_Analysis.show_fig">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.show_fig">[docs]</a>
+    <span class="k">def</span> <span class="nf">show_fig</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="MOSA_Analysis.return_figure">
-<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.return_figure">[docs]</a>
-    <span class="k">def</span> <span class="nf">return_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
+<div class="viewcode-block" id="MOSA_Analysis.return_fig">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.MOSA_Analysis.return_fig">[docs]</a>
+    <span class="k">def</span> <span class="nf">return_fig</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span></div>
 </div>
 
@@ -692,19 +692,19 @@
 <span class="k">class</span> <span class="nc">ShapeAnneal_Analysis</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class creates some simple analysis of the optimizer performance such that a user can readily assess how &quot;well&quot;</span>
-<span class="sd">    the generative process went. \n</span>
+<span class="sd">    the generative process went.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ------------</span>
-<span class="sd">    results_path : Filepath to .aj1 file that conducted a shape annealing optimization \n \n</span>
+<span class="sd">    results_path : Filepath to .aj1 file that conducted a shape annealing optimization</span>
 
-<span class="sd">    DISPLAY options that control colors / font sizes: \n</span>
-<span class="sd">    tick_font_size : Integer point-size of ticker font (default: 16) \n</span>
-<span class="sd">    axis_title_font_size : Integer point-size of axis titles (default: 18) \n</span>
-<span class="sd">    annotation_font_size : Integer point-size of annotation / text boxes (default: 14) \n</span>
-<span class="sd">    sub_plot_title_font_size : Integer point-size of subplot titles (default: 18) \n</span>
-<span class="sd">    plot_title_font_size : Integer point-size of figure title (default: 18) \n</span>
-<span class="sd">    legend_font : Integer point-size of legend titles (default: 14) \n</span>
+<span class="sd">    DISPLAY options that control colors / font sizes:</span>
+<span class="sd">    tick_font_size : Integer point-size of ticker font (default: 16)</span>
+<span class="sd">    axis_title_font_size : Integer point-size of axis titles (default: 18)</span>
+<span class="sd">    annotation_font_size : Integer point-size of annotation / text boxes (default: 14)</span>
+<span class="sd">    sub_plot_title_font_size : Integer point-size of subplot titles (default: 18)</span>
+<span class="sd">    plot_title_font_size : Integer point-size of figure title (default: 18)</span>
+<span class="sd">    legend_font : Integer point-size of legend titles (default: 14)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">results_path</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># This is the path to read in a file</span>
     <span class="n">tick_font_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span>
@@ -771,15 +771,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span><span class="o">.</span><span class="n">update_yaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s1">&#39;Temperature&#39;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ShapeAnneal_Analysis.show_figure">
-<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.show_figure">[docs]</a>
-    <span class="k">def</span> <span class="nf">show_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="ShapeAnneal_Analysis.show_fig">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.show_fig">[docs]</a>
+    <span class="k">def</span> <span class="nf">show_fig</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="ShapeAnneal_Analysis.return_figure">
-<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.return_figure">[docs]</a>
-    <span class="k">def</span> <span class="nf">return_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
+<div class="viewcode-block" id="ShapeAnneal_Analysis.return_fig">
+<a class="viewcode-back" href="../../../mango.visualizations.html#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.return_fig">[docs]</a>
+    <span class="k">def</span> <span class="nf">return_fig</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">master_fig</span></div>
 </div>
 

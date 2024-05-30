@@ -15,7 +15,7 @@
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../../../_static/documentation_options.js?v=7d16594f"></script>
-        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -73,19 +73,19 @@
            <div itemprop="articleBody">
              
   <h1>Source code for mango.optimizers.multiobjective_simulated_annealing</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">A.J. Vetturini \n</span>
-<span class="sd">IDIG and MMBL \n</span>
-<span class="sd">Carnegie Mellon University \n</span>
+<span></span><span class="c1"># A.J. Vetturini</span>
+<span class="c1"># IDIG and MMBL</span>
+<span class="c1"># Carnegie Mellon University</span>
 
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Currently this optimizer is only available for the PolyhedralSpace; future work will potentially need to incorporate</span>
-<span class="sd">different spaces and update this class to allow different spaces. \n</span>
+<span class="sd">different spaces and update this class to allow different spaces.</span>
 
 <span class="sd">This script incorporates the MOSA algorithm as developed by Suppapitnam, Seffen, Parks, and Clarkson in &quot;A Simulated</span>
-<span class="sd">Annealing Algorithm for Multiobjective Optimization&quot; (Engineering Optimization, 2000, Vol 33. pp. 59-85) \n</span>
+<span class="sd">Annealing Algorithm for Multiobjective Optimization&quot; (Engineering Optimization, 2000, Vol 33. pp. 59-85)</span>
 
 <span class="sd">There are some modifications made to the algorithm in reference to Suppapitnarm, Parks, Shea, and Clarkson in</span>
-<span class="sd">&quot;Conceptual Design of Bicycle Frames by Multiobjective Shape Annealing&quot;. \n</span>
+<span class="sd">&quot;Conceptual Design of Bicycle Frames by Multiobjective Shape Annealing&quot;.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="c1"># Import Modules</span>
@@ -110,49 +110,49 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The optimizer is the &quot;heart and soul&quot; of the framework. It contains the logic for applying grammars and controlling</span>
 <span class="sd">    the optimization-driven generative process. There are various hyperparameters that can be tuned which establish</span>
-<span class="sd">    the depth of search and time spent searching. \n</span>
-<span class="sd"> </span>
+<span class="sd">    the depth of search and time spent searching.</span>
+
 <span class="sd">    This data class contains the multiobjective shape annealing (MOSA) algorithm implementation and is set to solve a</span>
 <span class="sd">    MOP with at least 2 objectives defined, but technically any N number of constraints can be input. However, MOSA has</span>
-<span class="sd">    only been tested with 2 or 3 objectives, so any higher dimensionality must be analyzed with detail. \n</span>
+<span class="sd">    only been tested with 2 or 3 objectives, so any higher dimensionality must be analyzed with detail.</span>
 
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ------------</span>
-<span class="sd">    design_space : Initial PolyhedralSpace representing the design which is to be optimized \n</span>
-<span class="sd">    grammars : A singular GrammarSet or a list of GrammarSets to use in the generative process \n</span>
-<span class="sd">    design_constraints : The PolyhedralDesignConstraint object which constraint the optimizer \n</span>
-<span class="sd">    objective_functions : List of at least 2 objective function objects to be minimized \n</span>
-<span class="sd">    SAVE_PATH : Path of where to save the resultant generative .aj1 file \n</span>
-<span class="sd">    SAVE_NAME_NO_EXTENSION : Filename of resultant .aj1 file \n </span>
-<span class="sd">    constraint_set : List of constraint name strings that are checked by the optimizer by default \n</span>
+<span class="sd">    design_space : Initial PolyhedralSpace representing the design which is to be optimized</span>
+<span class="sd">    grammars : A singular GrammarSet or a list of GrammarSets to use in the generative process</span>
+<span class="sd">    design_constraints : The PolyhedralDesignConstraint object which constraint the optimizer</span>
+<span class="sd">    objective_functions : List of at least 2 objective function objects to be minimized</span>
+<span class="sd">    SAVE_PATH : Path of where to save the resultant generative .aj1 file</span>
+<span class="sd">    SAVE_NAME_NO_EXTENSION : Filename of resultant .aj1 file</span>
+<span class="sd">    constraint_set : List of constraint name strings that are checked by the optimizer by default</span>
 
 <span class="sd">    Optional / Other input parameters that can be changed:</span>
-<span class="sd">    --------------------------------------------------------</span>
-<span class="sd">    extension_value_default : Default node extension value to use (default: 0.34 nm) \n</span>
-<span class="sd">    extension_ramp : Dictionary mapping a extension grammar to a Ramp element \n</span>
-<span class="sd">    rotation_value_degrees_default : Default edge rotation value to use (default: 1 degrees) \n</span>
-<span class="sd">    rotation_ramp: Dictionary mapping a rotation grammar to a Ramp element \n</span>
-<span class="sd">    numDecimals : Number of decimal places to round to \n</span>
-<span class="sd">    print_progress : Bool which determines if messages are printed to the terminal (default: TRUE) \n \n</span>
+<span class="sd">    ------------</span>
+<span class="sd">    extension_value_default : Default node extension value to use (default: 0.34 nm)</span>
+<span class="sd">    extension_ramp : Dictionary mapping a extension grammar to a Ramp element</span>
+<span class="sd">    rotation_value_degrees_default : Default edge rotation value to use (default: 1 degrees)</span>
+<span class="sd">    rotation_ramp: Dictionary mapping a rotation grammar to a Ramp element</span>
+<span class="sd">    numDecimals : Number of decimal places to round to</span>
+<span class="sd">    print_progress : Bool which determines if messages are printed to the terminal (default: TRUE)</span>
 
-<span class="sd">    Multiobjective Simulated Annealing Hyperparameters that can be controlled \n</span>
+<span class="sd">    Multiobjective Simulated Annealing Hyperparameters that can be controlled</span>
 <span class="sd">    Note that the default parameters here won&#39;t necessarily give a &quot;good&quot; result, they must be tuned!</span>
-<span class="sd">    ---------------------------------------------------------------------------------------------------</span>
-<span class="sd">    NT1 : Number of random walk steps to initialize the temperature of the space (default: 2000) \n</span>
-<span class="sd">    NT2 : Number of inner-loop mutations to consider before lowering temperature (default: 400) \n</span>
-<span class="sd">    Na : Number of accepted design solutions to consider before lowering temperature (default: 400, 0.4*NT2) \n</span>
-<span class="sd">    r_b : Return to base parameter in range (0, 1) and dictates frequency of changing active design (default: 0.95) \n</span>
-<span class="sd">    acceptance_function : Controls how often &quot;worse&quot; moves are accepted (default: standard) \n</span>
-<span class="sd">    cooling_schedule : Cooling schedule used during simulated annealing (default: huang / HRSV) \n</span>
-<span class="sd">    N_Bi : Number of iterations before returning to base (default: 800, 2*NT2) \n</span>
-<span class="sd">    N_Bi_LowerLimit : Lower limit on number of iterations before conducting return to base (default: 25) \n</span>
-<span class="sd">    minimal_candidate_set_size : Lower limit on number of designs to consider when returning to base (default: 10) \n</span>
-<span class="sd">    r_i : Parameter controlling how large the candidate set size is in range (0, 1) (default: 0.95) \n</span>
-<span class="sd">    max_time_of_optimization_minutes : Max time spent generating a design (default: 60 minutes) \n</span>
-<span class="sd">    T_min : Minimal temperature to end the annealing process (default: 1e-8) \n</span>
-<span class="sd">    cooling_rate_geometric : Cooling rate to use if using geometric cooling_schedule (default: 0.9) \n</span>
-<span class="sd">    delta_T : Triki annealing schedule adaptation rate, only used if using triki cooling_schedule (default: 0.8) \n</span>
+<span class="sd">    ------------</span>
+<span class="sd">    NT1 : Number of random walk steps to initialize the temperature of the space (default: 2000)</span>
+<span class="sd">    NT2 : Number of inner-loop mutations to consider before lowering temperature (default: 400)</span>
+<span class="sd">    Na : Number of accepted design solutions to consider before lowering temperature (default: 400, 0.4*NT2)</span>
+<span class="sd">    r_b : Return to base parameter in range (0, 1) and dictates frequency of changing active design (default: 0.95)</span>
+<span class="sd">    acceptance_function : Controls how often &quot;worse&quot; moves are accepted (default: standard)</span>
+<span class="sd">    cooling_schedule : Cooling schedule used during simulated annealing (default: huang / HRSV)</span>
+<span class="sd">    N_Bi : Number of iterations before returning to base (default: 800, 2*NT2)</span>
+<span class="sd">    N_Bi_LowerLimit : Lower limit on number of iterations before conducting return to base (default: 25)</span>
+<span class="sd">    minimal_candidate_set_size : Lower limit on number of designs to consider when returning to base (default: 10)</span>
+<span class="sd">    r_i : Parameter controlling how large the candidate set size is in range (0, 1) (default: 0.95)</span>
+<span class="sd">    max_time_of_optimization_minutes : Max time spent generating a design (default: 60 minutes)</span>
+<span class="sd">    T_min : Minimal temperature to end the annealing process (default: 1e-8)</span>
+<span class="sd">    cooling_rate_geometric : Cooling rate to use if using geometric cooling_schedule (default: 0.9)</span>
+<span class="sd">    delta_T : Triki annealing schedule adaptation rate, only used if using triki cooling_schedule (default: 0.8)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Input parameters that must be passed in:</span>
     <span class="n">design_space</span><span class="p">:</span> <span class="n">PolyhedralSpace</span>

@@ -15,7 +15,7 @@
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../../../_static/documentation_options.js?v=7d16594f"></script>
-        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -73,11 +73,11 @@
            <div itemprop="articleBody">
              
   <h1>Source code for mango.optimization_features.objective_function</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">A.J. Vetturini \n</span>
-<span class="sd">IDIG and MMBL \n</span>
-<span class="sd">Carnegie Mellon University \n</span>
+<span></span><span class="c1"># A.J. Vetturini</span>
+<span class="c1"># IDIG and MMBL</span>
+<span class="c1"># Carnegie Mellon University</span>
 
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This script simply contains the dataclass for creating an ObjectiveFunction to use to guide the search process for</span>
 <span class="sd">a generative study.</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -91,20 +91,21 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class lets the user define a custom function which can be assigned as the objective of the generative process.</span>
 <span class="sd">    This is a slight WIP as I may want to convert this to a Python wrapper, but I am not sure about the logistics (or if</span>
-<span class="sd">    this is even a good idea). This class is very similar to the CustomDesignConstraint class. \n </span>
+<span class="sd">    this is even a good idea). This class is very similar to the CustomDesignConstraint class.</span>
 
 <span class="sd">    The function can really be defined as anything, however it should be noted that there are no checks here to see how</span>
-<span class="sd">    &quot;good&quot; a constraint is or is not, and that is at the discretion of the user. \n</span>
+<span class="sd">    &quot;good&quot; a constraint is or is not, and that is at the discretion of the user.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ------------</span>
-<span class="sd">    name : String unique identifies of the constraint name \n</span>
-<span class="sd">    objective_equation : A Python function defining the objective. For example, if you have a constraint as: \n</span>
-<span class="sd">                        \t def bar(input_vars, extra_params): \n</span>
-<span class="sd">                            \t \t objective_function_code \n</span>
+<span class="sd">    name : String unique identifies of the constraint name</span>
+<span class="sd">    objective_equation : A Python function defining the objective. For example, if you have a constraint as:</span>
+<span class="sd">                        def bar(input_vars, extra_params):</span>
+<span class="sd">                            objective_function_code</span>
 
-<span class="sd">                        \t Then you would pass in ObjectiveFunction(name=&#39;bar&#39;, design_constraint=bar, extra_params=extra_params) \n</span>
-<span class="sd">    extra_params : A dictionary of constants / values that a user may want to use in the custom constraint \n</span>
+<span class="sd">                        Then you would pass in ObjectiveFunction(name=&#39;bar&#39;, design_constraint=bar,</span>
+<span class="sd">                                                                 extra_params=extra_params)</span>
+<span class="sd">    extra_params : A dictionary of constants / values that a user may want to use in the custom constraint</span>
 <span class="sd">    numDecimals : Floating point value to control precision. Allowing too high of precision, depending on the sampling</span>
 <span class="sd">                  sampling, can lead to the optimizers getting stuck in local minima around a certain point.</span>
 <span class="sd">    &quot;&quot;&quot;</span>

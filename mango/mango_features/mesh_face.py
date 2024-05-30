@@ -1,8 +1,8 @@
-"""
-A.J. Vetturini
-IDIG and MMBL
-Carnegie Mellon University
+# A.J. Vetturini
+# IDIG and MMBL
+# Carnegie Mellon University
 
+"""
 This script contains a MeshFace which is simple a triangulated face. I offer the ability to use a square face but
 I do not specifically use this functionality as it increases computational complexity slights (need more checks to
 validate the face orientation).

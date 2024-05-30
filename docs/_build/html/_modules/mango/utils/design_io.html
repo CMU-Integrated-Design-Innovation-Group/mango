@@ -15,7 +15,7 @@
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../../../_static/documentation_options.js?v=7d16594f"></script>
-        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -73,17 +73,18 @@
            <div itemprop="articleBody">
              
   <h1>Source code for mango.utils.design_io</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot; </span>
-<span class="sd">A.J. Vetturini \n</span>
-<span class="sd">IDIG and MMBL \n</span>
-<span class="sd">Carnegie Mellon University \n</span>
+<span></span><span class="c1"># A.J. Vetturini</span>
+<span class="c1"># IDIG and MMBL</span>
+<span class="c1"># Carnegie Mellon University</span>
 
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This script is for reading in / outputting design files. For example, exporting to PLY file to convert a design to a</span>
 <span class="sd">DNA file via DAEDALUS2.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">mango.design_spaces.polyhedral_design_space</span> <span class="kn">import</span> <span class="n">PolyhedralSpace</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">trimesh.exchange.ply</span> <span class="kn">import</span> <span class="n">export_ply</span>
+<span class="kn">from</span> <span class="nn">trimesh.exchange.obj</span> <span class="kn">import</span> <span class="n">export_obj</span>
 <span class="kn">from</span> <span class="nn">mango.utils.mango_math</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">mango.utils.DNA_property_constants</span> <span class="kn">import</span> <span class="n">BDNA</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
@@ -94,9 +95,9 @@
 <a class="viewcode-back" href="../../../mango.utils.html#mango.utils.design_io.export_design_to_ply">[docs]</a>
 <span class="k">def</span> <span class="nf">export_design_to_ply</span><span class="p">(</span><span class="n">design</span><span class="p">:</span> <span class="n">PolyhedralSpace</span><span class="p">,</span> <span class="n">savepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">savename_no_extension</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    NOT INTENDED FOR END USER USE. PLEASE SEE export_DNA_design for the user-facing function \n</span>
+<span class="sd">    NOT INTENDED FOR END USER USE. PLEASE SEE export_DNA_design for the user-facing function</span>
 
-<span class="sd">    This function exports a given PolyhedralSpace to a .ply file for the use in a automated scaffold routing algorithm \n</span>
+<span class="sd">    This function exports a given PolyhedralSpace to a .ply file for the use in a automated scaffold routing algorithm</span>
 
 <span class="sd">    :param design: PolyhedralSpace design space that is to be converted to a PLY file</span>
 <span class="sd">    :param savepath: Filepath where to save the ply file</span>
@@ -116,6 +117,36 @@
         <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">savepath</span><span class="p">)</span>
     <span class="n">writeDir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">savepath</span><span class="p">,</span> <span class="n">save_name</span><span class="p">)</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">writeDir</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">export</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">writeDir</span></div>
+
+
+<div class="viewcode-block" id="export_design_to_obj">
+<a class="viewcode-back" href="../../../mango.utils.html#mango.utils.design_io.export_design_to_obj">[docs]</a>
+<span class="k">def</span> <span class="nf">export_design_to_obj</span><span class="p">(</span><span class="n">design</span><span class="p">:</span> <span class="n">PolyhedralSpace</span><span class="p">,</span> <span class="n">savepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">savename_no_extension</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    NOT INTENDED FOR END USER USE. PLEASE SEE export_DNA_design for the user-facing function</span>
+
+<span class="sd">    This function exports a given PolyhedralSpace to a .obj file for the use in a automated scaffold routing algorithm</span>
+
+<span class="sd">    :param design: PolyhedralSpace design space that is to be converted to a obj file</span>
+<span class="sd">    :param savepath: Filepath where to save the obj file</span>
+<span class="sd">    :param savename_no_extension: Filename of the obj file to use</span>
+<span class="sd">    :return: Directory path of where the file was saved</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># First create the PLY (mesh) file:</span>
+    <span class="n">design</span><span class="o">.</span><span class="n">create_trimesh_mesh</span><span class="p">()</span>  <span class="c1"># Re-create the trimesh mesh just in case</span>
+    <span class="n">mesh</span> <span class="o">=</span> <span class="n">design</span><span class="o">.</span><span class="n">mesh_file</span>
+    <span class="n">mesh</span><span class="o">.</span><span class="n">fix_normals</span><span class="p">()</span>
+    <span class="n">export</span> <span class="o">=</span> <span class="n">export_obj</span><span class="p">(</span><span class="n">mesh</span><span class="o">=</span><span class="n">mesh</span><span class="p">)</span>
+
+    <span class="c1"># Create the savepath:</span>
+    <span class="n">save_name</span> <span class="o">=</span> <span class="n">savename_no_extension</span> <span class="o">+</span> <span class="s1">&#39;.obj&#39;</span>
+    <span class="c1"># Check if the path exists:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">savepath</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">savepath</span><span class="p">)</span>
+    <span class="n">writeDir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">savepath</span><span class="p">,</span> <span class="n">save_name</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">writeDir</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">export</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">writeDir</span></div>
 
@@ -146,9 +177,9 @@
 <a class="viewcode-back" href="../../../mango.utils.html#mango.utils.design_io.export_list_of_designs_to_ply">[docs]</a>
 <span class="k">def</span> <span class="nf">export_list_of_designs_to_ply</span><span class="p">(</span><span class="n">design_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">savepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">list_of_savenames_no_extensions</span><span class="p">:</span> <span class="nb">list</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    NOT INTENDED FOR END USER USE. PLEASE SEE mass_design_export for the user-facing function \n</span>
+<span class="sd">    NOT INTENDED FOR END USER USE. PLEASE SEE mass_design_export for the user-facing function</span>
 
-<span class="sd">    This function will export a whole list of designs such that large amounts of data can be gathered. \n</span>
+<span class="sd">    This function will export a whole list of designs such that large amounts of data can be gathered.</span>
 
 <span class="sd">    :param design_list: List of PolyhedralSpace design space&#39;s that are to be converted to PLY files</span>
 <span class="sd">    :param savepath: Filepath where to save the ply file</span>
@@ -169,7 +200,8 @@
 <div class="viewcode-block" id="export_DNA_design">
 <a class="viewcode-back" href="../../../mango.utils.html#mango.utils.design_io.export_DNA_design">[docs]</a>
 <span class="k">def</span> <span class="nf">export_DNA_design</span><span class="p">(</span><span class="n">automated_scaffold_executable_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">design</span><span class="p">:</span> <span class="n">PolyhedralSpace</span><span class="p">,</span> <span class="n">export_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-                      <span class="n">savename_no_extension</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">DNA_geometry</span><span class="o">=</span><span class="n">BDNA</span><span class="p">,</span> <span class="n">scaffold_sequence_filepath</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+                      <span class="n">savename_no_extension</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">DNA_geometry</span><span class="o">=</span><span class="n">BDNA</span><span class="p">,</span> <span class="n">scaffold_sequence_filepath</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                      <span class="n">ply_or_obj</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;ply&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This is the top level function a user should call which will export a single design. The export_design_to_ply</span>
 <span class="sd">    is called by this function.</span>
@@ -180,16 +212,22 @@
 <span class="sd">    :param savename_no_extension: User defined name to save the design as</span>
 <span class="sd">    :param DNA_geometry: Do not change</span>
 <span class="sd">    :param scaffold_sequence_filepath: Path to sequence file to use, default is M13</span>
+<span class="sd">    :param ply_or_obj: Ply will export a PLY file, obj will export an OBJ file</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># First we need the minimal edge length in the design:</span>
     <span class="n">all_edges</span> <span class="o">=</span> <span class="n">calculate_design_edge_lengths</span><span class="p">(</span><span class="n">graph</span><span class="o">=</span><span class="n">design</span><span class="o">.</span><span class="n">design_graph</span><span class="p">)</span>
     <span class="n">min_edge_length</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">all_edges</span><span class="p">)</span>  <span class="c1"># min(all_edges) is in units of nm, need nucleobases:</span>
     <span class="n">min_edge_length_nb</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">min_edge_length</span> <span class="o">/</span> <span class="n">DNA_geometry</span><span class="o">.</span><span class="n">pitch_per_rise</span><span class="p">)</span>
     <span class="c1"># With the min_edge_length found, we can create a PLY file in the specified path:</span>
-    <span class="n">ply_path</span> <span class="o">=</span> <span class="n">export_design_to_ply</span><span class="p">(</span><span class="n">design</span><span class="o">=</span><span class="n">design</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="n">export_path</span><span class="p">,</span> <span class="n">savename_no_extension</span><span class="o">=</span><span class="n">savename_no_extension</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ply_or_obj</span> <span class="o">==</span> <span class="s1">&#39;ply&#39;</span><span class="p">:</span>
+        <span class="n">ply_path</span> <span class="o">=</span> <span class="n">export_design_to_ply</span><span class="p">(</span><span class="n">design</span><span class="o">=</span><span class="n">design</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="n">export_path</span><span class="p">,</span>
+                                        <span class="n">savename_no_extension</span><span class="o">=</span><span class="n">savename_no_extension</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ply_path</span> <span class="o">=</span> <span class="n">export_design_to_obj</span><span class="p">(</span><span class="n">design</span><span class="o">=</span><span class="n">design</span><span class="p">,</span> <span class="n">savepath</span><span class="o">=</span><span class="n">export_path</span><span class="p">,</span>
+                                        <span class="n">savename_no_extension</span><span class="o">=</span><span class="n">savename_no_extension</span><span class="p">)</span>
     <span class="c1"># Then we will call the automated algorithm.</span>
     <span class="c1">## First check if user specified a sequence to use:</span>
-    <span class="n">SEQ_PATH</span> <span class="o">=</span> <span class="s1">&#39;../../Data Availability/M13.txt&#39;</span>
+    <span class="n">SEQ_PATH</span> <span class="o">=</span> <span class="s1">&#39;./M13.txt&#39;</span>
     <span class="k">if</span> <span class="n">scaffold_sequence_filepath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">SEQ_PATH</span> <span class="o">=</span> <span class="n">scaffold_sequence_filepath</span>
     <span class="k">if</span> <span class="s1">&#39;DAEDALUS&#39;</span> <span class="ow">in</span> <span class="n">automated_scaffold_executable_path</span><span class="p">:</span>
@@ -214,7 +252,7 @@
 <div class="viewcode-block" id="mass_design_export">
 <a class="viewcode-back" href="../../../mango.utils.html#mango.utils.design_io.mass_design_export">[docs]</a>
 <span class="k">def</span> <span class="nf">mass_design_export</span><span class="p">(</span><span class="n">automated_scaffold_executable_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">export_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">aj1_filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-                       <span class="n">scaffold_sequence_filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">DNA_geometry</span><span class="o">=</span><span class="n">BDNA</span><span class="p">):</span>
+                       <span class="n">scaffold_sequence_filepath</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">DNA_geometry</span><span class="o">=</span><span class="n">BDNA</span><span class="p">,</span> <span class="n">ply_or_obj</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;ply&#39;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This is the top level function a user should call which will export a single design. The export_design_to_ply</span>
 <span class="sd">    is called by this function.</span>
@@ -231,7 +269,9 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">export_path</span><span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">export_path</span><span class="p">)</span>
     <span class="n">save_json_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">export_path</span><span class="p">,</span> <span class="s1">&#39;JSON_files&#39;</span><span class="p">)</span>
-    <span class="n">save_ply_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">export_path</span><span class="p">,</span> <span class="s1">&#39;PLY_files&#39;</span><span class="p">)</span>
+    <span class="n">foldername</span> <span class="o">=</span> <span class="s1">&#39;PLY_Files&#39;</span> <span class="k">if</span> <span class="n">ply_or_obj</span> <span class="o">==</span> <span class="s1">&#39;ply&#39;</span> <span class="k">else</span> <span class="s1">&#39;OBJ_files&#39;</span>
+    <span class="n">file_extension</span> <span class="o">=</span> <span class="s1">&#39;.ply&#39;</span> <span class="k">if</span> <span class="n">ply_or_obj</span> <span class="o">==</span> <span class="s1">&#39;ply&#39;</span> <span class="k">else</span> <span class="s1">&#39;.obj&#39;</span>
+    <span class="n">save_ply_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">export_path</span><span class="p">,</span> <span class="n">foldername</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">save_json_path</span><span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">save_json_path</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">save_ply_path</span><span class="p">):</span>
@@ -244,7 +284,7 @@
     <span class="k">for</span> <span class="n">datapoint</span><span class="p">,</span> <span class="n">design</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">MOSA_archive</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="c1"># First we need to create a unique name identifier:</span>
         <span class="n">fname</span> <span class="o">=</span> <span class="s1">&#39;Design_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datapoint</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datapoint</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="n">ply_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">export_path</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.ply&#39;</span>
+        <span class="n">ply_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">export_path</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span> <span class="o">+</span> <span class="n">file_extension</span>
         <span class="c1"># Call the export function:</span>
         <span class="n">nb_value</span> <span class="o">=</span> <span class="n">export_DNA_design</span><span class="p">(</span><span class="n">automated_scaffold_executable_path</span><span class="p">,</span> <span class="n">design</span><span class="p">,</span> <span class="n">export_path</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span>
                                      <span class="n">scaffold_sequence_filepath</span><span class="o">=</span><span class="n">scaffold_sequence_filepath</span><span class="p">)</span>
@@ -254,7 +294,7 @@
         <span class="n">json_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">export_path</span><span class="p">,</span> <span class="n">folder_path</span><span class="p">),</span> <span class="n">savename</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">json_file</span><span class="p">,</span> <span class="n">save_json_path</span><span class="p">)</span>
-            <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">ply_name</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">export_path</span><span class="p">,</span> <span class="s1">&#39;PLY_files&#39;</span><span class="p">))</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">ply_name</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">export_path</span><span class="p">,</span> <span class="n">foldername</span><span class="p">))</span>
             <span class="c1"># Remove the various DAEDALUS files to preserve space:</span>
             <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">export_path</span><span class="p">,</span> <span class="n">folder_path</span><span class="p">))</span>
 

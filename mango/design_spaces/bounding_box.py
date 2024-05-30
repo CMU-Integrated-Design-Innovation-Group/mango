@@ -1,11 +1,13 @@
-"""
-A.J. Vetturini
-IDIG and MMBL
-Carnegie Mellon University
+# A.J. Vetturini
+# IDIG and MMBL
+# Carnegie Mellon University
 
+
+"""
 This module defines the bounding box surrounding the polyhedral design space, it has many classes for the variety of
 box-types that the bounding_box can presume.
 """
+
 from dataclasses import dataclass
 from mango.utils.mango_math import *
 import plotly.graph_objs as go

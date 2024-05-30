@@ -15,7 +15,7 @@
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../../../_static/documentation_options.js?v=7d16594f"></script>
-        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -73,14 +73,16 @@
            <div itemprop="articleBody">
              
   <h1>Source code for mango.design_spaces.bounding_box</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">A.J. Vetturini \n</span>
-<span class="sd">IDIG and MMBL \n</span>
-<span class="sd">Carnegie Mellon University \n</span>
+<span></span><span class="c1"># A.J. Vetturini</span>
+<span class="c1"># IDIG and MMBL</span>
+<span class="c1"># Carnegie Mellon University</span>
 
+
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This module defines the bounding box surrounding the polyhedral design space, it has many classes for the variety of</span>
 <span class="sd">box-types that the bounding_box can presume.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">from</span> <span class="nn">mango.utils.mango_math</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">import</span> <span class="nn">plotly.graph_objs</span> <span class="k">as</span> <span class="nn">go</span>
@@ -103,12 +105,12 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ------------</span>
-<span class="sd">    a : Magnitude of parallelepiped aligned in x \n</span>
-<span class="sd">    b : Magnitude of parallelepiped aligned in y \n</span>
-<span class="sd">    c: Magnitude of parallelepiped aligned in z \n</span>
-<span class="sd">    alpha : Angle of parallelepiped between b and c \n</span>
-<span class="sd">    beta : Angle of parallelepiped between c and a \n</span>
-<span class="sd">    gamma: Angle of parallelepiped between b and a \n</span>
+<span class="sd">    a : Magnitude of parallelepiped aligned in x</span>
+<span class="sd">    b : Magnitude of parallelepiped aligned in y</span>
+<span class="sd">    c: Magnitude of parallelepiped aligned in z</span>
+<span class="sd">    alpha : Angle of parallelepiped between b and c</span>
+<span class="sd">    beta : Angle of parallelepiped between c and a</span>
+<span class="sd">    gamma: Angle of parallelepiped between b and a</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">a</span><span class="p">:</span> <span class="nb">float</span>  <span class="c1"># Aligns in X</span>
     <span class="n">b</span><span class="p">:</span> <span class="nb">float</span>   <span class="c1"># Aligns in Y</span>
@@ -242,10 +244,10 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ------------</span>
-<span class="sd">    a : Magnitude of parallelepiped aligned in x \n</span>
-<span class="sd">    b : Magnitude of parallelepiped aligned in y \n</span>
-<span class="sd">    c: Magnitude of parallelepiped aligned in z \n</span>
-<span class="sd">    beta : Angle of parallelepiped between c and a \n</span>
+<span class="sd">    a : Magnitude of parallelepiped aligned in x</span>
+<span class="sd">    b : Magnitude of parallelepiped aligned in y</span>
+<span class="sd">    c: Magnitude of parallelepiped aligned in z</span>
+<span class="sd">    beta : Angle of parallelepiped between c and a</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">a</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">b</span><span class="p">:</span> <span class="nb">float</span>
@@ -361,9 +363,9 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ------------</span>
-<span class="sd">    a : Magnitude of parallelepiped aligned in x \n</span>
-<span class="sd">    b : Magnitude of parallelepiped aligned in y \n</span>
-<span class="sd">    c: Magnitude of parallelepiped aligned in z \n</span>
+<span class="sd">    a : Magnitude of parallelepiped aligned in x</span>
+<span class="sd">    b : Magnitude of parallelepiped aligned in y</span>
+<span class="sd">    c: Magnitude of parallelepiped aligned in z</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">a</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">b</span><span class="p">:</span> <span class="nb">float</span>
@@ -455,8 +457,8 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ------------</span>
-<span class="sd">    a : Magnitude of parallelepiped aligned in x, y \n</span>
-<span class="sd">    c: Magnitude of parallelepiped aligned in z \n</span>
+<span class="sd">    a : Magnitude of parallelepiped aligned in x, y</span>
+<span class="sd">    c: Magnitude of parallelepiped aligned in z</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">a</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">c</span><span class="p">:</span> <span class="nb">float</span>
@@ -538,9 +540,9 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ------------</span>
-<span class="sd">    a : Magnitude of all parallelepiped edges \n</span>
-<span class="sd">    alpha : Angle of parallelepiped between all edges \n</span>
-<span class="sd">    &quot;&quot;&quot;</span> 
+<span class="sd">    a : Magnitude of all parallelepiped edges</span>
+<span class="sd">    alpha : Angle of parallelepiped between all edges</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">a</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span>
 
@@ -626,8 +628,8 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ------------</span>
-<span class="sd">    a : Magnitude of parallelepiped aligned in x, y \n</span>
-<span class="sd">    c: Magnitude of parallelepiped aligned in z \n</span>
+<span class="sd">    a : Magnitude of parallelepiped aligned in x, y</span>
+<span class="sd">    c: Magnitude of parallelepiped aligned in z</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">a</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">c</span><span class="p">:</span> <span class="nb">float</span>
@@ -793,14 +795,14 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ------------</span>
-<span class="sd">    a : Magnitude of parallelepiped aligned in x \n</span>
-<span class="sd">    b : Magnitude of parallelepiped aligned in y \n</span>
-<span class="sd">    c: Magnitude of parallelepiped aligned in z \n</span>
-<span class="sd">    alpha : Angle of parallelepiped between b and c \n</span>
-<span class="sd">    beta : Angle of parallelepiped between c and a \n</span>
-<span class="sd">    gamma: Angle of parallelepiped between b and a \n</span>
-<span class="sd">    cell_type : What system is being shown (used in calculating volume) \n</span>
-<span class="sd">    angles_in_degrees : Default TRUE, If false: will presume alpha beta gamma are in radians \n</span>
+<span class="sd">    a : Magnitude of parallelepiped aligned in x</span>
+<span class="sd">    b : Magnitude of parallelepiped aligned in y</span>
+<span class="sd">    c: Magnitude of parallelepiped aligned in z</span>
+<span class="sd">    alpha : Angle of parallelepiped between b and c</span>
+<span class="sd">    beta : Angle of parallelepiped between c and a</span>
+<span class="sd">    gamma: Angle of parallelepiped between b and a</span>
+<span class="sd">    cell_type : What system is being shown (used in calculating volume)</span>
+<span class="sd">    angles_in_degrees : Default TRUE, If false: will presume alpha beta gamma are in radians</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">a</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">b</span><span class="p">:</span> <span class="nb">float</span>

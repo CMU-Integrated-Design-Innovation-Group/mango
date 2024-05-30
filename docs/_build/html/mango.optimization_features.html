@@ -16,7 +16,7 @@
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="_static/documentation_options.js?v=7d16594f"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -96,9 +96,6 @@
 <h1>Optimization problem definition<a class="headerlink" href="#optimization-problem-definition" title="Link to this heading"></a></h1>
 <section id="module-mango.optimization_features.design_constraints">
 <span id="design-constraints"></span><h2>Design Constraints<a class="headerlink" href="#module-mango.optimization_features.design_constraints" title="Link to this heading"></a></h2>
-<p>A.J. Vetturini</p>
-<p>IDIG and MMBL</p>
-<p>Carnegie Mellon University</p>
 <p>This script contains the default (standard) design constraints used with the PolyhedralDesignSpace as well as the class
 affording a designer the ability to create a custom defined constraint.</p>
 <dl class="py class">
@@ -112,14 +109,15 @@ is even a good idea).</p>
 “good” a constraint is or is not, and that is at the discretion of the user.</p>
 <section id="parameters">
 <h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
-<p>name : String unique identifies of the constraint name</p>
-<p>design_constraint : A Python function defining the constraint. For example, if you have a constraint as:</p>
+<p>name : String unique identifies of the constraint name
+design_constraint : A Python function defining the constraint. For example, if you have a constraint as:</p>
 <blockquote>
-<div><p>def foo(input_vars, extra_params):</p>
-<blockquote>
-<div><p>constraint_code</p>
-</div></blockquote>
-<p>Then you would pass in CustomDesignConstraint(name=’foo’, design_constraint=foo, extra_params=extra_params)</p>
+<div><dl class="simple">
+<dt>def foo(input_vars, extra_params):</dt><dd><p>constraint_code</p>
+</dd>
+<dt>Then you would pass in CustomDesignConstraint(name=’foo’, design_constraint=foo,</dt><dd><p>extra_params=extra_params)</p>
+</dd>
+</dl>
 </div></blockquote>
 <p>extra_params : A dictionary of constants / values that a user may want to use in the custom constraint</p>
 <dl class="py attribute">
@@ -155,12 +153,19 @@ compliant w.r.t.: edge lengths, scaffold required to create the design, etc. If 
 aspects of the design, please see the CustomDesignConstraint class.</p>
 <section id="id1">
 <h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
-<p>extra_constraints : List of CustomDesignConstraint objects</p>
-<p>scaffold_routing_algorithm : Which automated algorithm is to be used on the exported PLY file, defualt DAEDALUS</p>
-<p>min_face_angle : Floating point minimal allowable face angle (in degrees). Too low of a value can cause issues in the exported design.</p>
-<p>min_edge_length : Integer min number of nucleotides any one edge can have; default is 39 due to ATHENA restrictions.</p>
-<p>max_edge_length : Integer max number of nucleotides any one edge can have</p>
-<p>max_number_basepairs_in_scaffold : Integer value for max # of nucleotides to allow in a design. Note that here we estimate the # of nts in the scaffold, and there may be some error in exported designs.</p>
+<p>extra_constraints : List of CustomDesignConstraint objects
+scaffold_routing_algorithm : Which automated algorithm is to be used on the exported PLY file, defualt DAEDALUS
+min_face_angle : Floating point minimal allowable face angle (in degrees). Too low of a value can cause issues</p>
+<blockquote>
+<div><p>in the exported design.</p>
+</div></blockquote>
+<p>min_edge_length : Integer min number of nucleotides any one edge can have; default is 39 due to ATHENA restrictions.
+max_edge_length : Integer max number of nucleotides any one edge can have
+max_number_basepairs_in_scaffold : Integer value for max # of nucleotides to allow in a design. Note that here we</p>
+<blockquote>
+<div><p>estimate the # of nts in the scaffold, and there may be some error in exported
+designs.</p>
+</div></blockquote>
 <dl class="py method">
 <dt class="sig sig-object py" id="mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.broken_preserved_edge">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">broken_preserved_edge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design_space</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/mango/optimization_features/design_constraints.html#PolyhedralDefaultConstraints.broken_preserved_edge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.optimization_features.design_constraints.PolyhedralDefaultConstraints.broken_preserved_edge" title="Link to this definition"></a></dt>
@@ -403,9 +408,6 @@ for internal logging / development purposes</p>
 </section>
 <section id="module-mango.optimization_features.objective_function">
 <span id="objective-function"></span><h2>Objective Function<a class="headerlink" href="#module-mango.optimization_features.objective_function" title="Link to this heading"></a></h2>
-<p>A.J. Vetturini</p>
-<p>IDIG and MMBL</p>
-<p>Carnegie Mellon University</p>
 <p>This script simply contains the dataclass for creating an ObjectiveFunction to use to guide the search process for
 a generative study.</p>
 <dl class="py class">
@@ -419,20 +421,21 @@ this is even a good idea). This class is very similar to the CustomDesignConstra
 “good” a constraint is or is not, and that is at the discretion of the user.</p>
 <section id="id2">
 <h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
-<p>name : String unique identifies of the constraint name</p>
-<p>objective_equation : A Python function defining the objective. For example, if you have a constraint as:</p>
+<p>name : String unique identifies of the constraint name
+objective_equation : A Python function defining the objective. For example, if you have a constraint as:</p>
 <blockquote>
-<div><p>def bar(input_vars, extra_params):</p>
-<blockquote>
-<div><p>objective_function_code</p>
-</div></blockquote>
-<p>Then you would pass in ObjectiveFunction(name=’bar’, design_constraint=bar, extra_params=extra_params)</p>
-</div></blockquote>
-<p>extra_params : A dictionary of constants / values that a user may want to use in the custom constraint</p>
-<dl class="simple">
-<dt>numDecimals<span class="classifier">Floating point value to control precision. Allowing too high of precision, depending on the sampling</span></dt><dd><p>sampling, can lead to the optimizers getting stuck in local minima around a certain point.</p>
+<div><dl class="simple">
+<dt>def bar(input_vars, extra_params):</dt><dd><p>objective_function_code</p>
+</dd>
+<dt>Then you would pass in ObjectiveFunction(name=’bar’, design_constraint=bar,</dt><dd><p>extra_params=extra_params)</p>
 </dd>
 </dl>
+</div></blockquote>
+<p>extra_params : A dictionary of constants / values that a user may want to use in the custom constraint
+numDecimals : Floating point value to control precision. Allowing too high of precision, depending on the sampling</p>
+<blockquote>
+<div><p>sampling, can lead to the optimizers getting stuck in local minima around a certain point.</p>
+</div></blockquote>
 <dl class="py method">
 <dt class="sig sig-object py" id="mango.optimization_features.objective_function.ObjectiveFunction.evaluate_function">
 <span class="sig-name descname"><span class="pre">evaluate_function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/optimization_features/objective_function.html#ObjectiveFunction.evaluate_function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.optimization_features.objective_function.ObjectiveFunction.evaluate_function" title="Link to this definition"></a></dt>

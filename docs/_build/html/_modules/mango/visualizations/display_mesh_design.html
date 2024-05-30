@@ -15,7 +15,7 @@
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../../../_static/documentation_options.js?v=7d16594f"></script>
-        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -73,11 +73,11 @@
            <div itemprop="articleBody">
              
   <h1>Source code for mango.visualizations.display_mesh_design</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">A.J. Vetturini \n</span>
-<span class="sd">IDIG and MMBL \n</span>
-<span class="sd">Carnegie Mellon University \n</span>
+<span></span><span class="c1"># A.J. Vetturini</span>
+<span class="c1"># IDIG and MMBL</span>
+<span class="c1"># Carnegie Mellon University</span>
 
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This is a visualization function that will utilize plotly to show a design as a mesh file both as a cylindrical</span>
 <span class="sd">representation and as a standard mesh file</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -101,31 +101,31 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ------------</span>
-<span class="sd">    design : Design we are visualizing of the PolyhedralSpace data object (see design_spaces.polyhedral_design_space). \n</span>
-<span class="sd">    bounding_box : The bounding box defined, can be accessed by the design.bounding_box \n</span>
+<span class="sd">    design : Design we are visualizing of the PolyhedralSpace data object (see design_spaces.polyhedral_design_space).</span>
+<span class="sd">    bounding_box : The bounding box defined, can be accessed by the design.bounding_box</span>
 
-<span class="sd">    BOOLEAN options that turn on / off various visualizations: \n</span>
-<span class="sd">    display_node_names : Determines if node names are shown, used for debugging (default: FALSE) \n</span>
-<span class="sd">    show_bounding_box : Determines if bounding box is shown, used for debugging (default: TRUE) \n</span>
-<span class="sd">    show_mesh_nodes : Determines if nodes are shown as scatter points or not (default: TRUE) \n</span>
-<span class="sd">    show_excluded_regions : Determines if the excluded regions are shown or not (default: TRUE) \n</span>
-<span class="sd">    opaque_excluded_region : Determines if excluded regions are opaque or not (default: FALSE / not opaque) \n</span>
-<span class="sd">    display_background : Determines if a background color is to be used (default: False / blank background) \n</span>
-<span class="sd">    display_axes : Determines if the axes and ticker labels are shown (default: True) \n</span>
+<span class="sd">    BOOLEAN options that turn on / off various visualizations:</span>
+<span class="sd">    display_node_names : Determines if node names are shown, used for debugging (default: FALSE)</span>
+<span class="sd">    show_bounding_box : Determines if bounding box is shown, used for debugging (default: TRUE)</span>
+<span class="sd">    show_mesh_nodes : Determines if nodes are shown as scatter points or not (default: TRUE)</span>
+<span class="sd">    show_excluded_regions : Determines if the excluded regions are shown or not (default: TRUE)</span>
+<span class="sd">    opaque_excluded_region : Determines if excluded regions are opaque or not (default: FALSE / not opaque)</span>
+<span class="sd">    display_background : Determines if a background color is to be used (default: False / blank background)</span>
+<span class="sd">    display_axes : Determines if the axes and ticker labels are shown (default: True)</span>
 
 
-<span class="sd">    DISPLAY options that control colors / font sizes: \n</span>
-<span class="sd">    face_color : String color of mesh faces defined by either plotly color or &#39;rgb(R, G, B)&#39; (default: darkgray) \n</span>
-<span class="sd">    constant_edge_color : String color of edges shown by either plotly color or &#39;rgb(R, G, B)&#39; (default: None / black) \n</span>
-<span class="sd">    symbol_size : Integer size of mesh nodes (default: 6) \n</span>
-<span class="sd">    line_width : Integer width of edges shown (default: 4) \n</span>
-<span class="sd">    tick_font : Integer point-size of ticker font (default: 14) \n</span>
-<span class="sd">    axis_title_font : Integer point-size of axis titles \n</span>
-<span class="sd">    camera_position : Camera dictionary (see plotly) for holding the camera angle constant \n</span>
-<span class="sd">    node_color :  String color of nodes defined by either plotly color or &#39;rgb(R, G, B)&#39; (default: green) \n</span>
-<span class="sd">    symbol : String symbol of nodes defined by plotly (default: square) \n </span>
-<span class="sd">    excluded_color : String color of excluded regions by either plotly color or &#39;rgb(R, G, B)&#39; (default: red) \n</span>
-<span class="sd">    plot_background_color : String color of background defined by either plotly color or &#39;rgb(R, G, B)&#39; (default: None) \n</span>
+<span class="sd">    DISPLAY options that control colors / font sizes:</span>
+<span class="sd">    face_color : String color of mesh faces defined by either plotly color or &#39;rgb(R, G, B)&#39; (default: darkgray)</span>
+<span class="sd">    constant_edge_color : String color of edges shown by either plotly color or &#39;rgb(R, G, B)&#39; (default: None / black)</span>
+<span class="sd">    symbol_size : Integer size of mesh nodes (default: 6)</span>
+<span class="sd">    line_width : Integer width of edges shown (default: 4)</span>
+<span class="sd">    tick_font : Integer point-size of ticker font (default: 14)</span>
+<span class="sd">    axis_title_font : Integer point-size of axis titles</span>
+<span class="sd">    camera_position : Camera dictionary (see plotly) for holding the camera angle constant</span>
+<span class="sd">    node_color :  String color of nodes defined by either plotly color or &#39;rgb(R, G, B)&#39; (default: green)</span>
+<span class="sd">    symbol : String symbol of nodes defined by plotly (default: square)</span>
+<span class="sd">    excluded_color : String color of excluded regions by either plotly color or &#39;rgb(R, G, B)&#39; (default: red)</span>
+<span class="sd">    plot_background_color : String color of background defined by either plotly color or &#39;rgb(R, G, B)&#39; (default: None)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">design</span><span class="p">:</span> <span class="n">PolyhedralSpace</span>
     <span class="n">bounding_box</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">TriclinicBox</span><span class="p">,</span> <span class="n">MonoclinicBox</span><span class="p">,</span> <span class="n">OrthorhombicBox</span><span class="p">,</span> <span class="n">TetragonalBox</span><span class="p">,</span>
@@ -287,7 +287,7 @@
             <span class="c1"># If both nodes are preserved_regions then we make the line green by default:</span>
             <span class="k">elif</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">design</span><span class="o">.</span><span class="n">terminal_edges</span> <span class="ow">or</span> <span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">design</span><span class="o">.</span><span class="n">terminal_edges</span><span class="p">:</span>
                 <span class="n">edge_trace</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Scatter3d</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">],</span> <span class="n">z</span><span class="o">=</span><span class="p">[</span><span class="n">z1</span><span class="p">,</span> <span class="n">z2</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;lines&#39;</span><span class="p">,</span>
-                                          <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">line_width</span><span class="p">),</span> <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                          <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">node_color</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">line_width</span><span class="p">),</span> <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                           <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Mesh Edge&#39;</span><span class="p">,</span> <span class="n">legendgroup</span><span class="o">=</span><span class="s1">&#39;Graph Edge&#39;</span><span class="p">)</span>
 
             <span class="c1"># Otherwise we use black for the line color:</span>
@@ -368,25 +368,25 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ------------</span>
-<span class="sd">    design : Design we are visualizing of the PolyhedralSpace data object (see design_spaces.polyhedral_design_space). \n</span>
-<span class="sd">    bounding_box : The bounding box defined, can be accessed by the design.bounding_box \n</span>
+<span class="sd">    design : Design we are visualizing of the PolyhedralSpace data object (see design_spaces.polyhedral_design_space).</span>
+<span class="sd">    bounding_box : The bounding box defined, can be accessed by the design.bounding_box</span>
 
-<span class="sd">    BOOLEAN options that turn on / off various visualizations: \n</span>
-<span class="sd">    show_bounding_box : Determines if bounding box is shown, used for debugging (default: TRUE) \n</span>
-<span class="sd">    show_excluded_regions : Determines if the excluded regions are shown or not (default: TRUE) \n</span>
-<span class="sd">    opaque_excluded_region : Determines if excluded regions are opaque or not (default: FALSE / not opaque) \n</span>
-<span class="sd">    display_background : Determines if a background color is to be used (default: False / blank background) \n</span>
-<span class="sd">    display_axes : Determines if the axes and ticker labels are shown (default: True) \n</span>
-<span class="sd">    show_box_bounds : Determines if custom annotations are displayed showing bounding box dimensions (default: FALSE) \n \n</span>
+<span class="sd">    BOOLEAN options that turn on / off various visualizations:</span>
+<span class="sd">    show_bounding_box : Determines if bounding box is shown, used for debugging (default: TRUE)</span>
+<span class="sd">    show_excluded_regions : Determines if the excluded regions are shown or not (default: TRUE)</span>
+<span class="sd">    opaque_excluded_region : Determines if excluded regions are opaque or not (default: FALSE / not opaque)</span>
+<span class="sd">    display_background : Determines if a background color is to be used (default: False / blank background)</span>
+<span class="sd">    display_axes : Determines if the axes and ticker labels are shown (default: True)</span>
+<span class="sd">    show_box_bounds : Determines if custom annotations are displayed showing bounding box dimensions (default: FALSE)</span>
 
-<span class="sd">    DISPLAY options that control colors / font sizes: \n</span>
-<span class="sd">    cylinder_color : String color of the cylinders mapped by either plotly color or &#39;rgb(R, G, B)&#39; (default: darkgray) \n</span>
-<span class="sd">    cylinder_diameter : Floating point value of the cylinder diameter to use (default : 2.25) (BDNA diameter) \n</span>
-<span class="sd">    tick_font : Integer point-size of ticker font (default: 14) \n</span>
-<span class="sd">    axis_title_font : Integer point-size of axis titles \n</span>
-<span class="sd">    camera_position : Camera dictionary (see plotly) for holding the camera angle constant \n</span>
-<span class="sd">    excluded_color : String color of excluded regions by either plotly color or &#39;rgb(R, G, B)&#39; (default: red) \n</span>
-<span class="sd">    plot_background_color : String color of background defined by either plotly color or &#39;rgb(R, G, B)&#39; (default: None) \n</span>
+<span class="sd">    DISPLAY options that control colors / font sizes:</span>
+<span class="sd">    cylinder_color : String color of the cylinders mapped by either plotly color or &#39;rgb(R, G, B)&#39; (default: darkgray)</span>
+<span class="sd">    cylinder_diameter : Floating point value of the cylinder diameter to use (default : 2.25) (BDNA diameter)</span>
+<span class="sd">    tick_font : Integer point-size of ticker font (default: 14)</span>
+<span class="sd">    axis_title_font : Integer point-size of axis titles</span>
+<span class="sd">    camera_position : Camera dictionary (see plotly) for holding the camera angle constant</span>
+<span class="sd">    excluded_color : String color of excluded regions by either plotly color or &#39;rgb(R, G, B)&#39; (default: red)</span>
+<span class="sd">    plot_background_color : String color of background defined by either plotly color or &#39;rgb(R, G, B)&#39; (default: None)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">design</span><span class="p">:</span> <span class="n">PolyhedralSpace</span>
     <span class="n">bounding_box</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">TriclinicBox</span><span class="p">,</span> <span class="n">MonoclinicBox</span><span class="p">,</span> <span class="n">OrthorhombicBox</span><span class="p">,</span> <span class="n">TetragonalBox</span><span class="p">,</span>

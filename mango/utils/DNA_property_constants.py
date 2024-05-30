@@ -1,8 +1,8 @@
-"""
-A.J. Vetturini
-IDIG and MMBL
-Carnegie Mellon University
+# A.J. Vetturini
+# IDIG and MMBL
+# Carnegie Mellon University
 
+"""
 This script contains the DNA constant values (e.g. bp rise)
 """
 from dataclasses import dataclass

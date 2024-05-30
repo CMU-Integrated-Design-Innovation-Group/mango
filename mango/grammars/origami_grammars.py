@@ -1,8 +1,8 @@
-"""
-A.J. Vetturini
-IDIG and MMBL
-Carnegie Mellon University
+# A.J. Vetturini
+# IDIG and MMBL
+# Carnegie Mellon University
 
+"""
 This script contains the dataclasses used in the grammar sets for the initial mango design framework. Further grammars
 can be added here as long as the top level "GrammarSet" object is used in the dataclass.
 """

@@ -1,8 +1,8 @@
-"""
-A.J. Vetturini
-IDIG and MMBL
-Carnegie Mellon University
+# A.J. Vetturini
+# IDIG and MMBL
+# Carnegie Mellon University
 
+"""
 This script contains the default (standard) design constraints used with the PolyhedralDesignSpace as well as the class
 affording a designer the ability to create a custom defined constraint.
 """

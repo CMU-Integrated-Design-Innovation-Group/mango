@@ -15,7 +15,7 @@
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../../../_static/documentation_options.js?v=7d16594f"></script>
-        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -73,11 +73,11 @@
            <div itemprop="articleBody">
              
   <h1>Source code for mango.optimization_features.design_constraints</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">A.J. Vetturini \n</span>
-<span class="sd">IDIG and MMBL \n</span>
-<span class="sd">Carnegie Mellon University \n</span>
+<span></span><span class="c1"># A.J. Vetturini</span>
+<span class="c1"># IDIG and MMBL</span>
+<span class="c1"># Carnegie Mellon University</span>
 
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This script contains the default (standard) design constraints used with the PolyhedralDesignSpace as well as the class</span>
 <span class="sd">affording a designer the ability to create a custom defined constraint.</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -102,12 +102,15 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ------------</span>
-<span class="sd">    extra_constraints : List of CustomDesignConstraint objects \n</span>
-<span class="sd">    scaffold_routing_algorithm : Which automated algorithm is to be used on the exported PLY file, defualt DAEDALUS \n</span>
-<span class="sd">    min_face_angle : Floating point minimal allowable face angle (in degrees). Too low of a value can cause issues in the exported design. \n</span>
-<span class="sd">    min_edge_length : Integer min number of nucleotides any one edge can have; default is 39 due to ATHENA restrictions. \n</span>
-<span class="sd">    max_edge_length : Integer max number of nucleotides any one edge can have \n</span>
-<span class="sd">    max_number_basepairs_in_scaffold : Integer value for max # of nucleotides to allow in a design. Note that here we estimate the # of nts in the scaffold, and there may be some error in exported designs. \n</span>
+<span class="sd">    extra_constraints : List of CustomDesignConstraint objects</span>
+<span class="sd">    scaffold_routing_algorithm : Which automated algorithm is to be used on the exported PLY file, defualt DAEDALUS</span>
+<span class="sd">    min_face_angle : Floating point minimal allowable face angle (in degrees). Too low of a value can cause issues</span>
+<span class="sd">                     in the exported design.</span>
+<span class="sd">    min_edge_length : Integer min number of nucleotides any one edge can have; default is 39 due to ATHENA restrictions.</span>
+<span class="sd">    max_edge_length : Integer max number of nucleotides any one edge can have</span>
+<span class="sd">    max_number_basepairs_in_scaffold : Integer value for max # of nucleotides to allow in a design. Note that here we</span>
+<span class="sd">                                       estimate the # of nts in the scaffold, and there may be some error in exported</span>
+<span class="sd">                                       designs.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">extra_constraints</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># A list of CustomDesignConstraint objects that should also be checked</span>
     <span class="n">scaffold_routing_algorithm</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;DAEDALUS&#39;</span>
@@ -386,7 +389,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">total_length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_lengths</span><span class="p">))</span>
-        <span class="n">total_length_in_number_of_nucleobases</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">total_length</span><span class="p">)</span> <span class="o">/</span> <span class="n">BDNA</span><span class="o">.</span><span class="n">pitch_per_rise</span>
+        <span class="n">total_length_in_number_of_nucleobases</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">total_length</span> <span class="o">/</span> <span class="n">BDNA</span><span class="o">.</span><span class="n">pitch_per_rise</span><span class="p">)</span>
 
         <span class="c1"># Depending on if we use DAEDALUS or TALOS we multiply this estimate by 2 or 6:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scaffold_routing_algorithm</span> <span class="o">==</span> <span class="s1">&#39;DAEDALUS&#39;</span><span class="p">:</span>
@@ -541,20 +544,21 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class lets the user define a custom function which can be assigned as an extra design constraint. This is</span>
 <span class="sd">    a slight WIP as I may want to convert this to a Python wrapper, but I am not sure about the logistics (or if this</span>
-<span class="sd">    is even a good idea). \n</span>
+<span class="sd">    is even a good idea).</span>
 
 <span class="sd">    The function can really be defined as anything, however it should be noted that there are no checks here to see how</span>
 <span class="sd">    &quot;good&quot; a constraint is or is not, and that is at the discretion of the user.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ------------</span>
-<span class="sd">    name : String unique identifies of the constraint name \n</span>
-<span class="sd">    design_constraint : A Python function defining the constraint. For example, if you have a constraint as: \n</span>
-<span class="sd">                        \t def foo(input_vars, extra_params): \n</span>
-<span class="sd">                            \t \tconstraint_code \n \n</span>
+<span class="sd">    name : String unique identifies of the constraint name</span>
+<span class="sd">    design_constraint : A Python function defining the constraint. For example, if you have a constraint as:</span>
+<span class="sd">                        def foo(input_vars, extra_params):</span>
+<span class="sd">                            constraint_code</span>
 
-<span class="sd">                        \t Then you would pass in CustomDesignConstraint(name=&#39;foo&#39;, design_constraint=foo, extra_params=extra_params) \n</span>
-<span class="sd">    extra_params : A dictionary of constants / values that a user may want to use in the custom constraint \n</span>
+<span class="sd">                        Then you would pass in CustomDesignConstraint(name=&#39;foo&#39;, design_constraint=foo,</span>
+<span class="sd">                                                                      extra_params=extra_params)</span>
+<span class="sd">    extra_params : A dictionary of constants / values that a user may want to use in the custom constraint</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># Name of the custom design constraint from the user</span>
     <span class="n">design_constraint</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># This is the actual function defining the design constraint</span>

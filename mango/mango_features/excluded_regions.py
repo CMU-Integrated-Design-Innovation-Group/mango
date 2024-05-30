@@ -1,8 +1,8 @@
-"""
-A.J. Vetturini
-IDIG and MMBL
-Carnegie Mellon University
+# A.J. Vetturini
+# IDIG and MMBL
+# Carnegie Mellon University
 
+"""
 This modules defines excluded region areas that will be used in defining the polyhedral_design_space to prevent material
 from being added into these spaces. These regions are specifically useful if a designer has a pre-allocated space to be
 occupied by a nanoparticle, and this conceptually prevents DNA from being added to these locations.

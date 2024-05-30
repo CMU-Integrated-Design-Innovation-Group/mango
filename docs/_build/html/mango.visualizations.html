@@ -16,7 +16,7 @@
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="_static/documentation_options.js?v=7d16594f"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -96,9 +96,6 @@
 <h1>Visualization Options<a class="headerlink" href="#visualization-options" title="Link to this heading"></a></h1>
 <section id="module-mango.visualizations.display_mesh_design">
 <span id="display-designs"></span><h2>Display Designs<a class="headerlink" href="#module-mango.visualizations.display_mesh_design" title="Link to this heading"></a></h2>
-<p>A.J. Vetturini</p>
-<p>IDIG and MMBL</p>
-<p>Carnegie Mellon University</p>
 <p>This is a visualization function that will utilize plotly to show a design as a mesh file both as a cylindrical
 representation and as a standard mesh file</p>
 <dl class="py class">
@@ -109,23 +106,23 @@ representation and as a standard mesh file</p>
 representations, since realistically the edge in the mesh dictates where material is at in the generated design.</p>
 <section id="parameters">
 <h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
-<p>design : Design we are visualizing of the PolyhedralSpace data object (see design_spaces.polyhedral_design_space).</p>
-<p>bounding_box : The bounding box defined, can be accessed by the design.bounding_box</p>
-<p>BOOLEAN options that turn on / off various visualizations:</p>
-<p>show_bounding_box : Determines if bounding box is shown, used for debugging (default: TRUE)</p>
-<p>show_excluded_regions : Determines if the excluded regions are shown or not (default: TRUE)</p>
-<p>opaque_excluded_region : Determines if excluded regions are opaque or not (default: FALSE / not opaque)</p>
-<p>display_background : Determines if a background color is to be used (default: False / blank background)</p>
-<p>display_axes : Determines if the axes and ticker labels are shown (default: True)</p>
-<p>show_box_bounds : Determines if custom annotations are displayed showing bounding box dimensions (default: FALSE)</p>
-<p>DISPLAY options that control colors / font sizes:</p>
-<p>cylinder_color : String color of the cylinders mapped by either plotly color or ‘rgb(R, G, B)’ (default: darkgray)</p>
-<p>cylinder_diameter : Floating point value of the cylinder diameter to use (default : 2.25) (BDNA diameter)</p>
-<p>tick_font : Integer point-size of ticker font (default: 14)</p>
-<p>axis_title_font : Integer point-size of axis titles</p>
-<p>camera_position : Camera dictionary (see plotly) for holding the camera angle constant</p>
-<p>excluded_color : String color of excluded regions by either plotly color or ‘rgb(R, G, B)’ (default: red)</p>
-<p>plot_background_color : String color of background defined by either plotly color or ‘rgb(R, G, B)’ (default: None)</p>
+<p>design : Design we are visualizing of the PolyhedralSpace data object (see design_spaces.polyhedral_design_space).
+bounding_box : The bounding box defined, can be accessed by the design.bounding_box</p>
+<p>BOOLEAN options that turn on / off various visualizations:
+show_bounding_box : Determines if bounding box is shown, used for debugging (default: TRUE)
+show_excluded_regions : Determines if the excluded regions are shown or not (default: TRUE)
+opaque_excluded_region : Determines if excluded regions are opaque or not (default: FALSE / not opaque)
+display_background : Determines if a background color is to be used (default: False / blank background)
+display_axes : Determines if the axes and ticker labels are shown (default: True)
+show_box_bounds : Determines if custom annotations are displayed showing bounding box dimensions (default: FALSE)</p>
+<p>DISPLAY options that control colors / font sizes:
+cylinder_color : String color of the cylinders mapped by either plotly color or ‘rgb(R, G, B)’ (default: darkgray)
+cylinder_diameter : Floating point value of the cylinder diameter to use (default : 2.25) (BDNA diameter)
+tick_font : Integer point-size of ticker font (default: 14)
+axis_title_font : Integer point-size of axis titles
+camera_position : Camera dictionary (see plotly) for holding the camera angle constant
+excluded_color : String color of excluded regions by either plotly color or ‘rgb(R, G, B)’ (default: red)
+plot_background_color : String color of background defined by either plotly color or ‘rgb(R, G, B)’ (default: None)</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.CylindricalRepresentation.axis_title_font">
 <span class="sig-name descname"><span class="pre">axis_title_font</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">22</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.CylindricalRepresentation.axis_title_font" title="Link to this definition"></a></dt>
@@ -249,28 +246,28 @@ plots / output file creator, but it has many options that can be adjusted as dis
 visualization is built using plotly and the figures will all show in a web browser.</p>
 <section id="id1">
 <h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
-<p>design : Design we are visualizing of the PolyhedralSpace data object (see design_spaces.polyhedral_design_space).</p>
-<p>bounding_box : The bounding box defined, can be accessed by the design.bounding_box</p>
-<p>BOOLEAN options that turn on / off various visualizations:</p>
-<p>display_node_names : Determines if node names are shown, used for debugging (default: FALSE)</p>
-<p>show_bounding_box : Determines if bounding box is shown, used for debugging (default: TRUE)</p>
-<p>show_mesh_nodes : Determines if nodes are shown as scatter points or not (default: TRUE)</p>
-<p>show_excluded_regions : Determines if the excluded regions are shown or not (default: TRUE)</p>
-<p>opaque_excluded_region : Determines if excluded regions are opaque or not (default: FALSE / not opaque)</p>
-<p>display_background : Determines if a background color is to be used (default: False / blank background)</p>
-<p>display_axes : Determines if the axes and ticker labels are shown (default: True)</p>
-<p>DISPLAY options that control colors / font sizes:</p>
-<p>face_color : String color of mesh faces defined by either plotly color or ‘rgb(R, G, B)’ (default: darkgray)</p>
-<p>constant_edge_color : String color of edges shown by either plotly color or ‘rgb(R, G, B)’ (default: None / black)</p>
-<p>symbol_size : Integer size of mesh nodes (default: 6)</p>
-<p>line_width : Integer width of edges shown (default: 4)</p>
-<p>tick_font : Integer point-size of ticker font (default: 14)</p>
-<p>axis_title_font : Integer point-size of axis titles</p>
-<p>camera_position : Camera dictionary (see plotly) for holding the camera angle constant</p>
-<p>node_color :  String color of nodes defined by either plotly color or ‘rgb(R, G, B)’ (default: green)</p>
-<p>symbol : String symbol of nodes defined by plotly (default: square)</p>
-<p>excluded_color : String color of excluded regions by either plotly color or ‘rgb(R, G, B)’ (default: red)</p>
-<p>plot_background_color : String color of background defined by either plotly color or ‘rgb(R, G, B)’ (default: None)</p>
+<p>design : Design we are visualizing of the PolyhedralSpace data object (see design_spaces.polyhedral_design_space).
+bounding_box : The bounding box defined, can be accessed by the design.bounding_box</p>
+<p>BOOLEAN options that turn on / off various visualizations:
+display_node_names : Determines if node names are shown, used for debugging (default: FALSE)
+show_bounding_box : Determines if bounding box is shown, used for debugging (default: TRUE)
+show_mesh_nodes : Determines if nodes are shown as scatter points or not (default: TRUE)
+show_excluded_regions : Determines if the excluded regions are shown or not (default: TRUE)
+opaque_excluded_region : Determines if excluded regions are opaque or not (default: FALSE / not opaque)
+display_background : Determines if a background color is to be used (default: False / blank background)
+display_axes : Determines if the axes and ticker labels are shown (default: True)</p>
+<p>DISPLAY options that control colors / font sizes:
+face_color : String color of mesh faces defined by either plotly color or ‘rgb(R, G, B)’ (default: darkgray)
+constant_edge_color : String color of edges shown by either plotly color or ‘rgb(R, G, B)’ (default: None / black)
+symbol_size : Integer size of mesh nodes (default: 6)
+line_width : Integer width of edges shown (default: 4)
+tick_font : Integer point-size of ticker font (default: 14)
+axis_title_font : Integer point-size of axis titles
+camera_position : Camera dictionary (see plotly) for holding the camera angle constant
+node_color :  String color of nodes defined by either plotly color or ‘rgb(R, G, B)’ (default: green)
+symbol : String symbol of nodes defined by plotly (default: square)
+excluded_color : String color of excluded regions by either plotly color or ‘rgb(R, G, B)’ (default: red)
+plot_background_color : String color of background defined by either plotly color or ‘rgb(R, G, B)’ (default: None)</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mango.visualizations.display_mesh_design.MeshRepresentation.axis_title_font">
 <span class="sig-name descname"><span class="pre">axis_title_font</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">16</span></em><a class="headerlink" href="#mango.visualizations.display_mesh_design.MeshRepresentation.axis_title_font" title="Link to this definition"></a></dt>
@@ -419,9 +416,6 @@ visualization is built using plotly and the figures will all show in a web brows
 </section>
 <section id="module-mango.visualizations.mango_output_visualization">
 <span id="create-output"></span><h2>Create Output<a class="headerlink" href="#module-mango.visualizations.mango_output_visualization" title="Link to this heading"></a></h2>
-<p>A.J. Vetturini</p>
-<p>IDIG and MMBL</p>
-<p>Carnegie Mellon University</p>
 <p>This script will support creating an output file that can be used within the kodak visualization tool. This scripts
 purpose is to create a simple binary file that can then be read-in by the visualization tool to create the validated</p>
 <dl class="py class">
@@ -445,13 +439,13 @@ purpose is to create a simple binary file that can then be read-in by the visual
 create a simple, minimal example output that one might be most interested in.</p>
 <section id="id2">
 <h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
-<p>aj1_filepath : String filepath location to the .aj1 results file output from the optimizer</p>
-<p>output_filepath : Where to store the plots file (as only a folderpath)</p>
-<p>output_filename_no_extension : String name of the file to output</p>
-<dl class="simple">
-<dt>max_number_of_windows<span class="classifier">Integer number of windows that the kodak viewer will let you have open. Just here to prevent</span></dt><dd><p>someone from accidentally opening too many windows, likely don’t change the value.</p>
-</dd>
-</dl>
+<p>aj1_filepath : String filepath location to the .aj1 results file output from the optimizer
+output_filepath : Where to store the plots file (as only a folderpath)
+output_filename_no_extension : String name of the file to output
+max_number_of_windows : Integer number of windows that the kodak viewer will let you have open. Just here to prevent</p>
+<blockquote>
+<div><p>someone from accidentally opening too many windows, likely don’t change the value.</p>
+</div></blockquote>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mango.visualizations.mango_output_visualization.VisualizationObject.aj1_filepath">
 <span class="sig-name descname"><span class="pre">aj1_filepath</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#mango.visualizations.mango_output_visualization.VisualizationObject.aj1_filepath" title="Link to this definition"></a></dt>
@@ -536,14 +530,11 @@ as the default exported designs which a user can interact with in the UI window.
 </section>
 <section id="module-mango.visualizations.optimizer_analysis">
 <span id="analyze-optimizer-performance"></span><h2>Analyze optimizer performance<a class="headerlink" href="#module-mango.visualizations.optimizer_analysis" title="Link to this heading"></a></h2>
-<p>A.J. Vetturini</p>
-<p>IDIG and MMBL</p>
-<p>Carnegie Mellon University</p>
 <p>This script is responsible for the creation of plots that a user may be interested in creating for their results file.
 While many results are created with this script, you may want to create your own plotting functions after the fact once
 you know what type of data you want to specifically analyze!</p>
 <dl class="simple">
-<dt>NOTE:</dt><dd><p>Some of the code here is HORRIBLE. I intially wrote these internally for a completely different use-case that I
+<dt>NOTE:</dt><dd><p>Some of the code here need updating. I intially wrote these internally for a completely different use-case that I
 later scrapped. The practices used here do not make sense for this application, and I really need to update them
 when I find time (will I find the time?).</p>
 </dd>
@@ -557,14 +548,14 @@ the generative process went.</p>
 <section id="id3">
 <h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
 <p>results_path : Filepath to .aj1 file that conducted a MOSA optimization</p>
-<p>DISPLAY options that control colors / font sizes:</p>
-<p>tick_font_size : Integer point-size of ticker font (default: 16)</p>
-<p>axis_title_font_size : Integer point-size of axis titles (default: 18)</p>
-<p>annotation_font_size : Integer point-size of annotation / text boxes (default: 14)</p>
-<p>sub_plot_title_font_size : Integer point-size of subplot titles (default: 18)</p>
-<p>plot_title_font_size : Integer point-size of figure title (default: 18)</p>
-<p>legend_font : Integer point-size of legend titles (default: 14)</p>
-<p>animation_epoch_step_size : Essentially the result-save frequency (default: 1)</p>
+<p>DISPLAY options that control colors / font sizes:
+tick_font_size : Integer point-size of ticker font (default: 16)
+axis_title_font_size : Integer point-size of axis titles (default: 18)
+annotation_font_size : Integer point-size of annotation / text boxes (default: 14)
+sub_plot_title_font_size : Integer point-size of subplot titles (default: 18)
+plot_title_font_size : Integer point-size of figure title (default: 18)
+legend_font : Integer point-size of legend titles (default: 14)
+animation_epoch_step_size : Essentially the result-save frequency (default: 1)</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.animation_epoch_step_size">
 <span class="sig-name descname"><span class="pre">animation_epoch_step_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.animation_epoch_step_size" title="Link to this definition"></a></dt>
@@ -709,13 +700,13 @@ compared to the final pareto found</p>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.return_figure">
-<span class="sig-name descname"><span class="pre">return_figure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#MOSA_Analysis.return_figure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.return_figure" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.return_fig">
+<span class="sig-name descname"><span class="pre">return_fig</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#MOSA_Analysis.return_fig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.return_fig" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.show_figure">
-<span class="sig-name descname"><span class="pre">show_figure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#MOSA_Analysis.show_figure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.show_figure" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.MOSA_Analysis.show_fig">
+<span class="sig-name descname"><span class="pre">show_fig</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#MOSA_Analysis.show_fig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.MOSA_Analysis.show_fig" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -754,13 +745,13 @@ the generative process went.</p>
 <section id="id4">
 <h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
 <p>results_path : Filepath to .aj1 file that conducted a shape annealing optimization</p>
-<p>DISPLAY options that control colors / font sizes:</p>
-<p>tick_font_size : Integer point-size of ticker font (default: 16)</p>
-<p>axis_title_font_size : Integer point-size of axis titles (default: 18)</p>
-<p>annotation_font_size : Integer point-size of annotation / text boxes (default: 14)</p>
-<p>sub_plot_title_font_size : Integer point-size of subplot titles (default: 18)</p>
-<p>plot_title_font_size : Integer point-size of figure title (default: 18)</p>
-<p>legend_font : Integer point-size of legend titles (default: 14)</p>
+<p>DISPLAY options that control colors / font sizes:
+tick_font_size : Integer point-size of ticker font (default: 16)
+axis_title_font_size : Integer point-size of axis titles (default: 18)
+annotation_font_size : Integer point-size of annotation / text boxes (default: 14)
+sub_plot_title_font_size : Integer point-size of subplot titles (default: 18)
+plot_title_font_size : Integer point-size of figure title (default: 18)
+legend_font : Integer point-size of legend titles (default: 14)</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.annotation_font_size">
 <span class="sig-name descname"><span class="pre">annotation_font_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">14</span></em><a class="headerlink" href="#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.annotation_font_size" title="Link to this definition"></a></dt>
@@ -799,13 +790,13 @@ the generative process went.</p>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.return_figure">
-<span class="sig-name descname"><span class="pre">return_figure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#ShapeAnneal_Analysis.return_figure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.return_figure" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.return_fig">
+<span class="sig-name descname"><span class="pre">return_fig</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Figure</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#ShapeAnneal_Analysis.return_fig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.return_fig" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.show_figure">
-<span class="sig-name descname"><span class="pre">show_figure</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#ShapeAnneal_Analysis.show_figure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.show_figure" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.show_fig">
+<span class="sig-name descname"><span class="pre">show_fig</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/visualizations/optimizer_analysis.html#ShapeAnneal_Analysis.show_fig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.visualizations.optimizer_analysis.ShapeAnneal_Analysis.show_fig" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">

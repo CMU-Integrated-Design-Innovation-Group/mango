@@ -1,8 +1,8 @@
-"""
-A.J. Vetturini
-IDIG and MMBL
-Carnegie Mellon University
+# A.J. Vetturini
+# IDIG and MMBL
+# Carnegie Mellon University
 
+"""
 Currently this optimizer is only available for the PolyhedralSpace; future work will potentially need to incorporate
 different spaces and update this class to allow different spaces.
 

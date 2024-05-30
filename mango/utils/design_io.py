@@ -1,8 +1,8 @@
-"""
-A.J. Vetturini
-IDIG and MMBL
-Carnegie Mellon University
+# A.J. Vetturini
+# IDIG and MMBL
+# Carnegie Mellon University
 
+"""
 This script is for reading in / outputting design files. For example, exporting to PLY file to convert a design to a
 DNA file via DAEDALUS2.
 """

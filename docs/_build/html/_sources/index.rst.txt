@@ -8,7 +8,7 @@ Welcome to mango generative design framework's documentation!
 
 What is this?
 --------------
-This is a generative design framework using shape grammars with the intent of generating wireframe DNA origami nanostructures. The framework contains various methods for exploring design given the variety of constraints a designer may need to be working under. \n 
+This is a generative design framework using shape grammars with the intent of generating wireframe DNA origami nanostructures. The framework contains various methods for exploring design given the variety of constraints a designer may need to be working under. 
 
 Developer Information
 ---------------------

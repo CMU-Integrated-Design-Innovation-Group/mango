@@ -1,14 +1,14 @@
-"""
-A.J. Vetturini
-IDIG and MMBL
-Carnegie Mellon University
+# A.J. Vetturini
+# IDIG and MMBL
+# Carnegie Mellon University
 
+"""
 This script is responsible for the creation of plots that a user may be interested in creating for their results file.
 While many results are created with this script, you may want to create your own plotting functions after the fact once
 you know what type of data you want to specifically analyze!
 
 NOTE:
-    Some of the code here is HORRIBLE. I intially wrote these internally for a completely different use-case that I
+    Some of the code here need updating. I intially wrote these internally for a completely different use-case that I
     later scrapped. The practices used here do not make sense for this application, and I really need to update them
     when I find time (will I find the time?).
 """

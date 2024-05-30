@@ -1,8 +1,8 @@
-"""
-A.J. Vetturini
-IDIG and MMBL
-Carnegie Mellon University
+# A.J. Vetturini
+# IDIG and MMBL
+# Carnegie Mellon University
 
+"""
 This is a visualization function that will utilize plotly to show a design as a mesh file both as a cylindrical
 representation and as a standard mesh file
 """

@@ -1,8 +1,8 @@
-"""
-A.J. Vetturini
-IDIG and MMBL
-Carnegie Mellon University
+# A.J. Vetturini
+# IDIG and MMBL
+# Carnegie Mellon University
 
+"""
 This modules defines preserved region areas that will be used in defining the polyhedral_design_space to ensure DNA
 is located in specific places in the design space. A user can specify either an edge of DNA or a vertex which represents
 DNA bundles "meeting" at a specific point in the wireframe shape.

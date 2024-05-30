@@ -1,11 +1,12 @@
-"""
-A.J. Vetturini
-IDIG and MMBL
-Carnegie Mellon University
+# A.J. Vetturini
+# IDIG and MMBL
+# Carnegie Mellon University
 
+"""
 This is the top level class responsible for maintaining the design features / qualities of a given design. This is
 effectively an environment from which we are applying grammars (actions) to.
 """
+
 # Import Modules
 from dataclasses import dataclass
 from typing import Optional, Union

@@ -15,7 +15,7 @@
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../../../_static/documentation_options.js?v=7d16594f"></script>
-        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -73,13 +73,13 @@
            <div itemprop="articleBody">
              
   <h1>Source code for mango.optimizers.single_objective_shape_annealing</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">A.J. Vetturini \n</span>
-<span class="sd">IDIG and MMBL \n</span>
-<span class="sd">Carnegie Mellon University \n</span>
+<span></span><span class="c1"># A.J. Vetturini</span>
+<span class="c1"># IDIG and MMBL</span>
+<span class="c1"># Carnegie Mellon University</span>
 
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Currently this optimizer is only available for the PolyhedralSpace; future work will potentially need to incorporate</span>
-<span class="sd">different spaces and update this class to allow different spaces. \n</span>
+<span class="sd">different spaces and update this class to allow different spaces.</span>
 
 <span class="sd">This script incorporates the shape annealing algorithm as developed in Cagan, J., and W. J. Mitchell.</span>
 <span class="sd">“Optimally Directed Shape Generation by Shape Annealing.” Environment and Planning B: Planning and Design 20,</span>
@@ -107,7 +107,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The optimizer is the &quot;heart and soul&quot; of the framework. It contains the logic for applying grammars and controlling</span>
 <span class="sd">    the optimization-driven generative process. There are various hyperparameters that can be tuned which establish</span>
-<span class="sd">    the depth of search and time spent searching. \n \n</span>
+<span class="sd">    the depth of search and time spent searching.</span>
 
 <span class="sd">    This data class contains the Shape Annealing algorithm implementation and is skewed towards a single objective</span>
 <span class="sd">    optimization task. It can be used with a weighted sums / epsilon constraint approach to multiobjective, but it</span>
@@ -116,46 +116,46 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ------------</span>
-<span class="sd">    design_space : Initial PolyhedralSpace representing the design which is to be optimized \n</span>
-<span class="sd">    grammars : A singular GrammarSet or a list of GrammarSets to use in the generative process \n</span>
-<span class="sd">    design_constraints : The PolyhedralDesignConstraint object which constraint the optimizer \n</span>
-<span class="sd">    objective_function : Objective function to be minimized \n</span>
-<span class="sd">    SAVE_PATH : Path of where to save the resultant generative .aj1 file \n</span>
-<span class="sd">    SAVE_NAME_NO_EXTENSION : Filename of resultant .aj1 file \n</span>
-<span class="sd">    constraint_set : List of constraint name strings that are checked by the optimizer by default \n \n</span>
+<span class="sd">    design_space : Initial PolyhedralSpace representing the design which is to be optimized</span>
+<span class="sd">    grammars : A singular GrammarSet or a list of GrammarSets to use in the generative process</span>
+<span class="sd">    design_constraints : The PolyhedralDesignConstraint object which constraint the optimizer</span>
+<span class="sd">    objective_function : Objective function to be minimized</span>
+<span class="sd">    SAVE_PATH : Path of where to save the resultant generative .aj1 file</span>
+<span class="sd">    SAVE_NAME_NO_EXTENSION : Filename of resultant .aj1 file</span>
+<span class="sd">    constraint_set : List of constraint name strings that are checked by the optimizer by default</span>
 
 <span class="sd">    Optional / Other input parameters that can be changed:</span>
-<span class="sd">    --------------------------------------------------------</span>
-<span class="sd">    extension_value_default : Default node extension value to use (default: 0.34 nm) \n</span>
-<span class="sd">    extension_ramp : Dictionary mapping a extension grammar to a Ramp element \n</span>
-<span class="sd">    rotation_value_degrees_default : Default edge rotation value to use (default: 1 degrees) \n</span>
-<span class="sd">    rotation_ramp: Dictionary mapping a rotation grammar to a Ramp element \n</span>
-<span class="sd">    numDecimals : Number of decimal places to round to \n</span>
-<span class="sd">    print_progress : Bool which determines if messages are printed to the terminal (default: TRUE) \n \n</span>
+<span class="sd">    ------------</span>
+<span class="sd">    extension_value_default : Default node extension value to use (default: 0.34 nm)</span>
+<span class="sd">    extension_ramp : Dictionary mapping a extension grammar to a Ramp element</span>
+<span class="sd">    rotation_value_degrees_default : Default edge rotation value to use (default: 1 degrees)</span>
+<span class="sd">    rotation_ramp: Dictionary mapping a rotation grammar to a Ramp element</span>
+<span class="sd">    numDecimals : Number of decimal places to round to</span>
+<span class="sd">    print_progress : Bool which determines if messages are printed to the terminal (default: TRUE)</span>
 
-<span class="sd">    Simulated Annealing Hyperparameters that can be controlled \n</span>
+<span class="sd">    Simulated Annealing Hyperparameters that can be controlled</span>
 <span class="sd">    Note that the default parameters here won&#39;t necessarily give a &quot;good&quot; result, they must be tuned!</span>
-<span class="sd">    ---------------------------------------------------------------------------------------------------</span>
-<span class="sd">    n : Number of inner loop mutations (default: 50) \n</span>
-<span class="sd">    limit : Set limit / # of accepted shapes within inner most loop of SA (default: 15) \n</span>
-<span class="sd">    n_stop : Max number of iterations to prevent an infinite loop (default: 100000) \n</span>
-<span class="sd">    T_min : Minimal temperature to end the annealing process (default: 1e-8) \n</span>
-<span class="sd">    max_time_of_optimization_minutes : Max time spent generating a design (default: 60 minutes) \n</span>
-<span class="sd">    max_number_of_epochs : Max number of epochs to run the generative study for (default: 50) \n</span>
-<span class="sd">    random_seed : Specified random seed (default: Random value) \n</span>
-<span class="sd">    random_walk_steps : Number of random walk steps to initialize the temperature of the space (default: 2000) \n</span>
-<span class="sd">    cooling_schedule : Cooling schedule used during simulated annealing (default: huang / HRSV) \n</span>
-<span class="sd">    cooling_rate_geometric : Cooling rate to use if using geometric cooling_schedule (default: 0.9) \n</span>
-<span class="sd">    delta_T : Triki annealing schedule adaptation rate, only used if using triki cooling_schedule (default: 0.8) \n</span>
+<span class="sd">    ------------</span>
+<span class="sd">    n : Number of inner loop mutations (default: 50)</span>
+<span class="sd">    limit : Set limit / # of accepted shapes within inner most loop of SA (default: 15)</span>
+<span class="sd">    n_stop : Max number of iterations to prevent an infinite loop (default: 100000)</span>
+<span class="sd">    T_min : Minimal temperature to end the annealing process (default: 1e-8)</span>
+<span class="sd">    max_time_of_optimization_minutes : Max time spent generating a design (default: 60 minutes)</span>
+<span class="sd">    max_number_of_epochs : Max number of epochs to run the generative study for (default: 50)</span>
+<span class="sd">    random_seed : Specified random seed (default: Random value)</span>
+<span class="sd">    random_walk_steps : Number of random walk steps to initialize the temperature of the space (default: 2000)</span>
+<span class="sd">    cooling_schedule : Cooling schedule used during simulated annealing (default: huang / HRSV)</span>
+<span class="sd">    cooling_rate_geometric : Cooling rate to use if using geometric cooling_schedule (default: 0.9)</span>
+<span class="sd">    delta_T : Triki annealing schedule adaptation rate, only used if using triki cooling_schedule (default: 0.8)</span>
 
 <span class="sd">    Optimization Convergence Parameters:</span>
-<span class="sd">    -------------------------------------</span>
-<span class="sd">    NOTE: Because this work was published in a bio-focused field, we do NOT use a convergence set by default, but rather</span>
+<span class="sd">    ------------</span>
+<span class="sd">    FYI:  Because this work was published in a bio-focused field, we do NOT use a convergence set by default, but rather</span>
 <span class="sd">          let the optimization process carry on for a set time. This is because this framework is really intended for</span>
-<span class="sd">          design conceptualization, and fine tuning a design is not going to be accomplished with this framework. \n</span>
-<span class="sd">    use_convergence : Boolean to use convergence or whether to just run for a set amount of time (default : FALSE) \n</span>
-<span class="sd">    minimal_convergence_size : Integer number of # of designs to consider when calculating convergence (default : 25) \n</span>
-<span class="sd">    convergence_threshold : Floating point threshold for determining design convergence (default = 0.01) \n</span>
+<span class="sd">          design conceptualization, and fine tuning a design is not going to be accomplished with this framework.</span>
+<span class="sd">    use_convergence : Boolean to use convergence or whether to just run for a set amount of time (default : FALSE)</span>
+<span class="sd">    minimal_convergence_size : Integer number of # of designs to consider when calculating convergence (default : 25)</span>
+<span class="sd">    convergence_threshold : Floating point threshold for determining design convergence (default = 0.01)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Input parameters that must be passed in:</span>
     <span class="n">design_space</span><span class="p">:</span> <span class="n">PolyhedralSpace</span>
@@ -214,6 +214,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">optimization_objective_values</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tracked_objectives_at_Ti</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># initial temperature</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scaffold_needed</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_seed</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">random_seed</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10000000</span><span class="p">)</span>
@@ -385,7 +386,8 @@
         <span class="k">if</span> <span class="n">random_walk</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">random_walk_objective_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj_value</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">optimization_objective_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj_value</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">optimization_objective_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj_value</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scaffold_needed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">design_space</span><span class="o">.</span><span class="n">input_values</span><span class="p">[</span><span class="s1">&#39;estimated_scaffold_length&#39;</span><span class="p">])</span></div>
 
 
 
@@ -620,13 +622,6 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid cooling schedule selected, options are: geometric, triki, huang&#39;</span><span class="p">)</span>
 
-        <span class="c1"># We also append the temperature to the temperature_tracker list and reset the tracker list:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">print_progress</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Objective Valuation at Epoch </span><span class="si">{</span><span class="n">cur_epoch</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tracked_objectives_at_Ti</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">ValueError</span> <span class="ow">or</span> <span class="ne">IndexError</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;No designs evaluated at epoch: </span><span class="si">{</span><span class="n">cur_epoch</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">temperature_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tracked_objectives_at_Ti</span> <span class="o">=</span> <span class="p">[]</span></div>
 
@@ -662,10 +657,10 @@
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
         <span class="n">curEpoch</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">keep_annealing</span><span class="p">(</span><span class="n">start_time</span><span class="o">=</span><span class="n">start_time</span><span class="p">,</span> <span class="n">cur_epoch</span><span class="o">=</span><span class="n">curEpoch</span><span class="p">):</span>
-            <span class="n">success</span><span class="p">,</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>  <span class="c1"># Count of successive state applications</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Count of successive state applications</span>
 
             <span class="c1"># Inner loop of n steps to modify design:</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">):</span>
                 <span class="n">active_design_state</span><span class="p">,</span> <span class="n">candidate_design_state</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">design_space</span><span class="p">),</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">design_space</span><span class="p">)</span>
                 <span class="n">extension_map</span><span class="p">,</span> <span class="n">rotation_map</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_extend_and_rotation_values</span><span class="p">(</span><span class="n">epoch</span><span class="o">=</span><span class="n">curEpoch</span><span class="p">)</span>
                 <span class="c1"># Randomly pick and apply a grammar:</span>
@@ -708,6 +703,8 @@
 
                 <span class="c1"># Now we check to see this inner loop should break early:</span>
                 <span class="k">if</span> <span class="n">success</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">limit</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">print_progress</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Quenching temperature due to successes </span><span class="si">{</span><span class="n">success</span><span class="si">}</span><span class="s1"> exceeding limit </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">limit</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
                     <span class="k">break</span>
 
             <span class="c1"># After the for loop we check if successes is 0. If so then the equilibrium value is met and we end!</span>

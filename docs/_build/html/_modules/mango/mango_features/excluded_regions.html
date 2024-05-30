@@ -15,7 +15,7 @@
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../../../_static/documentation_options.js?v=7d16594f"></script>
-        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -73,11 +73,11 @@
            <div itemprop="articleBody">
              
   <h1>Source code for mango.mango_features.excluded_regions</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">A.J. Vetturini \n</span>
-<span class="sd">IDIG and MMBL \n</span>
-<span class="sd">Carnegie Mellon University \n</span>
+<span></span><span class="c1"># A.J. Vetturini</span>
+<span class="c1"># IDIG and MMBL</span>
+<span class="c1"># Carnegie Mellon University</span>
 
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This modules defines excluded region areas that will be used in defining the polyhedral_design_space to prevent material</span>
 <span class="sd">from being added into these spaces. These regions are specifically useful if a designer has a pre-allocated space to be</span>
 <span class="sd">occupied by a nanoparticle, and this conceptually prevents DNA from being added to these locations.</span>
@@ -93,14 +93,14 @@
 <span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">RectangularPrism</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This is an excluded region representing a simple box. This is more computationally &quot;efficient&quot; than the sphere as there are fewer</span>
-<span class="sd">    geometrical faces to check, although it takes up more space that you may want want.</span>
+<span class="sd">    This is an excluded region representing a simple box. This is more &quot;efficient&quot; than the sphere as there are fewer</span>
+<span class="sd">    geometrical faces to check, although it takes up more space that you may not want.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ------------</span>
-<span class="sd">    c1 : Corner 1 defined by a numpy array in [X Y Z] (nm). Note C1 &lt; C2 for all dimensions. \n</span>
-<span class="sd">    c2 : Corner 2 defined by a numpy array in [X Y Z] (nm) \n</span>
-<span class="sd">    numDecimals: Number of decimals to round positional values to \n</span>
+<span class="sd">    c1 : Corner 1 defined by a numpy array in [X Y Z] (nm). Note C1 &lt; C2 for all dimensions.</span>
+<span class="sd">    c2 : Corner 2 defined by a numpy array in [X Y Z] (nm)</span>
+<span class="sd">    numDecimals: Number of decimals to round positional values to</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># We locate the Nanoparticle based on the bottom left corner and the top right corners 3D Coordinates as a 1D array</span>
     <span class="c1"># These MUST be OPPOSING corners to define out the &quot;bounding box&quot; of sorts.</span>
@@ -224,10 +224,10 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ------------</span>
-<span class="sd">    center : Center of sphere defined by a numpy array in [X Y Z] (nm). \n</span>
-<span class="sd">    diameter : floating point of the sphere (nm) \n</span>
-<span class="sd">    numDecimals: Number of decimals to round positional values to \n</span>
-<span class="sd">    &quot;&quot;&quot;</span> 
+<span class="sd">    center : Center of sphere defined by a numpy array in [X Y Z] (nm).</span>
+<span class="sd">    diameter : floating point of the sphere (nm)</span>
+<span class="sd">    numDecimals: Number of decimals to round positional values to</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">center</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span>
     <span class="n">diameter</span><span class="p">:</span> <span class="nb">float</span>
     <span class="n">numDecimals</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>

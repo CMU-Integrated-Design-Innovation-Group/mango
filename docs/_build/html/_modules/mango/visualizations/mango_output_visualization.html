@@ -15,7 +15,7 @@
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../../../_static/documentation_options.js?v=7d16594f"></script>
-        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -73,11 +73,11 @@
            <div itemprop="articleBody">
              
   <h1>Source code for mango.visualizations.mango_output_visualization</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">A.J. Vetturini \n</span>
-<span class="sd">IDIG and MMBL \n</span>
-<span class="sd">Carnegie Mellon University \n</span>
+<span></span><span class="c1"># A.J. Vetturini</span>
+<span class="c1"># IDIG and MMBL</span>
+<span class="c1"># Carnegie Mellon University</span>
 
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This script will support creating an output file that can be used within the kodak visualization tool. This scripts</span>
 <span class="sd">purpose is to create a simple binary file that can then be read-in by the visualization tool to create the validated</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -107,7 +107,7 @@
 <span class="k">def</span> <span class="nf">select_evenly_spaced_tuples</span><span class="p">(</span><span class="n">tuples_list</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">num_points</span><span class="o">=</span><span class="mi">33</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function finds 33 evenly space points amongst a list of 2D tuples [(1, 2), (3, 4), ...] and uses these points</span>
-<span class="sd">    as the default exported designs which a user can interact with in the UI window. \n \n</span>
+<span class="sd">    as the default exported designs which a user can interact with in the UI window.</span>
 
 <span class="sd">    Why 33 as the default? The plots files I create with this value were a reasonable enough size.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -138,11 +138,11 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ------------</span>
-<span class="sd">    aj1_filepath : String filepath location to the .aj1 results file output from the optimizer \n</span>
-<span class="sd">    output_filepath : Where to store the plots file (as only a folderpath) \n</span>
-<span class="sd">    output_filename_no_extension : String name of the file to output \n</span>
+<span class="sd">    aj1_filepath : String filepath location to the .aj1 results file output from the optimizer</span>
+<span class="sd">    output_filepath : Where to store the plots file (as only a folderpath)</span>
+<span class="sd">    output_filename_no_extension : String name of the file to output</span>
 <span class="sd">    max_number_of_windows : Integer number of windows that the kodak viewer will let you have open. Just here to prevent</span>
-<span class="sd">                            someone from accidentally opening too many windows, likely don&#39;t change the value. \n</span>
+<span class="sd">                            someone from accidentally opening too many windows, likely don&#39;t change the value.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">aj1_filepath</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># Path to the new AJ1 file to read in</span>
     <span class="n">output_filepath</span><span class="p">:</span> <span class="nb">str</span>
@@ -369,8 +369,8 @@
     <span class="k">def</span> <span class="nf">create_pareto_animation_figure</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Simple function used to create the relevant animation figure for the output file &quot;&quot;&quot;</span>
         <span class="n">mosa_analysis</span> <span class="o">=</span> <span class="n">MOSA_Analysis</span><span class="p">(</span><span class="n">results_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">aj1_filepath</span><span class="p">)</span>
-        <span class="n">animation_fig</span> <span class="o">=</span> <span class="n">mosa_analysis</span><span class="o">.</span><span class="n">create_pareto_animation_figure</span><span class="p">(</span><span class="n">return_or_show</span><span class="o">=</span><span class="s1">&#39;return&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">animation_fig</span><span class="o">.</span><span class="n">to_json</span><span class="p">()</span></div>
+        <span class="n">mosa_analysis</span><span class="o">.</span><span class="n">create_pareto_animation_figure</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">mosa_analysis</span><span class="o">.</span><span class="n">return_fig</span><span class="p">()</span><span class="o">.</span><span class="n">to_json</span><span class="p">()</span></div>
 </div>
 
 

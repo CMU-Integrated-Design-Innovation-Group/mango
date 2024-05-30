@@ -16,7 +16,7 @@
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="_static/documentation_options.js?v=7d16594f"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -96,9 +96,6 @@
 <h1>Utilities<a class="headerlink" href="#utilities" title="Link to this heading"></a></h1>
 <section id="module-mango.utils.DNA_property_constants">
 <span id="dna-constants"></span><h2>DNA Constants<a class="headerlink" href="#module-mango.utils.DNA_property_constants" title="Link to this heading"></a></h2>
-<p>A.J. Vetturini</p>
-<p>IDIG and MMBL</p>
-<p>Carnegie Mellon University</p>
 <p>This script contains the DNA constant values (e.g. bp rise)</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="mango.utils.DNA_property_constants.BDNA">
@@ -119,9 +116,6 @@
 </section>
 <section id="module-mango.utils.design_io">
 <span id="design-io"></span><h2>Design IO<a class="headerlink" href="#module-mango.utils.design_io" title="Link to this heading"></a></h2>
-<p>A.J. Vetturini</p>
-<p>IDIG and MMBL</p>
-<p>Carnegie Mellon University</p>
 <p>This script is for reading in / outputting design files. For example, exporting to PLY file to convert a design to a
 DNA file via DAEDALUS2.</p>
 <dl class="py function">
@@ -132,7 +126,7 @@ DNA file via DAEDALUS2.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mango.utils.design_io.export_DNA_design">
-<span class="sig-prename descclassname"><span class="pre">mango.utils.design_io.</span></span><span class="sig-name descname"><span class="pre">export_DNA_design</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">automated_scaffold_executable_path:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design:</span> <span class="pre">~mango.design_spaces.polyhedral_design_space.PolyhedralSpace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">export_path:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savename_no_extension:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DNA_geometry=&lt;class</span> <span class="pre">'mango.utils.DNA_property_constants.BDNA'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaffold_sequence_filepath:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/mango/utils/design_io.html#export_DNA_design"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.utils.design_io.export_DNA_design" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mango.utils.design_io.</span></span><span class="sig-name descname"><span class="pre">export_DNA_design</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">automated_scaffold_executable_path:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">design:</span> <span class="pre">~mango.design_spaces.polyhedral_design_space.PolyhedralSpace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">export_path:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savename_no_extension:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DNA_geometry=&lt;class</span> <span class="pre">'mango.utils.DNA_property_constants.BDNA'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaffold_sequence_filepath:</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">=</span> <span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ply_or_obj:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'ply'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/mango/utils/design_io.html#export_DNA_design"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.utils.design_io.export_DNA_design" title="Link to this definition"></a></dt>
 <dd><p>This is the top level function a user should call which will export a single design. The export_design_to_ply
 is called by this function.</p>
 <dl class="field-list simple">
@@ -144,7 +138,27 @@ is called by this function.</p>
 <li><p><strong>savename_no_extension</strong> – User defined name to save the design as</p></li>
 <li><p><strong>DNA_geometry</strong> – Do not change</p></li>
 <li><p><strong>scaffold_sequence_filepath</strong> – Path to sequence file to use, default is M13</p></li>
+<li><p><strong>ply_or_obj</strong> – Ply will export a PLY file, obj will export an OBJ file</p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mango.utils.design_io.export_design_to_obj">
+<span class="sig-prename descclassname"><span class="pre">mango.utils.design_io.</span></span><span class="sig-name descname"><span class="pre">export_design_to_obj</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">design</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="mango.design_spaces.html#mango.design_spaces.polyhedral_design_space.PolyhedralSpace" title="mango.design_spaces.polyhedral_design_space.PolyhedralSpace"><span class="pre">PolyhedralSpace</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">savepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savename_no_extension</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/utils/design_io.html#export_design_to_obj"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.utils.design_io.export_design_to_obj" title="Link to this definition"></a></dt>
+<dd><p>NOT INTENDED FOR END USER USE. PLEASE SEE export_DNA_design for the user-facing function</p>
+<p>This function exports a given PolyhedralSpace to a .obj file for the use in a automated scaffold routing algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>design</strong> – PolyhedralSpace design space that is to be converted to a obj file</p></li>
+<li><p><strong>savepath</strong> – Filepath where to save the obj file</p></li>
+<li><p><strong>savename_no_extension</strong> – Filename of the obj file to use</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Directory path of where the file was saved</p>
 </dd>
 </dl>
 </dd></dl>
@@ -186,7 +200,7 @@ is called by this function.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mango.utils.design_io.mass_design_export">
-<span class="sig-prename descclassname"><span class="pre">mango.utils.design_io.</span></span><span class="sig-name descname"><span class="pre">mass_design_export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">automated_scaffold_executable_path:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">export_path:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aj1_filepath:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaffold_sequence_filepath:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DNA_geometry=&lt;class</span> <span class="pre">'mango.utils.DNA_property_constants.BDNA'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/utils/design_io.html#mass_design_export"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.utils.design_io.mass_design_export" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">mango.utils.design_io.</span></span><span class="sig-name descname"><span class="pre">mass_design_export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">automated_scaffold_executable_path:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">export_path:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aj1_filepath:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaffold_sequence_filepath:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">DNA_geometry=&lt;class</span> <span class="pre">'mango.utils.DNA_property_constants.BDNA'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ply_or_obj:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'ply'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/utils/design_io.html#mass_design_export"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.utils.design_io.mass_design_export" title="Link to this definition"></a></dt>
 <dd><p>This is the top level function a user should call which will export a single design. The export_design_to_ply
 is called by this function.</p>
 <dl class="field-list simple">
@@ -205,9 +219,6 @@ is called by this function.</p>
 </section>
 <section id="module-mango.utils.mango_math">
 <span id="math-functions"></span><h2>Math Functions<a class="headerlink" href="#module-mango.utils.mango_math" title="Link to this heading"></a></h2>
-<p>A.J. Vetturini</p>
-<p>IDIG and MMBL</p>
-<p>Carnegie Mellon University</p>
 <p>These are various functions used throughout the application that range from mathematical functions to graph-based
 functions which return specific values from a provided graph. There are no custom data types used in any of these
 functions which is the criteria I used to “separate” out the code.</p>

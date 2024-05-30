@@ -1,8 +1,8 @@
-"""
-A.J. Vetturini
-IDIG and MMBL
-Carnegie Mellon University
+# A.J. Vetturini
+# IDIG and MMBL
+# Carnegie Mellon University
 
+"""
 These are various functions used throughout the application that range from mathematical functions to graph-based
 functions which return specific values from a provided graph. There are no custom data types used in any of these
 functions which is the criteria I used to "separate" out the code.

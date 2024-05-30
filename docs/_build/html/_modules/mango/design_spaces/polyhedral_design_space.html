@@ -15,7 +15,7 @@
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../../../_static/documentation_options.js?v=7d16594f"></script>
-        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -73,14 +73,15 @@
            <div itemprop="articleBody">
              
   <h1>Source code for mango.design_spaces.polyhedral_design_space</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">A.J. Vetturini \n</span>
-<span class="sd">IDIG and MMBL \n</span>
-<span class="sd">Carnegie Mellon University \n</span>
+<span></span><span class="c1"># A.J. Vetturini</span>
+<span class="c1"># IDIG and MMBL</span>
+<span class="c1"># Carnegie Mellon University</span>
 
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This is the top level class responsible for maintaining the design features / qualities of a given design. This is</span>
 <span class="sd">effectively an environment from which we are applying grammars (actions) to.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="c1"># Import Modules</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
@@ -104,9 +105,9 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ------------</span>
-<span class="sd">    bounding_box : BoundingBox data type, created \n</span>
-<span class="sd">    preserved : List of PreservedVertex or PreservedEdge objects \n</span>
-<span class="sd">    excluded: An optional list of Sphere or RectangularPrism objects \n</span>
+<span class="sd">    bounding_box : BoundingBox data type, created</span>
+<span class="sd">    preserved : List of PreservedVertex or PreservedEdge objects</span>
+<span class="sd">    excluded: An optional list of Sphere or RectangularPrism objects</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">bounding_box</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">TriclinicBox</span><span class="p">,</span> <span class="n">MonoclinicBox</span><span class="p">,</span> <span class="n">OrthorhombicBox</span><span class="p">,</span> <span class="n">TetragonalBox</span><span class="p">,</span>
                         <span class="n">RhombohedralBox</span><span class="p">,</span> <span class="n">HexagonalBox</span><span class="p">,</span> <span class="n">CubicBox</span><span class="p">]</span>
@@ -120,6 +121,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">edge_divide_nodes</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Tracking where all edge_divisions occur</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">merge_label_dict</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Used to track edge_divisions so we know when we can back out</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">all_faces</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># Dictionary to tract MeshFaces thru stored tuples</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_values</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="c1"># This graph is used for the merge face grammar to guarantee that we can back out of certain topologies</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">merge_label_graph</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">empty_graph</span><span class="p">(</span><span class="n">create_using</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">)</span>
@@ -466,7 +468,7 @@
         <span class="n">convex_hull_volume</span> <span class="o">=</span> <span class="n">convex_hull</span><span class="o">.</span><span class="n">volume</span>
 
         <span class="c1"># Set values:</span>
-        <span class="n">input_values</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_values</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;edge_lengths&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">edge_lengths</span><span class="p">),</span>
             <span class="s1">&#39;face_angles&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">face_angles</span><span class="p">),</span>
             <span class="s1">&#39;estimated_scaffold_length&#39;</span><span class="p">:</span> <span class="n">numBasepairs</span><span class="p">,</span>
@@ -479,7 +481,7 @@
             <span class="s1">&#39;bounding_box&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">bounding_box</span>
         <span class="p">}</span>
 
-        <span class="k">return</span> <span class="n">input_values</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_values</span></div>
 
 
 

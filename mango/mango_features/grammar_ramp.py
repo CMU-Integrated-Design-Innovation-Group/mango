@@ -1,8 +1,8 @@
-"""
-A.J. Vetturini
-IDIG and MMBL
-Carnegie Mellon University
+# A.J. Vetturini
+# IDIG and MMBL
+# Carnegie Mellon University
 
+"""
 This script contains the ability to create ramp elements for both the edge rotation and the length extension rules.
 These ramps are specifically used for the length extension or edge rotation rules, future research may seek to optimize
 these ramps automatically based on the scale of the input.

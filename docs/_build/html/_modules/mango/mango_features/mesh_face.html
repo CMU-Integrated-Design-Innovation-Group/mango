@@ -15,7 +15,7 @@
         <script src="../../../_static/jquery.js?v=5d32c60e"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="../../../_static/documentation_options.js?v=7d16594f"></script>
-        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
         <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
@@ -73,11 +73,11 @@
            <div itemprop="articleBody">
              
   <h1>Source code for mango.mango_features.mesh_face</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">A.J. Vetturini \n</span>
-<span class="sd">IDIG and MMBL \n</span>
-<span class="sd">Carnegie Mellon University \n</span>
+<span></span><span class="c1"># A.J. Vetturini</span>
+<span class="c1"># IDIG and MMBL</span>
+<span class="c1"># Carnegie Mellon University</span>
 
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This script contains a MeshFace which is simple a triangulated face. I offer the ability to use a square face but</span>
 <span class="sd">I do not specifically use this functionality as it increases computational complexity slights (need more checks to</span>
 <span class="sd">validate the face orientation).</span>
@@ -102,13 +102,13 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ------------</span>
-<span class="sd">    v1 : Numpy array of X Y Z of a vertex defining a mesh face \n</span>
-<span class="sd">    v2 : Numpy array of X Y Z of a second vertex defining a mesh face \n</span>
-<span class="sd">    v3 : Numpy array of X Y Z of a third vertex defining a mesh face \n</span>
-<span class="sd">    v4 : (OPTIONAL) Numpy array of X Y Z of a fourth vertex defining a mesh face \n</span>
-<span class="sd">    face_type : String defining if the face is a triangle or a rectangle, not recommended to change \n</span>
-<span class="sd">    numDecimals : integer that is automatically specified to 2. You can lower the precision if desired but consider DNA! \n</span>
-<span class="sd">    &quot;&quot;&quot;</span> 
+<span class="sd">    v1 : Numpy array of X Y Z of a vertex defining a mesh face</span>
+<span class="sd">    v2 : Numpy array of X Y Z of a second vertex defining a mesh face</span>
+<span class="sd">    v3 : Numpy array of X Y Z of a third vertex defining a mesh face</span>
+<span class="sd">    v4 : (OPTIONAL) Numpy array of X Y Z of a fourth vertex defining a mesh face</span>
+<span class="sd">    face_type : String defining if the face is a triangle or a rectangle, not recommended to change</span>
+<span class="sd">    numDecimals : integer that is automatically specified to 2. You can lower the precision if desired but consider DNA!</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Our faces can be either a triangle or a square, but mainly a triangle.</span>
     <span class="n">v1</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span>
     <span class="n">v2</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span>

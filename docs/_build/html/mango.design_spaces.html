@@ -16,7 +16,7 @@
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="_static/documentation_options.js?v=7d16594f"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -96,9 +96,6 @@
 <h1>Establishing design space<a class="headerlink" href="#establishing-design-space" title="Link to this heading"></a></h1>
 <section id="module-mango.design_spaces.bounding_box">
 <span id="bounding-boxes"></span><h2>Bounding Boxes<a class="headerlink" href="#module-mango.design_spaces.bounding_box" title="Link to this heading"></a></h2>
-<p>A.J. Vetturini</p>
-<p>IDIG and MMBL</p>
-<p>Carnegie Mellon University</p>
 <p>This module defines the bounding box surrounding the polyhedral design space, it has many classes for the variety of
 box-types that the bounding_box can presume.</p>
 <dl class="py class">
@@ -146,8 +143,8 @@ all angles are held to 90 degrees.</p>
 and a value of the height is specified. Further, the angles alpha and beta are held to 60 whereas gamma is 120.</p>
 <section id="id1">
 <h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
-<p>a : Magnitude of parallelepiped aligned in x, y</p>
-<p>c: Magnitude of parallelepiped aligned in z</p>
+<p>a : Magnitude of parallelepiped aligned in x, y
+c: Magnitude of parallelepiped aligned in z</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mango.design_spaces.bounding_box.HexagonalBox.a">
 <span class="sig-name descname"><span class="pre">a</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.HexagonalBox.a" title="Link to this definition"></a></dt>
@@ -189,10 +186,10 @@ and a value of the height is specified. Further, the angles alpha and beta are h
 an angle specified between c and a, but alpha and gamma are held to 90 degrees by default</p>
 <section id="id2">
 <h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
-<p>a : Magnitude of parallelepiped aligned in x</p>
-<p>b : Magnitude of parallelepiped aligned in y</p>
-<p>c: Magnitude of parallelepiped aligned in z</p>
-<p>beta : Angle of parallelepiped between c and a</p>
+<p>a : Magnitude of parallelepiped aligned in x
+b : Magnitude of parallelepiped aligned in y
+c: Magnitude of parallelepiped aligned in z
+beta : Angle of parallelepiped between c and a</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mango.design_spaces.bounding_box.MonoclinicBox.a">
 <span class="sig-name descname"><span class="pre">a</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.MonoclinicBox.a" title="Link to this definition"></a></dt>
@@ -250,9 +247,9 @@ an angle specified between c and a, but alpha and gamma are held to 90 degrees b
 defining angles of the box are all held perpendicular (90 degrees).</p>
 <section id="id3">
 <h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
-<p>a : Magnitude of parallelepiped aligned in x</p>
-<p>b : Magnitude of parallelepiped aligned in y</p>
-<p>c: Magnitude of parallelepiped aligned in z</p>
+<p>a : Magnitude of parallelepiped aligned in x
+b : Magnitude of parallelepiped aligned in y
+c: Magnitude of parallelepiped aligned in z</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mango.design_spaces.bounding_box.OrthorhombicBox.a">
 <span class="sig-name descname"><span class="pre">a</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.OrthorhombicBox.a" title="Link to this definition"></a></dt>
@@ -303,14 +300,14 @@ defining angles of the box are all held perpendicular (90 degrees).</p>
 <p>This is a high level class that is used to initialize the various default conditions.</p>
 <section id="id4">
 <h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
-<p>a : Magnitude of parallelepiped aligned in x</p>
-<p>b : Magnitude of parallelepiped aligned in y</p>
-<p>c: Magnitude of parallelepiped aligned in z</p>
-<p>alpha : Angle of parallelepiped between b and c</p>
-<p>beta : Angle of parallelepiped between c and a</p>
-<p>gamma: Angle of parallelepiped between b and a</p>
-<p>cell_type : What system is being shown (used in calculating volume)</p>
-<p>angles_in_degrees : Default TRUE, If false: will presume alpha beta gamma are in radians</p>
+<p>a : Magnitude of parallelepiped aligned in x
+b : Magnitude of parallelepiped aligned in y
+c: Magnitude of parallelepiped aligned in z
+alpha : Angle of parallelepiped between b and c
+beta : Angle of parallelepiped between c and a
+gamma: Angle of parallelepiped between b and a
+cell_type : What system is being shown (used in calculating volume)
+angles_in_degrees : Default TRUE, If false: will presume alpha beta gamma are in radians</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mango.design_spaces.bounding_box.Parallelepiped.a">
 <span class="sig-name descname"><span class="pre">a</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.Parallelepiped.a" title="Link to this definition"></a></dt>
@@ -432,8 +429,8 @@ to extend the face directions, for example.</p>
 same values, respectively.</p>
 <section id="id5">
 <h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
-<p>a : Magnitude of all parallelepiped edges</p>
-<p>alpha : Angle of parallelepiped between all edges</p>
+<p>a : Magnitude of all parallelepiped edges
+alpha : Angle of parallelepiped between all edges</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mango.design_spaces.bounding_box.RhombohedralBox.a">
 <span class="sig-name descname"><span class="pre">a</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.RhombohedralBox.a" title="Link to this definition"></a></dt>
@@ -475,8 +472,8 @@ same values, respectively.</p>
 defines a height. All angles are held perpendicular</p>
 <section id="id6">
 <h3>Parameters<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
-<p>a : Magnitude of parallelepiped aligned in x, y</p>
-<p>c: Magnitude of parallelepiped aligned in z</p>
+<p>a : Magnitude of parallelepiped aligned in x, y
+c: Magnitude of parallelepiped aligned in z</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mango.design_spaces.bounding_box.TetragonalBox.a">
 <span class="sig-name descname"><span class="pre">a</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.TetragonalBox.a" title="Link to this definition"></a></dt>
@@ -518,12 +515,12 @@ defines a height. All angles are held perpendicular</p>
 parameter of the parallelepiped can be constrained.</p>
 <section id="id7">
 <h3>Parameters<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
-<p>a : Magnitude of parallelepiped aligned in x</p>
-<p>b : Magnitude of parallelepiped aligned in y</p>
-<p>c: Magnitude of parallelepiped aligned in z</p>
-<p>alpha : Angle of parallelepiped between b and c</p>
-<p>beta : Angle of parallelepiped between c and a</p>
-<p>gamma: Angle of parallelepiped between b and a</p>
+<p>a : Magnitude of parallelepiped aligned in x
+b : Magnitude of parallelepiped aligned in y
+c: Magnitude of parallelepiped aligned in z
+alpha : Angle of parallelepiped between b and c
+beta : Angle of parallelepiped between c and a
+gamma: Angle of parallelepiped between b and a</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mango.design_spaces.bounding_box.TriclinicBox.a">
 <span class="sig-name descname"><span class="pre">a</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#mango.design_spaces.bounding_box.TriclinicBox.a" title="Link to this definition"></a></dt>
@@ -597,9 +594,6 @@ parameter of the parallelepiped can be constrained.</p>
 </section>
 <section id="module-mango.design_spaces.polyhedral_design_space">
 <span id="design-spaces"></span><h2>Design Spaces<a class="headerlink" href="#module-mango.design_spaces.polyhedral_design_space" title="Link to this heading"></a></h2>
-<p>A.J. Vetturini</p>
-<p>IDIG and MMBL</p>
-<p>Carnegie Mellon University</p>
 <p>This is the top level class responsible for maintaining the design features / qualities of a given design. This is
 effectively an environment from which we are applying grammars (actions) to.</p>
 <dl class="py class">
@@ -610,9 +604,9 @@ effectively an environment from which we are applying grammars (actions) to.</p>
 as vHelix, DAEDALUS, and TALOS. This design space manages a 3D space via its design_graph</p>
 <section id="id8">
 <h3>Parameters<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
-<p>bounding_box : BoundingBox data type, created</p>
-<p>preserved : List of PreservedVertex or PreservedEdge objects</p>
-<p>excluded: An optional list of Sphere or RectangularPrism objects</p>
+<p>bounding_box : BoundingBox data type, created
+preserved : List of PreservedVertex or PreservedEdge objects
+excluded: An optional list of Sphere or RectangularPrism objects</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mango.design_spaces.polyhedral_design_space.PolyhedralSpace.add_new_node">
 <span class="sig-name descname"><span class="pre">add_new_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">terminal</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/mango/design_spaces/polyhedral_design_space.html#PolyhedralSpace.add_new_node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.design_spaces.polyhedral_design_space.PolyhedralSpace.add_new_node" title="Link to this definition"></a></dt>

@@ -16,7 +16,7 @@
         <script src="_static/jquery.js?v=5d32c60e"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
         <script src="_static/documentation_options.js?v=7d16594f"></script>
-        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
         <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -96,9 +96,6 @@
 <h1>Input design features<a class="headerlink" href="#input-design-features" title="Link to this heading"></a></h1>
 <section id="module-mango.mango_features.preserved_regions">
 <span id="preserved-regions"></span><h2>Preserved Regions<a class="headerlink" href="#module-mango.mango_features.preserved_regions" title="Link to this heading"></a></h2>
-<p>A.J. Vetturini</p>
-<p>IDIG and MMBL</p>
-<p>Carnegie Mellon University</p>
 <p>This modules defines preserved region areas that will be used in defining the polyhedral_design_space to ensure DNA
 is located in specific places in the design space. A user can specify either an edge of DNA or a vertex which represents
 DNA bundles “meeting” at a specific point in the wireframe shape.</p>
@@ -110,8 +107,8 @@ DNA bundles “meeting” at a specific point in the wireframe shape.</p>
 input conditions defining the Preserved Regions MUST be able to be triangulated via the alphashape algorithm.</p>
 <section id="parameters">
 <h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
-<p>v1 : Numpy array defining where the 1st vertex is located in 3D space</p>
-<p>v3 : Numpy array defining where the 2nd vertex is located in 3D space</p>
+<p>v1 : Numpy array defining where the 1st vertex is located in 3D space
+v3 : Numpy array defining where the 2nd vertex is located in 3D space</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mango.mango_features.preserved_regions.PreservedEdge.v1">
 <span class="sig-name descname"><span class="pre">v1</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">array</span></em><a class="headerlink" href="#mango.mango_features.preserved_regions.PreservedEdge.v1" title="Link to this definition"></a></dt>
@@ -146,9 +143,6 @@ via the alphashape algorithm.</p>
 </section>
 <section id="module-mango.mango_features.excluded_regions">
 <span id="excluded-regions"></span><h2>Excluded Regions<a class="headerlink" href="#module-mango.mango_features.excluded_regions" title="Link to this heading"></a></h2>
-<p>A.J. Vetturini</p>
-<p>IDIG and MMBL</p>
-<p>Carnegie Mellon University</p>
 <p>This modules defines excluded region areas that will be used in defining the polyhedral_design_space to prevent material
 from being added into these spaces. These regions are specifically useful if a designer has a pre-allocated space to be
 occupied by a nanoparticle, and this conceptually prevents DNA from being added to these locations.</p>
@@ -156,13 +150,13 @@ occupied by a nanoparticle, and this conceptually prevents DNA from being added 
 <dt class="sig sig-object py" id="mango.mango_features.excluded_regions.RectangularPrism">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mango.mango_features.excluded_regions.</span></span><span class="sig-name descname"><span class="pre">RectangularPrism</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numDecimals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mango/mango_features/excluded_regions.html#RectangularPrism"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.excluded_regions.RectangularPrism" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>This is an excluded region representing a simple box. This is more computationally “efficient” than the sphere as there are fewer
-geometrical faces to check, although it takes up more space that you may want want.</p>
+<p>This is an excluded region representing a simple box. This is more “efficient” than the sphere as there are fewer
+geometrical faces to check, although it takes up more space that you may not want.</p>
 <section id="id2">
 <h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
-<p>c1 : Corner 1 defined by a numpy array in [X Y Z] (nm). Note C1 &lt; C2 for all dimensions.</p>
-<p>c2 : Corner 2 defined by a numpy array in [X Y Z] (nm)</p>
-<p>numDecimals: Number of decimals to round positional values to</p>
+<p>c1 : Corner 1 defined by a numpy array in [X Y Z] (nm). Note C1 &lt; C2 for all dimensions.
+c2 : Corner 2 defined by a numpy array in [X Y Z] (nm)
+numDecimals: Number of decimals to round positional values to</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mango.mango_features.excluded_regions.RectangularPrism.c1">
 <span class="sig-name descname"><span class="pre">c1</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">array</span></em><a class="headerlink" href="#mango.mango_features.excluded_regions.RectangularPrism.c1" title="Link to this definition"></a></dt>
@@ -214,9 +208,9 @@ design
 geometrical faces to check, although it takes up more space that you may not want.</p>
 <section id="id3">
 <h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
-<p>center : Center of sphere defined by a numpy array in [X Y Z] (nm).</p>
-<p>diameter : floating point of the sphere (nm)</p>
-<p>numDecimals: Number of decimals to round positional values to</p>
+<p>center : Center of sphere defined by a numpy array in [X Y Z] (nm).
+diameter : floating point of the sphere (nm)
+numDecimals: Number of decimals to round positional values to</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mango.mango_features.excluded_regions.Sphere.center">
 <span class="sig-name descname"><span class="pre">center</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">array</span></em><a class="headerlink" href="#mango.mango_features.excluded_regions.Sphere.center" title="Link to this definition"></a></dt>
@@ -269,9 +263,6 @@ design
 </section>
 <section id="module-mango.mango_features.grammar_ramp">
 <span id="ramp-element"></span><h2>Ramp Element<a class="headerlink" href="#module-mango.mango_features.grammar_ramp" title="Link to this heading"></a></h2>
-<p>A.J. Vetturini</p>
-<p>IDIG and MMBL</p>
-<p>Carnegie Mellon University</p>
 <p>This script contains the ability to create ramp elements for both the edge rotation and the length extension rules.
 These ramps are specifically used for the length extension or edge rotation rules, future research may seek to optimize
 these ramps automatically based on the scale of the input.</p>
@@ -284,12 +275,12 @@ process. Generally, earlier in the search we make larger design modifications an
 more refined search by making smaller design modifications down to a minmal value.</p>
 <section id="id4">
 <h3>Parameters<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
-<p>unique_id : Center of sphere defined by a numpy array in [X Y Z] (nm).</p>
-<p>max_value : floating point of the sphere (nm)</p>
-<p>min_value : Number of decimals to round positional values to</p>
-<p>max_number_epochs : Integer number defining how many epochs a study might run for to allocate step sizes</p>
-<p>min_steps_at_min : Integer number of a minimal # of steps to use the min_value for the ramp element</p>
-<p>precision : integer that is automatically specified to 2. You can lower the precision if desired but consider DNA!</p>
+<p>unique_id : Center of sphere defined by a numpy array in [X Y Z] (nm).
+max_value : floating point of the sphere (nm)
+min_value : Number of decimals to round positional values to
+max_number_epochs : Integer number defining how many epochs a study might run for to allocate step sizes
+min_steps_at_min : Integer number of a minimal # of steps to use the min_value for the ramp element
+precision : integer that is automatically specified to 2. You can lower the precision if desired but consider DNA!</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mango.mango_features.grammar_ramp.Ramp.create_ramp">
 <span class="sig-name descname"><span class="pre">create_ramp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span></span></span><a class="reference internal" href="_modules/mango/mango_features/grammar_ramp.html#Ramp.create_ramp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.grammar_ramp.Ramp.create_ramp" title="Link to this definition"></a></dt>
@@ -358,9 +349,6 @@ or rotation value during that design iteration.</p>
 </section>
 <section id="module-mango.mango_features.mesh_face">
 <span id="mesh-face-not-intended-as-user-facing"></span><h2>Mesh Face (Not intended as user-facing)<a class="headerlink" href="#module-mango.mango_features.mesh_face" title="Link to this heading"></a></h2>
-<p>A.J. Vetturini</p>
-<p>IDIG and MMBL</p>
-<p>Carnegie Mellon University</p>
 <p>This script contains a MeshFace which is simple a triangulated face. I offer the ability to use a square face but
 I do not specifically use this functionality as it increases computational complexity slights (need more checks to
 validate the face orientation).</p>
@@ -373,12 +361,12 @@ validate the face orientation).</p>
 computational geometry attributes during the generative process.</p>
 <section id="id5">
 <h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
-<p>v1 : Numpy array of X Y Z of a vertex defining a mesh face</p>
-<p>v2 : Numpy array of X Y Z of a second vertex defining a mesh face</p>
-<p>v3 : Numpy array of X Y Z of a third vertex defining a mesh face</p>
-<p>v4 : (OPTIONAL) Numpy array of X Y Z of a fourth vertex defining a mesh face</p>
-<p>face_type : String defining if the face is a triangle or a rectangle, not recommended to change</p>
-<p>numDecimals : integer that is automatically specified to 2. You can lower the precision if desired but consider DNA!</p>
+<p>v1 : Numpy array of X Y Z of a vertex defining a mesh face
+v2 : Numpy array of X Y Z of a second vertex defining a mesh face
+v3 : Numpy array of X Y Z of a third vertex defining a mesh face
+v4 : (OPTIONAL) Numpy array of X Y Z of a fourth vertex defining a mesh face
+face_type : String defining if the face is a triangle or a rectangle, not recommended to change
+numDecimals : integer that is automatically specified to 2. You can lower the precision if desired but consider DNA!</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mango.mango_features.mesh_face.MeshFace.calculate_face_centroid">
 <span class="sig-name descname"><span class="pre">calculate_face_centroid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">array</span></span></span><a class="reference internal" href="_modules/mango/mango_features/mesh_face.html#MeshFace.calculate_face_centroid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mango.mango_features.mesh_face.MeshFace.calculate_face_centroid" title="Link to this definition"></a></dt>

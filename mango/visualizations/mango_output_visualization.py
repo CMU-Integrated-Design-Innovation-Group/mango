@@ -1,8 +1,8 @@
-"""
-A.J. Vetturini
-IDIG and MMBL
-Carnegie Mellon University
+# A.J. Vetturini
+# IDIG and MMBL
+# Carnegie Mellon University
 
+"""
 This script will support creating an output file that can be used within the kodak visualization tool. This scripts
 purpose is to create a simple binary file that can then be read-in by the visualization tool to create the validated
 """
