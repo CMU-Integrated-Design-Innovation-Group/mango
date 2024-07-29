@@ -2,13 +2,13 @@
 This script uses multiple grammar sets as inputs to ShapeAnnealing to ensure it is able to discern between the sets
 """
 # Import Modules
-from mango.optimization_features.objective_function import ObjectiveFunction
+from mango.optimizers.objective_function import ObjectiveFunction
 from mango.design_spaces.bounding_box import TetragonalBox
-from mango.mango_features.preserved_regions import PreservedVertex
+from mango.features.preserved_regions import PreservedVertex
 from mango.design_spaces.polyhedral_design_space import PolyhedralSpace
 from mango.grammars.origami_grammars import TriangulationGrammars
 from mango.optimization_features import design_constraints
-from mango.mango_features.grammar_ramp import Ramp
+from mango.features.grammar_ramp import Ramp
 import numpy as np
 from mango.optimizers.single_objective_shape_annealing import ShapeAnneal
 

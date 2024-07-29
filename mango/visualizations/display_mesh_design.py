@@ -10,7 +10,7 @@ representation and as a standard mesh file
 from mango.design_spaces.bounding_box import TriclinicBox, MonoclinicBox, OrthorhombicBox, TetragonalBox, RhombohedralBox, HexagonalBox, CubicBox
 from mango.design_spaces.polyhedral_design_space import PolyhedralSpace
 from dataclasses import dataclass
-from mango.utils.mango_math import length_and_direction_between_nodes, rotation_matrix_from_vectors, find_smaller_z_value
+from mango.utils.math import length_and_direction_between_nodes, rotation_matrix_from_vectors, find_smaller_z_value
 import plotly.graph_objs as go
 import numpy as np
 from typing import Union

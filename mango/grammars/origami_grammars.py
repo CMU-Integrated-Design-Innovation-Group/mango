@@ -10,11 +10,11 @@ from dataclasses import dataclass, field
 import time
 from mango.design_spaces.polyhedral_design_space import PolyhedralSpace
 from random import choice, seed
-from mango.utils.mango_math import *
-from mango.mango_features.mesh_face import MeshFace
+from mango.utils.math import *
+from mango.features.mesh_face import MeshFace
 from mango.utils.DNA_property_constants import BDNA
 from scipy.spatial.transform import Rotation
-from mango.mango_features.preserved_regions import PreservedVertex, PreservedEdge
+from mango.features.preserved_regions import PreservedVertex, PreservedEdge
 
 @dataclass
 class GrammarSet(object):
@@ -120,7 +120,7 @@ class TriangulationGrammars(GrammarSet):
         if override is not None:
             face_verts_to_divide = override
         face_to_divide = design_space.all_faces[face_verts_to_divide]
-        # We divide the face using the method from the mesh_face.py file in mango_features:
+        # We divide the face using the method from the mesh_face.py file in features:
         new_vertex, new_triangle1, new_triangle2, divided_edge, og_vertex = face_to_divide.divide_triangular_face()
 
         # Now, if the new vertex we created already exists in the graph, we will simply return False meaning that the
@@ -567,28 +567,47 @@ class ParallelepipedGrammars(GrammarSet):
     def __post_init__(self):
         # Which grammars we can call depends on the cell_type:
         if self.cell_type == 'triclinic':
-            self.grammar_names = ['Vary_a', 'Vary_b', 'Vary_c',
-                                  'Rotate_alpha', 'Rotate_beta', 'Rotate_gamma']
+            #self.grammar_names = ['Vary_a', 'Vary_b', 'Vary_c', 'Rotate_alpha', 'Rotate_beta', 'Rotate_gamma']
+            self.grammar_names = ['Vary Box', 'Rotate Box']
+            self.possible_actions = ['a', 'b', 'c']
+            self.possible_rotations = ['alpha', 'beta', 'gamma']
 
         elif self.cell_type == 'monoclinic':
-            self.grammar_names = ['Vary_a', 'Vary_b', 'Vary_c',
-                                  'Rotate_beta']
+            #self.grammar_names = ['Vary_a', 'Vary_b', 'Vary_c', 'Rotate_beta']
+            self.grammar_names = ['Vary Box', 'Rotate Box']
+            self.possible_actions = ['a', 'b', 'c']
+            self.possible_rotations = ['beta']
 
         elif self.cell_type == 'orthorhombic':
-            self.grammar_names = ['Vary_a', 'Vary_b', 'Vary_c']
+            #self.grammar_names = ['Vary_a', 'Vary_b', 'Vary_c']
+            self.grammar_names = ['Vary Box']
+            self.possible_actions = ['a', 'b', 'c']
+            self.possible_rotations = []
+
 
         elif self.cell_type == 'tetragonal':
-            self.grammar_names = ['Vary_a', 'Vary_c']
+            #self.grammar_names = ['Vary_a', 'Vary_c']
+            self.grammar_names = ['Vary Box']
+            self.possible_actions = ['a', 'c']
+            self.possible_rotations = []
 
         elif self.cell_type == 'rhombohedral' or self.cell_type == 'trigonal':
-            self.grammar_names = ['Vary_a',
-                                  'Rotate_alpha']
+            #self.grammar_names = ['Vary_a', 'Rotate_alpha']
+            self.grammar_names = ['Vary Box', 'Rotate Box']
+            self.possible_actions = ['a']
+            self.possible_rotations = ['beta']
 
         elif self.cell_type == 'hexagonal':
-            self.grammar_names = ['Vary_a', 'Vary_c']
+            #self.grammar_names = ['Vary_a', 'Vary_c']
+            self.grammar_names = ['Vary Box']
+            self.possible_actions = ['a',  'c']
+            self.possible_rotations = []
 
         elif self.cell_type == 'isometric' or self.cell_type == 'cubic':
-            self.grammar_names = ['Vary_a']
+            #self.grammar_names = ['Vary_a']
+            self.grammar_names = ['Vary Box']
+            self.possible_actions = ['a']
+            self.possible_rotations = []
         else:
             raise Exception('Invalid parallelepiped volume calculation')
 
@@ -600,7 +619,13 @@ class ParallelepipedGrammars(GrammarSet):
 
     def pick_random_grammar(self) -> str:
         """ Randomly selects a grammar with equal probabilty """
-        return choice(self.grammar_names)
+        grammar_choice = choice(self.grammar_names)
+        if grammar_choice == 'Vary Box':
+            box_dir = choice(self.possible_actions)
+        elif grammar_choice == 'Rotate Box':
+            box_dir = choice(self.possible_actions)
+        else:
+            raise Exception('Invalid grammar choice.')
 
 
     def call_grammar_function(self, grammar_selected: str, design_space: PolyhedralSpace, extension_value: float = None,
@@ -615,13 +640,15 @@ class ParallelepipedGrammars(GrammarSet):
         :return:
         """
         start_time = time.time()
-        grammar_rule, geometry = grammar_selected.split('_')
+        grammar_rule, _ = grammar_selected.split()
 
         if grammar_rule == 'Vary':
+            geometry = choice(self.possible_actions)
             check = self.extend_or_shorten_edge(design_space=design_space, extension_value=extension_value,
                                                 param=geometry)
 
         elif grammar_rule == 'Rotate':
+            geometry = choice(self.possible_rotations)
             check = self.rotate_edge(design_space=design_space, rotation_value=rotation_value, param=geometry)
 
         else:
@@ -790,10 +817,16 @@ class CustomGrammarSet(GrammarSet):
         self.grammar_map = {}
         for s in self.grammar_sets:
             # We add all grammar names from all grammar sets as potential rules to pick
-            for name in s.grammar_names:
-                self.grammar_names.append(name)
-                # We also add this name to the grammar_map so we know which grammar functions to call:
-                self.grammar_map[name] = s
+            if isinstance(s, ParallelepipedGrammars):
+                for name in s.grammar_names:
+                    self.grammar_names.append(name)
+                    # We also add this name to the grammar_map so we know which grammar functions to call:
+                    self.grammar_map[name] = s
+            elif isinstance(s, TriangulationGrammars):
+                for name in s.grammar_names:
+                    self.grammar_names.append(name)
+                    # We also add this name to the grammar_map so we know which grammar functions to call:
+                    self.grammar_map[name] = s
 
     @staticmethod
     def set_seed(seed_number: int):
@@ -802,7 +835,17 @@ class CustomGrammarSet(GrammarSet):
 
     def pick_random_grammar(self) -> str:
         # Simply select a random rule
-        return choice(self.grammar_names)
+        grammar_choice = choice(self.grammar_names)
+        if grammar_choice in 'Vary Box':
+            gset = self.grammar_map[grammar_choice]
+            direction = choice(gset.possible_actions)
+            return grammar_choice
+        elif grammar_choice == 'Rotate Box':
+            gset = self.grammar_map[grammar_choice]
+            direction = choice(gset.possible_rotations)
+            return grammar_choice
+        else:
+            return grammar_choice
 
 
     def call_grammar_function(self, grammar_selected: str, design_space: PolyhedralSpace,

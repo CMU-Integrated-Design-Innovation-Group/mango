@@ -9,7 +9,7 @@ box-types that the bounding_box can presume.
 """
 
 from dataclasses import dataclass
-from mango.utils.mango_math import *
+from mango.utils.math import *
 import plotly.graph_objs as go
 
 # Function call use in boxes:
@@ -661,6 +661,7 @@ class Parallelepiped(object):
     def __post_init__(self):
         # Due to computational geometry, we want to ensure the faces of the Parallelepiped are constant so we declare
         # a constant rotation here going CCW at each face:
+        #self.faces = [(0, 2, 6, 1), (3, 5, 7, 4), (0, 2, 5, 3), (1, 4, 7, 6), (2, 6, 7, 5), (0, 3, 4, 1)]
         self.faces = [(0, 2, 6, 1), (3, 5, 7, 4), (0, 2, 5, 3), (1, 4, 7, 6), (2, 6, 7, 5), (0, 3, 4, 1)]
 
         # Update angles to be in rads:
@@ -721,20 +722,23 @@ class Parallelepiped(object):
         """
         v1 = np.array([self.a, 0, 0])
         v2 = np.array([self.b * np.cos(self.gamma), self.b * np.sin(self.gamma), 0])
+
         v3x = self.c * np.cos(self.beta)
-        v3y = self.b * np.cos(self.alpha) * np.sin(self.gamma)
+        v3y = self.c * (np.cos(self.alpha) - np.cos(self.beta) * np.cos(self.gamma)) / np.sin(self.gamma)
         v3z = np.sqrt(self.c ** 2 - v3x ** 2 - v3y ** 2)
+
         v3 = np.array([v3x, v3y, v3z])
+
         vertices = np.around(np.array([
-                    np.array([0, 0, 0]),
-                    v1,
-                    v2,
-                    v3,
-                    v1 + v3,
-                    v2 + v3,
-                    v1 + v2,
-                    v1 + v2 + v3
-                ]), 2)
+            [0, 0, 0],
+            v1,
+            v2,
+            v3,
+            v1 + v3,
+            v2 + v3,
+            v1 + v2,
+            v1 + v2 + v3
+        ]), 2)
         return vertices
 
 
@@ -746,9 +750,6 @@ class Parallelepiped(object):
         face_equations = []
         all_vertices = self.calculate_vertices_and_edges()
         # Order of faces matters == LEFT HANDED due to checking for points
-
-        face_vectors = ['xy', 'xy', 'yz', 'yz', 'xz', 'xz']  # Come back to this later, these are the "a b c" plane
-        # alignments where x==a y==b and z==c
         for face_vertices in self.faces:
             vertices = []
             for v in face_vertices:
@@ -773,7 +774,7 @@ class Parallelepiped(object):
 
 
     @staticmethod
-    def intersection_point(line_start: np.array, line_end: np.array, abcd: np.array) -> bool:
+    def intersection_point(line_start: np.array, line_end: np.array, abcd: np.array, threshold=0.) -> bool:
         """
         Calculate the intersection point between a line segment and a plane if it exists.
 
@@ -789,17 +790,19 @@ class Parallelepiped(object):
         sign_start = np.dot(abcd[:3], line_start) + abcd[3]
         sign_end = np.dot(abcd[:3], line_end) + abcd[3]
 
-        # We ONLY check in the case that we are not checking from a point that lies on a plane. If a point already
-        # lies on a plane then we presume that we are on the correct side.
-        if not np.isclose(sign_start, 0) and not np.isclose(sign_end, 0):
-            # Check if the line and the plane are parallel and if so just return "None"
-            if sign(sign_start) != sign(sign_end):
-                return True
-            else:
-                return False
+        # If sign_start / sign_end lies on the plane (and equals 0) then False
+        if round(sign_start) == 0. or round(sign_end) == 0.:
+            return False
+
+        # Check if the line segment intersects the plane
+        if (sign(sign_start) != sign(sign_end)) and not (abs(min(sign_start, sign_end)) < threshold):
+            return True
+
+        # If not intersecting and neither point is on the plane
+        return False
 
 
-    def edge_intersecting_box(self, point1: np.ndarray, point2: np.ndarray) -> bool:
+    def edge_intersecting_box(self, point1: np.ndarray, point2: np.ndarray, threshold=0.) -> bool:
         """
         Determines if there is an intersection point between a line segment and a plane in the mesh.
 
@@ -811,7 +814,7 @@ class Parallelepiped(object):
         # Check if a point lies inside the parallelepiped by checking if it lies on the positive side of all faces
         for abcd in self.face_equations:
             # Check if the line segment intersects the face:
-            if self.intersection_point(point1, point2, np.array(abcd)):
+            if self.intersection_point(point1, point2, np.array(abcd), threshold):
                 return True
 
         # Otherwise return False meaning "edge not intersecting"

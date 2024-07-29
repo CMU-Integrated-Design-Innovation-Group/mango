@@ -83,13 +83,14 @@ class VisualizationObject(object):
         return data
 
 
-    def create_standard_output_single_objective(self, mesh_or_cylinder: str = 'cylinder') -> None:
+    def create_standard_output_single_objective(self, mesh_or_cylinder: str = 'cylinder', show_box: bool = False) -> None:
         """
         This function will create the standard output windows for a single objective optimization process consisting of:
             - The objective function valuation over the number of epochs which is interactive and a user can select
               from this list
             - A window describing all constraints of the problem
 
+        :param show_box: Shows the bounding box in the visualized elements
         :param mesh_or_cylinder: Values are either "mesh" or "cylinder" and change the visual appearance of the
                                  generated design
         """
@@ -128,9 +129,11 @@ class VisualizationObject(object):
 
         for xy, des in zip(scatterXY, stored_designs):
             if mesh_or_cylinder == 'cylinder':
-                newDes = CylindricalRepresentation(design=des, bounding_box=des.bounding_box)
+                newDes = CylindricalRepresentation(design=des, bounding_box=des.bounding_box,
+                                                   show_bounding_box=show_box, display_axes=show_box)
             else:
-                newDes = MeshRepresentation(design=des, bounding_box=des.bounding_box)
+                newDes = MeshRepresentation(design=des, bounding_box=des.bounding_box, show_bounding_box=show_box,
+                                            display_axes=show_box)
 
             #newDes.create_plot()
             fig = newDes.return_figure()

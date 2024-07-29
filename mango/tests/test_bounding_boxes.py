@@ -1,7 +1,7 @@
 from mango.design_spaces.bounding_box import TriclinicBox, MonoclinicBox, OrthorhombicBox, TetragonalBox, \
     RhombohedralBox, HexagonalBox, CubicBox
 
-from mango.mango_features.preserved_regions import PreservedVertex
+from mango.features.preserved_regions import PreservedVertex
 from mango.design_spaces.polyhedral_design_space import PolyhedralSpace
 from mango.visualizations import display_mesh_design
 import numpy as np

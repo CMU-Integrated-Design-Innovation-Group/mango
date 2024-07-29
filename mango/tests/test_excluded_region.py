@@ -1,4 +1,4 @@
-from mango.mango_features.excluded_regions import RectangularPrism, Sphere
+from mango.features.excluded_regions import RectangularPrism, Sphere
 import numpy as np
 
 if __name__ == '__main__':

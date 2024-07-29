@@ -1,5 +1,5 @@
 from mango.design_spaces.bounding_box import TetragonalBox
-from mango.mango_features.preserved_regions import PreservedEdge
+from mango.features.preserved_regions import PreservedEdge
 from mango.design_spaces.polyhedral_design_space import PolyhedralSpace
 from mango.visualizations import display_mesh_design
 import numpy as np

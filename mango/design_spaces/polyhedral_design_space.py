@@ -6,19 +6,23 @@
 This is the top level class responsible for maintaining the design features / qualities of a given design. This is
 effectively an environment from which we are applying grammars (actions) to.
 """
-
+import os
 # Import Modules
 from dataclasses import dataclass
 from typing import Optional, Union
 from .bounding_box import TriclinicBox, MonoclinicBox, OrthorhombicBox, TetragonalBox, RhombohedralBox, HexagonalBox, CubicBox
-from mango.mango_features.preserved_regions import PreservedEdge
-from mango.mango_features.mesh_face import MeshFace
-from mango.utils.mango_math import *
+from mango.features.preserved_regions import PreservedEdge
+from mango.features.mesh_face import MeshFace
+from mango.utils.math import *
 import trimesh
 from itertools import combinations
 from scipy.spatial import ConvexHull
 from mango.utils.DNA_property_constants import BDNA
 import pyvista as pv
+import warnings
+import shutil
+import scadnano as sc
+from scipy.spatial import Delaunay
 
 @dataclass
 class PolyhedralSpace(object):
@@ -30,12 +34,28 @@ class PolyhedralSpace(object):
     ------------
     bounding_box : BoundingBox data type, created
     preserved : List of PreservedVertex or PreservedEdge objects
-    excluded: An optional list of Sphere or RectangularPrism objects
+    excluded : An optional list of Sphere or RectangularPrism objects
+    use_precise_geometry : A feature that enables nucleotide-level information to be observed during the generative
+                           process. However, this features adds a much higher computational cost and leads to much
+                           lengthier studies.
+    temp_geometry_path : A path to temporarily store files during the generative process in the precise_geometry mode.
+                         The user must have write access to this directory. This must be specified if
+                         use_precise_geometry is set to True
+    automated_algorithm_software : A path leading to an automated algorithm of choice, however the only supported
+                                   arguments are currently: DAEDALUS2, TALOS, vHelix-BSCOR. It is highly suggested to
+                                   use an ABSOLUTE path (e.g., C:/user/username/Desktop/DAEDALUS2.exe) instead of a
+                                   RELATIVE path (e.g. './output2').
+    sequence_file : A path to a sequence file (.txt) which dictates the scaffold sequence to use in a design.
     """
     bounding_box: Union[TriclinicBox, MonoclinicBox, OrthorhombicBox, TetragonalBox,
                         RhombohedralBox, HexagonalBox, CubicBox]
     preserved: list
     excluded: Optional[list]
+    use_precise_geometry: bool = False
+    temp_geometry_path: str = None
+    automated_algorithm_software: str = None
+    automated_name: str = None
+    sequence_file: str = None
 
     def __post_init__(self):
         self.design_graph = nx.empty_graph()  # Initialize this to an empty graph
@@ -48,6 +68,32 @@ class PolyhedralSpace(object):
         self.node_count = 0
         # This graph is used for the merge face grammar to guarantee that we can back out of certain topologies
         self.merge_label_graph = nx.empty_graph(create_using=nx.DiGraph)
+
+        # Validate the use of precise_geometry:
+        if self.use_precise_geometry:
+            # Check if we can write to temp_geometry_path and warn user that this process will take longer to run.
+            assert self.temp_geometry_path is not None, ('ERROR: User must specify the temp_geometry_path if using '
+                                                         'the precise geometry mode.')
+            assert self.automated_algorithm_software is not None, ('ERROR: User must specify the automated_algorithm_'
+                                                                   'software if using the precise geometry mode.')
+            assert self.automated_name in ['DAEDALUS', 'TALOS', 'vHelix'], ('ERROR: The automated_name only currently '
+                                                                            'supports: DAEDALUS, TALOS, and vHelix.')
+            warnings.warn('Precise geometry mode has been enabled. As a warning, this mode takes considerably '
+                          'longer to validate geometry and will lead to lengthier studies.')
+            # Add an extra "temp" folder:
+            if self.automated_name == 'vHelix':
+                # In vHelix we set the temporary path to a temporary folder in the location of bscor.bat
+                fpath, _ = os.path.split(self.automated_algorithm_software)
+                self.temp_geometry_path = os.path.join(fpath, '.mango_temp_files')
+            else:
+                self.temp_geometry_path = os.path.join(self.temp_geometry_path, '.mango_temp_files')
+            if not os.path.exists(self.temp_geometry_path):
+                print('Creating temporary directory.')
+                os.makedirs(self.temp_geometry_path)
+                self.nucleotide_level_design = None  # init this variable to use as we update the design space.
+            else:
+                print('Temporary directory already exists, continuing.')
+
 
         # Create the preserved regions by adding them to the design_graph:
         self.create_preserved_regions()
@@ -128,6 +174,7 @@ class PolyhedralSpace(object):
         :return: (bool, list) : the bool returns if the shape is valid (true) or not (false) and the list contains
                                 the list returns a list of tuples defining the graph nodes of the preserved regions
         """
+        reassigned = False
         if not isinstance(shape, trimesh.Trimesh) and not isinstance(shape, pv.PolyData):
             raise Exception("An alphashape could not be generated for the provided input criterion and the optimization"
                             " process could not begin.")
@@ -135,11 +182,22 @@ class PolyhedralSpace(object):
         tris = shape.faces.reshape(-1, 4)[:, 1:]
         # First we do a simple check to validate a mesh was triangulated:
         if len(tris) < 4:
-            return True, -1  # If there are less than 4 triangles there is no way a 3D surface mesh is formed properly
+            if len(tris) == 0:
+                tri = Delaunay(og_verts)
+                verts, tris = tri.points, tri.convex_hull
+                reassigned = True  # Set flag
+            else:
+                return True, -1  # If there are less than 4 triangles there is no way a 3D surface mesh is formed properly
 
         # First check if number of verices in mesh matches number of vertices passed in:
         if len(verts) != len(og_verts):
-            return True, -1  # If we do not have the same number of points, then this mesh does not contain the input info
+            # Test if the issue is with pyvista (I have experienced this):
+            tri = Delaunay(og_verts)
+            verts, tris = tri.points, tri.convex_hull
+            reassigned = True  # Set flag
+            #if len(verts) != len(og_verts):
+            #    return True, -1  # If we do not have the same number of points, then mesh does not contain the input
+
 
         # Now we must create a "map" of shape vertices. We do this because the delaunay triangulation might "move" the
         # indexed vertices around and so we want to validate we are checking the correct vertices:
@@ -166,8 +224,12 @@ class PolyhedralSpace(object):
             if not edge_found:
                 return True, -1  # If we could not find a preserved edge we return True to re-arrange the mesh w new alpha
 
-        # Otherwise, if we make it here, return False signalling "mesh passed checks, stop searching"
-        return False, new_preserved_edges
+        if reassigned:
+            # If the mesh was reassigned we must pass back the proper verts and faces to store:
+            return True, (verts, tris, new_preserved_edges)
+        else:
+            # Otherwise, if we make it here, return False signalling "mesh passed checks, stop searching"
+            return False, new_preserved_edges
 
 
     def triangulate_input_conditions(self) -> tuple:
@@ -200,6 +262,7 @@ class PolyhedralSpace(object):
         keep_searching = True
         initial_alpha = 0.
         surface_mesh = None  # Init to get rid of annoying warning!
+        use_mesh = True
         while keep_searching:
             curSurf = points.delaunay_3d(alpha=initial_alpha)  # Note: reconstruct_surface() did not seem to work very well!
             surface_mesh = curSurf.extract_surface()
@@ -208,17 +271,30 @@ class PolyhedralSpace(object):
                                                                   og_verts=vert_list)
             # If keep_searching is returned False then we update the terminal_edges:
             if not keep_searching:
-                self.terminal_edges = new_edges
+                #self.terminal_edges = new_edges
+                break
+
+            elif keep_searching and new_edges != -1:
+                # This is the case for when re-assigning the space:
+                verts, tris, terminal_edges = new_edges
+                use_mesh = False
+                #self.terminal_edges = terminal_edges
+                break
+
             initial_alpha += 0.1
 
             # Now we have a condition to check based on intiial_alpha:
             if initial_alpha >= 5:
-                raise Exception('Unable to find a valid start condition for your input conditions, please reach out'
-                                'to the developers to find a solution to your input case.')
+                use_mesh = True
+                print("ERROR DELETE ME AND UNCOMMENT BELOW AND REMOVE USE_MESH")
+
+                #raise Exception('Unable to find a valid start condition for your input conditions, please reach out'
+                #                'to the developers to find a solution to your input case.')
 
         # After finding the correct surface_mesh:
-        verts = surface_mesh.points
-        tris = surface_mesh.faces.reshape(-1, 4)[:, 1:]
+        if use_mesh:
+            verts = surface_mesh.points
+            tris = surface_mesh.faces.reshape(-1, 4)[:, 1:]
 
         return tris, verts
 
@@ -310,6 +386,124 @@ class PolyhedralSpace(object):
         self.mesh_file = mesh
 
 
+    def create_precise_files(self):
+        """
+        This function is used in precise mode to create a caDNAno design file which can be used for nucleotide
+        level design analysis in the creation of objective function. This feature is supported by the development of
+        scadnano which provides an elegant scriptable interface for DNA origami nanostructures.
+        """
+        # First delete the active design file in the temp directory (if it exists) to ensure compatibility:
+        for file in os.listdir(self.temp_geometry_path):
+            if file.endswith('.json'):  # caDNAno file from ATHENA
+                os.remove(os.path.join(self.temp_geometry_path, file))
+            elif file.endswith('.rpoly'):  # vHelix file
+                os.remove(os.path.join(self.temp_geometry_path, file))
+
+        # Based on the supported software we call the proper function:
+        if self.automated_name == 'DAEDALUS':
+            self._apply_daedalus_talos(self.automated_name)
+        elif self.automated_name == 'TALOS':
+            self._apply_daedalus_talos(self.automated_name)
+        elif self.automated_name == 'vHelix':
+            self._apply_vhelix()
+        else:
+            raise Exception(f'Precise mode is only currently supported for the DAEDALUS, TALOS, and vHelix-BSCOR'
+                            f'algorithms. The selected algorithm should define the "automated_name" parameter. You '
+                            f'specified: {self.automated_name}')
+
+    def _apply_daedalus_talos(self, name):
+        """ This function applies the DAEDALUS or TALOS algorithm and moves the required files around so as to not take
+        up too much space on a computers hard drive. """
+        from mango.utils.design_io import export_DNA_design
+        if self.sequence_file is None:
+            _, run_successfully = export_DNA_design(automated_name=name,
+                                                    automated_scaffold_executable_path=self.automated_algorithm_software,
+                                                    design=self,
+                                                    export_path=self.temp_geometry_path,
+                                                    savename_no_extension='TEMP_design_mango'
+                                                    )
+        else:
+            _, run_successfully = export_DNA_design(automated_name=name,
+                                                    automated_scaffold_executable_path=self.automated_algorithm_software,
+                                                    design=self,
+                                                    export_path=self.temp_geometry_path,
+                                                    savename_no_extension='TEMP_design_mango',
+                                                    scaffold_sequence_filepath=self.sequence_file
+                                                    )
+        if run_successfully:
+            directory, filename = self._clean_precise_folders()
+            # Open the design via scadnano and reassign the design information so user can access this when designing
+            # an objective function / design constraint:
+            if directory is None:
+                self.nucleotide_level_design = None
+                return
+            # If the design_path is set then we open the file:
+            try:
+                self.nucleotide_level_design = sc.Design.from_cadnano_v2(directory=directory, filename=filename)
+            except sc.StrandError:
+                # I am unsure what the StrandError is, but we define an invalid shape in this case.
+                self.nucleotide_level_design = None
+        else:
+            self.nucleotide_level_design = None
+
+    def _apply_vhelix(self):
+        """ This function applies the vHelix algorithm and moves the required files around so as to not take up
+                too much space on a computers hard drive. """
+        from mango.utils.design_io import export_DNA_design
+        _, _ = export_DNA_design(automated_name='vHelix',
+                                                automated_scaffold_executable_path=self.automated_algorithm_software,
+                                                design=self,
+                                                export_path=self.temp_geometry_path,
+                                                savename_no_extension='TEMP_design_mango'
+                                                )
+        # After applying we cleanup the directory quickly:
+        run_successfully = False
+        rpoly_path = None
+        for file in os.listdir(self.temp_geometry_path):
+            if file.endswith('.rpoly'):
+                run_successfully = True
+                rpoly_path = os.path.join(self.temp_geometry_path, file)
+            else:
+                os.remove(os.path.join(self.temp_geometry_path, file))
+
+        # If an rpoly file wasn't created then there was an error and therefore we set "None" to signal invalid design
+        if not run_successfully:
+            self.nucleotide_level_design = None
+            return
+
+        # Otherwise we set the nucleotide_level_design to be simply the filepath to the rpoly file for processing
+        self.nucleotide_level_design = rpoly_path
+
+
+    def _clean_precise_folders(self):
+        """ This function cleans up the temporary directory created during precise_mode such that only the required
+        information is kept to be mindful of memory requirements:
+        """
+        directory, path = None, None
+
+        # First we grab whatever the current directory created is (this will be the only folder in this directory):
+        files = os.listdir(self.temp_geometry_path)
+        cur_folder = [i for i in files if os.path.isdir(os.path.join(self.temp_geometry_path, i))]
+
+        # Move the JSON file to the top level temp folderpath:
+        if len(cur_folder) == 0:
+            # If no file was created (i.e., invalid design into automated software) we just return None to signal this
+            return directory, path
+        tpath = os.path.join(self.temp_geometry_path, cur_folder[0])
+        for file in os.listdir(tpath):
+            if '.json' in file:
+                # Once we find the JSON file, we simply mover it to the general temp_geometry_path:
+                directory, path = self.temp_geometry_path, file
+                shutil.move(os.path.join(tpath, file), os.path.join(self.temp_geometry_path, file))
+                break
+
+        # Delete the temporary directory for memory reasons:
+        shutil.rmtree(tpath)
+
+        # Return filepath to json file:
+        return directory, path
+
+
     def calculate_input_parameters(self, edge_lengths: list, routing_algorithm: str) -> dict:
         """
         This will return a standardized dictionary that will be used to allow for customized objective functions and
@@ -375,7 +569,8 @@ class PolyhedralSpace(object):
             'volume': self.mesh_file.volume,
             'convex_hull_volume': convex_hull_volume,
             'design_graph': self.design_graph,
-            'bounding_box': self.bounding_box
+            'bounding_box': self.bounding_box,
+            'PolyhedralSpace': self,
         }
 
         return self.input_values

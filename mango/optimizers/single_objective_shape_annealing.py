@@ -18,12 +18,13 @@ from typing import List, Union
 import warnings
 from mango.design_spaces.polyhedral_design_space import PolyhedralSpace
 from mango.grammars.origami_grammars import GrammarSet, CustomGrammarSet
-from mango.optimization_features import design_constraints, objective_function
-from mango.utils.mango_math import *
+from mango.optimizers import design_constraints, objective_function
+from mango.utils.math import *
 import time
 from random import random, seed, randint
 import os
 import dill
+import shutil
 
 @dataclass
 class ShapeAnneal(object):
@@ -309,7 +310,7 @@ class ShapeAnneal(object):
         self.design_evolution[epoch] = (obj_value, self.design_space)
 
 
-    def initialize_temperature(self) -> None:
+    def initialize_temperature(self) -> bool:
         """
         This function performs a random walk through the objective space to automatically assign the temperature used
         in the acceptance criterion for the first epoch.
@@ -369,15 +370,18 @@ class ShapeAnneal(object):
         # After the while loop has ended, we set the value of temperature to the std. dev of the objectives tracked:
         newTemp = round(float(np.std(self.random_walk_objective_values)), self.numDecimals)
         if np.isclose(newTemp, 0):
-            raise Exception(f'Could not find any variation in the objective function valuation for the'
-                            f'specified function {self.objective_function.name}. Please increase random_walk_steps or '
-                            f'verify the objective function is evaluating properly!')
+            warnings.warn(f'Could not find any variation in the objective function valuation for the'
+                          f'specified function {self.objective_function.name}. Please increase random_walk_steps or '
+                          f'verify the objective function is evaluating properly!')
+            return False
+
         self.T = newTemp  # Assign the std. dev to the initial temperature value
         self.temperature_values.append(self.T)  # Store this initial value in the list
         # Return to the initial state to start the optimization process from
         self.update_design_space(new_design_space=initial_design_to_return)
         # Store the initial design now that temperature is initialized:
         self.store_design_for_animation(epoch=0)
+        return True
 
 
     def keep_annealing(self, start_time: float, cur_epoch: int) -> bool:
@@ -525,9 +529,17 @@ class ShapeAnneal(object):
         self.initialize_time_tracker_dict()
         self.design_space.generate_start_shape()
 
+        # Create the initial files for the initial constraint check:
+        if self.design_space.use_precise_geometry:
+            self.design_space.create_precise_files()
+
         ### STEP 0: (added this later, oops) Validate that the generated start shape actually passed all design
         # constraints to ensure that the optimization process can begin. Here, we also intialize the design constraint
         # tracking for computational efficiency
+        all_edge_lengths = calculate_design_edge_lengths(graph=self.design_space.design_graph)
+        self.design_space.calculate_input_parameters(edge_lengths=all_edge_lengths,
+                                                     routing_algorithm=self.design_constraints.scaffold_routing_algorithm)
+
         self.design_constraints.create_constraint_dictionary(design_space=self.design_space)
         passed_all_constraints, constraint_times = self.design_constraints.check_constraints(
             design_space=self.design_space, constraint_set=self.constraint_set)
@@ -540,7 +552,10 @@ class ShapeAnneal(object):
         #            design space w/ our grammars:
         if self.print_progress:
             print('Initializing temperatures for start state')
-        self.initialize_temperature()
+        passed_init_temps = self.initialize_temperature()
+        if not passed_init_temps:
+            self.save_output()
+            return
 
         start_time = time.time()
         curEpoch = 1
@@ -596,8 +611,8 @@ class ShapeAnneal(object):
                     break
 
             # After the for loop we check if successes is 0. If so then the equilibrium value is met and we end!
-            # Note: This is a bad convergence criterion with the use of a ramp element / in general imo
-            #       I'd rather use the L1 or just for a # of epochs, this isn't inherently always true.
+            # Note: Imo, is a bad convergence criterion with the use of a ramp element / in general
+            #       I'd rather use the L1 or just for a # of iterations, this isn't inherently always true.
             """if success == 0:
                 break"""
 
@@ -654,3 +669,8 @@ class ShapeAnneal(object):
             except TypeError as e:
                 # Check if the error is due to a specific type and skip over it
                 print(f'Error exporting file: {e}')
+
+        # Delete the temp files directory if in precise geometry mode:
+        if self.design_space.use_precise_geometry:
+            full_save_path = os.path.split(self.design_space.temp_geometry_path)
+            shutil.rmtree(full_save_path[0])

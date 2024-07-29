@@ -19,14 +19,15 @@ from copy import deepcopy
 import warnings
 from mango.design_spaces.polyhedral_design_space import PolyhedralSpace
 from mango.grammars.origami_grammars import GrammarSet, CustomGrammarSet
-from mango.optimization_features import design_constraints
-from mango.utils.mango_math import *
+from mango.optimizers import design_constraints
+from mango.utils.math import *
 import time
 from typing import Union, List
 import pandas as pd
 from random import random, seed, randint
 import os
 import dill
+import shutil
 
 @dataclass
 class MOSA(object):
@@ -451,13 +452,15 @@ class MOSA(object):
             # Check and make sure the temperature is not 0:
             if np.isclose(self.obj_temp_dict[key], 0):
                 obj = self.objective_functions[count]
-                raise Exception(f'MOSA could not find any variation in the objective function valuations for the'
+                warnings.warn(f'MOSA could not find any variation in the objective function valuations for the'
                                 f'specified function {obj.name}. Please increase NT1 or verify the objective function '
                                 f'is actually evaluating at different values.')
+                return False
             count += 1
 
         # We store the post-random walk Pareto for visualization purposes:
         self.archive_post_temperature_initialization = list(self.MOSA_archive.keys())
+        return True
 
 
     def calculate_pareto_isolation(self) -> pd.DataFrame:
@@ -498,7 +501,7 @@ class MOSA(object):
         # EXCEPTION of the extreme solutions (i.e. solutions corresponding to extrema in the trade-off / solutions
         # with the lowest objective function. Sorting the dictionary:
         points, isolations = [], []
-        for k, v in isolation_dict.items():
+        '''for k, v in isolation_dict.items():
             # Since I am currently using a relatively simple objective function space, I will not remove the extrema
             # datapoints, as these do not explicitly constitute a barely feasible solution.
             if any(val in minBRF for val in k):
@@ -508,7 +511,7 @@ class MOSA(object):
             else:
                 # If the point is not an extrema, we are going to add it to this 2D list:
                 points.append(k)
-                isolations.append(v)
+                isolations.append(v)'''
         # For safety and if NT1 is too small, we check to see if points and isolations are empty, and if so, we add
         # the isolation dict values:
         if points == [] and isolations == []:
@@ -822,6 +825,15 @@ class MOSA(object):
         # Initialize dictionaries for tracking and generate the initial shape for the input design space
         self.initialize_time_tracker_dict()
         self.design_space.generate_start_shape()
+        # If the design space is in precise mode we must generate the first conditions:
+        if self.design_space.use_precise_geometry:
+            self.design_space.create_precise_files()
+        all_edge_lengths = calculate_design_edge_lengths(graph=self.design_space.design_graph)
+        self.design_space.calculate_input_parameters(edge_lengths=all_edge_lengths,
+                                                     routing_algorithm=self.design_constraints.scaffold_routing_algorithm)
+
+        # Update bounding box:
+        self.design_space.bounding_box.shape.update_face_equations()
 
         ### STEP 0: (added this later, oops) Validate that the generated start shape actually passed all design
         # constraints to ensure that the optimization process can begin:
@@ -829,6 +841,9 @@ class MOSA(object):
         passed_all_constraints, constraint_times = self.design_constraints.check_constraints(
             design_space=self.design_space, constraint_set=self.constraint_set)
         if not passed_all_constraints:
+            from mango.visualizations.display_mesh_design import CylindricalRepresentation
+            temp = CylindricalRepresentation(design=self.design_space, bounding_box=self.design_space.bounding_box, show_bounding_box=True, )
+            temp.show_figure()
             raise Exception('Invalid input design: The triangulated initial shape did not pass all design constraints'
                             ' of the problem, please review the constraints and initial triangulation of the problem'
                             ' definition. Please reach out to dev team if this is unclear.')
@@ -837,7 +852,11 @@ class MOSA(object):
         #            design space w/ our grammars:
         if self.print_progress:
             print('Initializing temperatures for start state')
-        self.initialize_temperatures()
+
+        passed_init_temps = self.initialize_temperatures()
+        if not passed_init_temps:
+            self.save_output()
+            return  # End due to inability to find "good" solution
 
         ### STEP 2 of MOSA: Use intelligent Return to Base to reset the reset the current design space along the pareto
         if self.print_progress:
@@ -987,3 +1006,10 @@ class MOSA(object):
         copy_of_data = deepcopy(self)
         with open(output_file, 'wb') as f:
             dill.dump(copy_of_data, f)
+
+        # Delete the temp files directory if in precise geometry mode:
+        if self.design_space.use_precise_geometry:
+            full_save_path = os.path.split(self.design_space.temp_geometry_path)
+            shutil.rmtree(full_save_path[0])
+
+

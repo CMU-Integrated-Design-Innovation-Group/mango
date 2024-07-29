@@ -6,11 +6,11 @@ Note:
     aware that this may take ~10-15 minutes depending on machine
 """
 # Import Modules
-from mango.optimization_features.objective_function import ObjectiveFunction
+from mango.optimizers.objective_function import ObjectiveFunction
 from mango.design_spaces.bounding_box import TetragonalBox
-from mango.mango_features.preserved_regions import PreservedVertex
-from mango.mango_features.excluded_regions import Sphere
-from mango.mango_features.grammar_ramp import Ramp
+from mango.features.preserved_regions import PreservedVertex
+from mango.features.excluded_regions import Sphere
+from mango.features.grammar_ramp import Ramp
 from mango.design_spaces.polyhedral_design_space import PolyhedralSpace
 from mango.grammars.origami_grammars import TriangulationGrammars, ParallelepipedGrammars
 from mango.optimization_features import design_constraints

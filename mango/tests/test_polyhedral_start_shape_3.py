@@ -1,6 +1,6 @@
 from mango.design_spaces.bounding_box import CubicBox
-from mango.mango_features.preserved_regions import PreservedVertex, PreservedEdge
-from mango.mango_features.excluded_regions import Sphere
+from mango.features.preserved_regions import PreservedVertex, PreservedEdge
+from mango.features.excluded_regions import Sphere
 from mango.design_spaces.polyhedral_design_space import PolyhedralSpace
 from mango.visualizations import display_mesh_design
 import numpy as np

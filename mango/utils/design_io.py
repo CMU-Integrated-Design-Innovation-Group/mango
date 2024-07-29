@@ -10,16 +10,16 @@ from mango.design_spaces.polyhedral_design_space import PolyhedralSpace
 import os
 from trimesh.exchange.ply import export_ply
 from trimesh.exchange.obj import export_obj
-from mango.utils.mango_math import *
+from mango.utils.math import *
 from mango.utils.DNA_property_constants import BDNA
 import subprocess
 import dill
 import shutil
+import time
+import signal
 
 def export_design_to_ply(design: PolyhedralSpace, savepath: str, savename_no_extension: str):
     """
-    NOT INTENDED FOR END USER USE. PLEASE SEE export_DNA_design for the user-facing function
-
     This function exports a given PolyhedralSpace to a .ply file for the use in a automated scaffold routing algorithm
 
     :param design: PolyhedralSpace design space that is to be converted to a PLY file
@@ -45,8 +45,6 @@ def export_design_to_ply(design: PolyhedralSpace, savepath: str, savename_no_ext
 
 def export_design_to_obj(design: PolyhedralSpace, savepath: str, savename_no_extension: str):
     """
-    NOT INTENDED FOR END USER USE. PLEASE SEE export_DNA_design for the user-facing function
-
     This function exports a given PolyhedralSpace to a .obj file for the use in a automated scaffold routing algorithm
 
     :param design: PolyhedralSpace design space that is to be converted to a obj file
@@ -71,7 +69,7 @@ def export_design_to_obj(design: PolyhedralSpace, savepath: str, savename_no_ext
     return writeDir
 
 
-def all_same(strings):
+def _all_same(strings):
     """ Simple function to verify that the filename is unique when doing a mass export """
     # Check if the list is empty
     if not strings:
@@ -89,7 +87,7 @@ def all_same(strings):
     return True
 
 
-def export_list_of_designs_to_ply(design_list: list, savepath: str, list_of_savenames_no_extensions: list):
+def _export_list_of_designs_to_ply(design_list: list, savepath: str, list_of_savenames_no_extensions: list):
     """
     NOT INTENDED FOR END USER USE. PLEASE SEE mass_design_export for the user-facing function
 
@@ -101,21 +99,21 @@ def export_list_of_designs_to_ply(design_list: list, savepath: str, list_of_save
     """
     if len(design_list) != len(list_of_savenames_no_extensions):
         raise Exception('Lengths of lists do NOT match -> Can NOT export')
-    if all_same(list_of_savenames_no_extensions):
+    if _all_same(list_of_savenames_no_extensions):
         raise Exception('Duplicate savenames found -> Can NOT export')
 
     for design, savename in zip(design_list, list_of_savenames_no_extensions):
         export_design_to_ply(design=design,
-                             savepath=savepath,
-                             savename_no_extension=savename)
+                              savepath=savepath,
+                              savename_no_extension=savename)
 
 
 def export_DNA_design(automated_scaffold_executable_path: str, design: PolyhedralSpace, export_path: str,
                       savename_no_extension: str, DNA_geometry=BDNA, scaffold_sequence_filepath: str = None,
-                      ply_or_obj: str = 'ply') -> int:
+                      ply_or_obj: str = 'ply', automated_name: str = 'DAEDALUS', vHelix_sim_time=0.) -> (int, bool):
     """
-    This is the top level function a user should call which will export a single design. The export_design_to_ply
-    is called by this function.
+    This is the top level function a user should call which will export a single design using the ATHENA algorithms
+    (i.e., DAEDALUS or TALOS). The export_design_to_ply is called by this function.
 
     :param design: PolyhedralSpace design space that is to be converted to a PLY file
     :param automated_scaffold_executable_path: Filepath to automated algorithm (e.g. DAEDALUS2.exe path)
@@ -124,40 +122,69 @@ def export_DNA_design(automated_scaffold_executable_path: str, design: Polyhedra
     :param DNA_geometry: Do not change
     :param scaffold_sequence_filepath: Path to sequence file to use, default is M13
     :param ply_or_obj: Ply will export a PLY file, obj will export an OBJ file
+    :param vHelix_sim_time: If using vHelix, this controls how long the sim time should go for. Generally, I would not
+                            recommend using any higher than zero and fine-tune the design after the generative process.
+                            If you opt to use this simulation during the generative process, be prepared for very
+                            lengthy processes (i.e., ~day(s) depending on optimizer hyperparameters).
     """
     # First we need the minimal edge length in the design:
+    if isinstance(design, tuple):
+        design = design[1]
     all_edges = calculate_design_edge_lengths(graph=design.design_graph)
     min_edge_length = min(all_edges)  # min(all_edges) is in units of nm, need nucleobases:
     min_edge_length_nb = int(min_edge_length / DNA_geometry.pitch_per_rise)
     # With the min_edge_length found, we can create a PLY file in the specified path:
     if ply_or_obj == 'ply':
         ply_path = export_design_to_ply(design=design, savepath=export_path,
-                                        savename_no_extension=savename_no_extension)
+                                         savename_no_extension=savename_no_extension)
     else:
         ply_path = export_design_to_obj(design=design, savepath=export_path,
-                                        savename_no_extension=savename_no_extension)
+                                         savename_no_extension=savename_no_extension)
     # Then we will call the automated algorithm.
     ## First check if user specified a sequence to use:
-    SEQ_PATH = './M13.txt'
+    path, _ = os.path.split(os.path.realpath(__file__))
+    SEQ_PATH = os.path.join(path, 'M13.txt')
     if scaffold_sequence_filepath is not None:
         SEQ_PATH = scaffold_sequence_filepath
-    if 'DAEDALUS' in automated_scaffold_executable_path:
+
+    if automated_name == 'DAEDALUS':
         #command = f"{automated_scaffold_executable_path} {export_path} {ply_path} {SEQ_PATH} 1 2 0 {min_edge_length_nb} 0.0 m > output.log 2>&1"
         ## NOTE TO SELF: 1 2 1 is outputting the correct scale in design... interesting, 0 is scaling up. FORTRAN code
         ## is a bit rather non-obvious as to why this scales up, but these designs simulated look good
-        command = f"{automated_scaffold_executable_path} {export_path} {ply_path} {SEQ_PATH} 1 2 1 {min_edge_length_nb} 0.0 m > output.log 2>&1"
-    elif 'TALOS' not in automated_scaffold_executable_path:
-        command = f"{automated_scaffold_executable_path} {export_path} {ply_path} {SEQ_PATH} 3 2 0 {min_edge_length_nb} 0.0 m > output.log 2>&1"
-    else:
-        raise Exception('Only DAEDALUS and TALOS are supported for the executable path.')
-    # Run:
-    try:
-        subprocess.run(command, shell=True, text=True, check=True, stdout=subprocess.PIPE)
-    except subprocess.CalledProcessError:
-        pass
-    # We return this value although most of the time it isn't really needed, just useful for mass export:
-    return min_edge_length_nb
+        command = f"{automated_scaffold_executable_path} {export_path} {ply_path} {SEQ_PATH} 1 2 1 {min_edge_length_nb} 0.0 m"
 
+
+    elif automated_name == 'TALOS':
+        command = f"{automated_scaffold_executable_path} {export_path} {ply_path} {SEQ_PATH} 3 2 1 {min_edge_length_nb} 0.0 m"
+
+    elif automated_name == 'vHelix':
+        command = f"{automated_scaffold_executable_path} {ply_path}"
+
+    else:
+        raise Exception('Only DAEDALUS, TALOS are currently supported for the executable path.')
+
+    if automated_name in ['DAEDALUS', 'TALOS']:
+        # Run ATHENA algorithm
+        process_run_successfully = True
+        try:
+            subprocess.run(command, check=True, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            # If the automated_name is vHelix we really just want to end it "immediately" of sorts
+
+        except subprocess.CalledProcessError:
+            process_run_successfully = False
+
+        # We return this value although most of the time it isn't really needed, just useful for mass export:
+        return min_edge_length_nb, process_run_successfully
+
+
+    else:
+        # Run vHelix by setting WD first:
+        process_run_successfully = True
+        wd, _ = os.path.split(design.automated_algorithm_software)
+        subprocess.run(command, cwd=wd, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+        # We return this value although most of the time it isn't really needed, just useful for mass export:
+        return min_edge_length_nb, process_run_successfully
 
 def mass_design_export(automated_scaffold_executable_path: str, export_path: str, aj1_filepath: str,
                        scaffold_sequence_filepath: str, DNA_geometry=BDNA, ply_or_obj: str = 'ply'):

@@ -4,9 +4,9 @@ to get an error, there would be a flaw in the logic somewhere in the code if we 
 N values.
 """
 # Import Modules
-from mango.optimization_features.objective_function import ObjectiveFunction
+from mango.optimizers.objective_function import ObjectiveFunction
 from mango.design_spaces.bounding_box import TetragonalBox
-from mango.mango_features.preserved_regions import PreservedVertex
+from mango.features.preserved_regions import PreservedVertex
 from mango.design_spaces.polyhedral_design_space import PolyhedralSpace
 from mango.grammars.origami_grammars import TriangulationGrammars
 from mango.optimization_features import design_constraints

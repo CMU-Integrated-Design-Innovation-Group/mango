@@ -1,4 +1,4 @@
-from mango.mango_features.preserved_regions import PreservedEdge, PreservedVertex
+from mango.features.preserved_regions import PreservedEdge, PreservedVertex
 import numpy as np
 
 if __name__ == '__main__':
