@@ -4,7 +4,7 @@ numba==0.59.0
 numpy==1.26.4
 pandas==2.2.0
 plotly==5.18.0
-pymeshfix==0.16.2
+pymeshfix==0.17.0
 pyvista==0.43.2
 scipy==1.12.0
 setuptools==70.3.0
