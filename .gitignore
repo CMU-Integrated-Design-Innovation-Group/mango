@@ -1,3 +1,7 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
 # Compiled source #
 ###################
 *.com
@@ -35,3 +39,6 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Sphinx documentation
+docs/_build/
