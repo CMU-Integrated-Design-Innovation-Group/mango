@@ -256,3 +256,28 @@ def mass_design_export(automated_scaffold_executable_path: str, export_path: str
         f.write('Below is a list of all failed conversions for logging purposes. These designs failed to convert via DAEDALUS2: \n')
         for file in failed_conversion_designs:
             f.write(file + '\n')
+
+
+class MangoUnpickler(dill.Unpickler):
+    """
+    After refractoring a few files were name changed which breaks the dill loading. The class below allows for the Dill
+    package to still unpickle these old designs.
+    """
+    def find_class(self, module, name):
+        renamed_module = module
+        if module == "mango.mango_features.preserved_regions":
+            renamed_module = "mango.features.preserved_regions"
+        elif module == "mango.mango_features.excluded_regions":
+            renamed_module = "mango.features.excluded_regions"
+        elif module == "mango.mango_features.mesh_face":
+            renamed_module = "mango.features.excluded_regions"
+        elif module == "mango.optimization_features.design_constraints":
+            renamed_module = "mango.optimizers.design_constraints"
+        elif module == "mango.optimization_features.objective_function":
+            renamed_module = "mango.optimizers.objective_function"
+        elif module == "mango.mango_features.grammar_ramp":
+            renamed_module = "mango.features.grammar_ramp"
+        elif module == "mango.mango_math":
+            renamed_module = "mango.math"
+
+        return super(MangoUnpickler, self).find_class(renamed_module, name)

@@ -317,6 +317,11 @@ def parallelepiped_volume(cell_type: str, a: float, b: float, c: float, alpha: f
     This function simply calculates the volume of a parallelepiped but changes depending on the cell_type attribute as
     the volume can be more readily calculated through the equations below.
     """
+    temp_a = None
+    temp_b = None
+    temp_c = None
+
+
     if cell_type == 'triclinic':
         magnitude = a * b * c
         angles = np.sqrt(1 + 2*np.cos(alpha)*np.cos(beta)*np.cos(gamma) - (np.cos(alpha)**2) - (np.cos(beta)**2) - (np.cos(gamma)**2))

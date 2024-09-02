@@ -114,6 +114,7 @@ class MOSA(object):
     minimal_candidate_set_size: int = 10
     r_i: float = 0.95  # Return fraction parameter, recommended at least 0.9 but can be in (0, 1)
     max_time_of_optimization_minutes: int = 60  # Number of minutes before exiting the optimization for protection
+    animation_frequency: int = 5  # Every animation_frequency epochs the designs will be output for a design animation
     print_progress: bool = True
     T_min: float = 1e-8  # Because of math the temperature will never truly be 0 so we need a stop point
 
@@ -816,6 +817,8 @@ class MOSA(object):
         """
         curData = list(self.MOSA_archive.keys())
         self.pareto_animation[epoch] = curData
+        if epoch % self.animation_frequency == 0:
+            self.pareto_animation[epoch] = deepcopy(self.MOSA_archive)
 
 
     def begin_MOSA(self) -> None:

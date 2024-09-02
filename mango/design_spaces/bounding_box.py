@@ -769,8 +769,18 @@ class Parallelepiped(object):
 
     def update_volume(self) -> None:
         """ Calculates and updates the volume attribute """
-        self.volume = parallelepiped_volume(self.cell_type, self.a, self.b, self.c, self.alpha,
-                                            self.beta, self.gamma)
+        # First grab the first face randomly to align with a coordinate system:
+        vertices = self.calculate_vertices_and_edges()
+
+        # Get vectors:
+        a = vertices[1, :] - vertices[0, :]
+        b = vertices[2, :] - vertices[0, :]
+        c = vertices[3, :] - vertices[0, :]
+
+        # Triple scalar product
+        self.volume = np.abs(np.dot(b, np.cross(a, c)))
+
+
 
 
     @staticmethod
