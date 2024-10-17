@@ -1,4 +1,3 @@
-""" Test to validate that a design state can be represented in the caDNAno format in a precise study """
 from mango.optimizers import MOSA, CustomDesignConstraint, PolyhedralDefaultConstraints, ObjectiveFunction
 from mango.grammars import origami_grammars
 from mango.features import Ramp, PreservedVertex
