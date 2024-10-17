@@ -1,4 +1,3 @@
-""" Test to validate that a design state can be represented in the caDNAno format in a precise study """
 import numpy as np
 from itertools import combinations
 from mango.utils.math import xyz_from_graph, length_and_direction_between_nodes
