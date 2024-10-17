@@ -16,13 +16,8 @@ import warnings
 import os
 from mango.visualizations.optimizer_analysis import MOSA_Analysis
 
-# Import kodak module which is a package I built to visualize my results figures. You can also manually create your
-# own results by reading in the results file via dill.load(filepath)
-try:
-    from kodak.kodak_creator import KodakPlots
-except ModuleNotFoundError:
-    raise Exception("Missing kodak toolkit package. Please see https://github.com/ajvetturini/kodak_toolkit/tree/master"
-                    " for how to install this visualization Python package")
+# Should replace below with the kodak toolkit github page if I continue dev-ing it for my visualizations
+from mango.visualizations.kodak.kodak_creator import KodakPlots
 
 
 # This returns a list of 33 evenly spaced point (for a total of 35) to use in a design animation for the multiobjective
