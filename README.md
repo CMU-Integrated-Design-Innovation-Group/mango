@@ -2,7 +2,7 @@
 
 This is a Python-based generative design framework intended for wireframe DNA origami. Here, grammars are employed which can allow for the exploration of wireframe objects corresponding with different design features. This framework is intended to give you a "sandbox" to generate designs which minimize an input function given specific design constraints. The accompanying readthedocs documentation walks through tutorials on the types of designs the can be generated.
 
-Also, this package can create standardized outputs that can be created via the [kodak toolkit](https://github.com/ajvetturini/kodak_toolkit) and viewed in browser using the [visualization application](https://ajvetturini.github.io/kodak/).
+Also, this package can create standardized outputs that can be created and viewed in browser using the [visualization application](https://ajvetturini.github.io/kodak/).
 
 This package is in active development and it should be expected for code to change quite frequently.
 
