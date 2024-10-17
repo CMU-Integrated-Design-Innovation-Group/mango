@@ -118,9 +118,7 @@ def create_design_space(excluded_region_in_design: bool, savename: str, max_numb
 
 
 if __name__ == '__main__':
-
     # Create the output file (Used in Figure 4)
-    # Re-run code above to regenerate the code we need i think?
     name, optimizer = create_design_space(excluded_region_in_design=True, savename='Single_Objective_Porosity',
                                           max_number_nucleotides=7249, seed=8, use_rcut=True, cutoff_distance=5.0)
     optimizer.begin_annealing()
